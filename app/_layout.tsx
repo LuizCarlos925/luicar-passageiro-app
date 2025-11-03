@@ -17,14 +17,15 @@ import { StatusBar } from 'expo-status-bar';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
+import { useFonts } from 'expo-font';
+
 import {
-  useFonts,
-  Quicksand_300Light,
-  Quicksand_400Regular,
-  Quicksand_500Medium,
-  Quicksand_600SemiBold,
-  Quicksand_700Bold,
-} from '@expo-google-fonts/quicksand';
+  NataSansBold,
+  NataSansLight,
+  NataSansMedium,
+  NataSansRegular,
+  NataSansSemiBold,
+} from '@/assets/fonts';
 
 import { theme } from '@/global/theme';
 
@@ -64,11 +65,11 @@ const App = () => {
   useUpdate();
 
   useFonts({
-    Quicksand_300Light,
-    Quicksand_400Regular,
-    Quicksand_500Medium,
-    Quicksand_600SemiBold,
-    Quicksand_700Bold,
+    NataSansLight,
+    NataSansRegular,
+    NataSansMedium,
+    NataSansSemiBold,
+    NataSansBold,
   });
 
   return (

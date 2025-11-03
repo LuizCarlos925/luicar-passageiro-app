@@ -1,15 +1,14 @@
 import React, { JSX, PropsWithChildren, useEffect } from 'react';
-import { Keyboard, Platform, ViewStyle } from 'react-native';
+import { Keyboard, Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { useSegments } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 import { Header, IHeaderProps } from '@/components/Header/Header';
 
-import { StatusBar } from 'expo-status-bar';
-import { RefreshControl } from 'react-native-gesture-handler';
-import { theme } from '@/global/theme';
-import { ContainerWrapper } from './styles';
+import { colors, theme } from '@/global/theme';
 
 interface Props {
   alignItems?: 'center' | 'flex-start';
@@ -106,7 +105,7 @@ export const GlobalContainer = ({
     }
 
     return (
-      <ContainerWrapper
+      <View
         style={[
           {
             alignItems,
@@ -118,13 +117,14 @@ export const GlobalContainer = ({
         ]}
       >
         {children}
-      </ContainerWrapper>
+      </View>
     );
   };
 
   return (
-    <ContainerWrapper
+    <View
       style={[
+        styles.container,
         {
           paddingTop: header || withoutPaddingTop ? 0 : top,
           paddingBottom: bottom + paddingBottom,
@@ -142,6 +142,13 @@ export const GlobalContainer = ({
           showTabBar={!isOpenKeyboard && showTabBar}
         />
       )} */}
-    </ContainerWrapper>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.neutro_10,
+  },
+});

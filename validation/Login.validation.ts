@@ -86,5 +86,4 @@ export const SignUpAccessSchema = Yup.object({
   passwordConfirm: Yup.string()
     .required('Confirmação de senha obrigatória')
     .oneOf([Yup.ref('password')], 'Senha não coincide com a anterior'),
-  acceptTerms: Yup.boolean().required(),
 });

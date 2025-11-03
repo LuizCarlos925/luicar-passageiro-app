@@ -61,11 +61,11 @@ export const colors = {
 };
 
 export const fonts = {
-  light: 'Quicksand_300Light',
-  regular: 'Quicksand_400Regular',
-  medium: 'Quicksand_500Medium',
-  semibold: 'Quicksand_600SemiBold',
-  bold: 'Quicksand_700Bold',
+  light: 'NataSansLight',
+  regular: 'NataSansRegular',
+  medium: 'NataSansMedium',
+  semibold: 'NataSansSemiBold',
+  bold: 'NataSansBold',
 };
 
 export const theme = {

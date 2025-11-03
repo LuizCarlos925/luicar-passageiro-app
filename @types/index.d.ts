@@ -10,6 +10,7 @@ declare module '*.svg' {
 }
 
 declare module '*.otf';
+declare module '*.ttf';
 
 type ImageFormRN = {
   uri: string;
