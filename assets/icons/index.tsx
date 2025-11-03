@@ -4,5 +4,5 @@ export { default as EyeOpenIcon } from './EyeOpen.svg';
 export { default as LogoIcon } from './Logo.svg';
 
 // modal
-export { default as ModalAlert } from './modal/AlertTextIcon.svg';
-export { default as ModalSuccess } from './modal/Check.svg';
+export { default as ModalError } from './modal/Error.svg';
+export { default as ModalSuccess } from './modal/Success.svg';

@@ -1,19 +1,18 @@
 export const modalsOptions = {
-  batteryLow: {
-    type: 'Info',
-    title: 'Bateria baixa',
-    description:
-      'Nivel de bateria baixo, pode afetar o desempenho e estabilidade do app.',
-    textButton1: 'OK',
-    textButton2: undefined,
-    isVerticalButtons: false,
-    customModalTitle: 'Bateria baixa',
-  },
   forgotPassword: {
     type: 'Success',
-    title: 'O link de recuperação foi enviado para o seu e-mail com sucesso!',
-    description: 'Por favor, verifique também sua caixa de spam',
-    textButton1: 'OK',
+    title: 'Sucesso!',
+    description:
+      'O link de redefinição foi enviado com sucesso! Não esqueça de conferir a caixa de spam',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+    isVerticalButtons: false,
+  },
+  changePassword: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description: 'Sua senha foi redefinida com sucesso!',
+    textButton1: 'Continuar',
     textButton2: undefined,
     isVerticalButtons: false,
   },

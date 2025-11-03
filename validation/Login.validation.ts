@@ -18,6 +18,30 @@ export const ForgotPasswordSchema = Yup.object({
   email: Yup.string().email('E-mail Inválido').required('E-mail obrigatório'),
 });
 
+export type RecoverPasswordForm = Yup.InferType<typeof RecoverPasswordSchema>;
+
+export const RecoverPasswordSchema = Yup.object({
+  password: Yup.string()
+    .required('Senha obrigatória')
+    .min(8, 'A senha deve conter, no mínimo, 8 caracteres')
+    .matches(
+      /^(?=.*[A-Z])/,
+      'Senha fraca. Insira pelo menos 1 (uma) letra maiúscula',
+    )
+    .matches(
+      /^(?=.*[a-z])/,
+      'Senha fraca. Insira pelo menos 1 (uma) letra minúscula',
+    )
+    .matches(/^(?=.*[0-9])/, 'Senha fraca. Insira pelo menos 1 (um) número')
+    .matches(
+      /^(?=.*[\W])/,
+      'Senha fraca. Insira pelo menos 1 (um) caractere especial',
+    ),
+  confirmPassword: Yup.string()
+    .required('Confirmação de senha obrigatória')
+    .oneOf([Yup.ref('password')], 'Senha não coincide com a anterior'),
+});
+
 export type SignUpProfileForm = Yup.InferType<typeof SignUpProfileSchema>;
 
 export const SignUpProfileSchema = Yup.object({

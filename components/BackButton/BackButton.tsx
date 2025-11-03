@@ -1,15 +1,11 @@
 import React from 'react';
-import { ViewStyle } from 'react-native';
-import { router } from 'expo-router';
+import { Pressable, StyleSheet, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 import { ChevronLeftIcon } from '@/assets/icons';
 
 import Text from '@/components/Text/Text';
-
-import { theme } from '@/global/theme';
-
-import { IconLeftWrapper } from './styles';
 
 interface IBackButtonProps {
   title?: string;
@@ -21,31 +17,58 @@ interface IBackButtonProps {
 
 const BackButton = ({
   title,
-  size = 16,
-  color = theme.colors.primary_100,
+  size = 20,
+  color,
   onPress,
   style,
 }: IBackButtonProps) => {
   const { top } = useSafeAreaInsets();
 
   return (
-    <IconLeftWrapper
+    <Pressable
       onPress={() => {
         if (onPress) {
           return onPress();
         }
         router.back();
       }}
-      style={[{ paddingTop: top }, style]}
+      style={[styles.container, { paddingTop: top }, style]}
     >
-      <ChevronLeftIcon width={size} height={size} color={color} />
+      <ChevronLeftIcon
+        width={size - 4}
+        height={size - 4}
+        color={color}
+        style={styles.icon}
+      />
+
       {title && (
-        <Text size={size} fontWeight={600} color={color}>
+        <Text size={size} fontWeight={700} color={color} style={styles.text}>
           {title}
         </Text>
       )}
-    </IconLeftWrapper>
+    </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    minHeight: 20,
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+    gap: 8,
+  },
+  icon: {
+    position: 'absolute',
+    left: 4,
+    bottom: 14,
+  },
+  text: {
+    flex: 1,
+    textAlign: 'center',
+  },
+});
 
 export default BackButton;

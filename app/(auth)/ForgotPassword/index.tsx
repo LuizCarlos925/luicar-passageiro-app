@@ -9,12 +9,7 @@ import { Button } from '@/components/Button/Button';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
-import { theme } from '@/global/theme';
-import { shadow } from '@/global/shadow';
-
 import { useModal } from '@/hooks/useModal';
-
-import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
 
@@ -22,8 +17,7 @@ import {
   ForgotPasswordForm,
   ForgotPasswordSchema,
 } from '@/validation/Login.validation';
-
-import { InfoWrapper, InputWrapper } from './styles';
+import { StyleSheet, View } from 'react-native';
 
 const ForgotPassword = () => {
   const { setModal } = useModal();
@@ -35,77 +29,67 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = async (form: ForgotPasswordForm) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      await api.post('/forgotPassword', {
-        email: form.email?.toLocaleLowerCase(),
-        role: 'authenticated',
-      });
+      // await api.post('/forgotPassword', {
+      //   email: form.email?.toLocaleLowerCase(),
+      //   role: 'authenticated',
+      // });
 
       setModal({
         name: 'forgotPassword',
-        onPressBack: () => router.back(),
-        onPress: () => router.back(),
+        onPressBack: () => router.push('/(auth)/ChangePassword'),
+        onPress: () => router.push('/(auth)/ChangePassword'),
       });
     } catch (err) {
       handleError(err);
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   return (
-    <GlobalContainer
-      containerStyle={{ paddingTop: 0 }}
-      scrollContainerStyle={{ alignItems: 'flex-start' }}
-      paddingHorizontal={20}
-      gap={10}
-    >
-      <BackButton style={{ marginTop: 15 }} />
+    <GlobalContainer paddingHorizontal={20} gap={40}>
+      <BackButton title="Recuperar senha" />
 
-      <Text
-        size={38}
-        fontWeight={700}
-        color={theme.colors.primary_100}
-        marginTop={20}
-      >
-        Esqueci a senha
-      </Text>
-      <Text
-        size={16}
-        fontWeight={600}
-        color={theme.colors.primary_100}
-        marginTop={20}
-      >
-        Insira um e-mail cadastrado na plataforma
-      </Text>
-
-      <InfoWrapper>
-        <Text color={theme.colors.primary_60}>
-          Um link será enviado no seu e-mail para a alteração da senha!
+      <View style={styles.wrapper}>
+        <Text size={32} fontWeight={700} style={styles.text}>
+          Redefinir senha
         </Text>
-      </InfoWrapper>
+        <Text size={16} style={styles.text}>
+          Informe o seu e-mail cadastrado para recuperar a sua senha
+        </Text>
+      </View>
 
-      <InputWrapper style={shadow.default}>
-        <Input
-          name="email"
-          control={control}
-          label="E-mail"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholder="Digite seu e-mail"
-        />
-      </InputWrapper>
+      <Input
+        name="email"
+        control={control}
+        label="E-mail"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholder="Digite seu e-mail"
+        marginTop={40}
+      />
 
       <Button
         onPress={handleSubmit(onSubmit)}
         style={{ marginTop: 'auto', marginBottom: 40 }}
         isLoading={isLoading}
       >
-        Continuar
+        Enviar link de redefinição
       </Button>
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    width: '100%',
+    gap: 8,
+    alignItems: 'center',
+  },
+  text: {
+    textAlign: 'center',
+  },
+});
 
 export default ForgotPassword;
