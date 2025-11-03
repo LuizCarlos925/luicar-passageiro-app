@@ -23,7 +23,7 @@ interface Props {
 
 const Text = ({
   children,
-  color = theme.colors.neutro_100,
+  color = theme.colors.secondary_80,
   fontWeight = 400,
   size = 14,
   style,

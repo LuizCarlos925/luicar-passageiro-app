@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    primary_10: '#EFEAF6',
+    primary_10: '#FFFBF8',
     primary_20: '#FDE9D1',
     primary_40: '#FAD4A3',
     primary_60: '#F8BE76',
@@ -8,7 +8,7 @@ export const theme = {
     primary_100: '#F3931A',
 
     neutro_00: '#FFFFFF',
-    neutro_10: '#F1F5F9',
+    neutro_10: '#FEFEFE',
     neutro_20: '#D1D0D0',
     neutro_40: '#A2A2A2',
     neutro_60: '#747373',

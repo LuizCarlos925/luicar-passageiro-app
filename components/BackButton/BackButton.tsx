@@ -3,7 +3,7 @@ import { ViewStyle } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ChevronLeftIcon } from '@/assets';
+import { ChevronLeftIcon } from '@/assets/icons';
 
 import Text from '@/components/Text/Text';
 
@@ -20,7 +20,7 @@ interface IBackButtonProps {
 }
 
 const BackButton = ({
-  title = 'Voltar',
+  title,
   size = 16,
   color = theme.colors.primary_100,
   onPress,
@@ -39,9 +39,11 @@ const BackButton = ({
       style={[{ paddingTop: top }, style]}
     >
       <ChevronLeftIcon width={size} height={size} color={color} />
-      <Text size={size} fontWeight={600} color={color}>
-        {title}
-      </Text>
+      {title && (
+        <Text size={size} fontWeight={600} color={color}>
+          {title}
+        </Text>
+      )}
     </IconLeftWrapper>
   );
 };
