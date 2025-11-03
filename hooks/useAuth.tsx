@@ -17,18 +17,13 @@ import { ILoginResponse } from '@/interfaces/login';
 
 import {
   LoginForm,
-  SignUpAddressForm,
-  SignUpBankAccountForm,
-  SignUpPasswordForm,
+  SignUpAccessForm,
   SignUpProfileForm,
 } from '@/validation/Login.validation';
 // import { ModalBlocked } from '@/components/ModalBlocked/ModalBlocked';
 // import { ModalTerms } from '@/components/ModalTerms/ModalTerms';
 
-export type ISignUpData = SignUpProfileForm &
-  SignUpAddressForm &
-  SignUpBankAccountForm &
-  SignUpPasswordForm;
+export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
 
 interface IUserProvider {
   user: IUser;
@@ -67,7 +62,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const [isFeedTab, setIsFeedTab] = useState(false);
   const [isUnderConstruction, setIsUnderConstruction] = useState(false);
   const [isBlocked, setIsBlocked] = useState('');
-  const [isAcceptedTerms, setIsAcceptedTerms] = useState(true);
 
   const isAuthenticated = user?.id !== undefined;
 

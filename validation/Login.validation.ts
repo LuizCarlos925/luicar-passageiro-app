@@ -45,7 +45,6 @@ export const RecoverPasswordSchema = Yup.object({
 export type SignUpProfileForm = Yup.InferType<typeof SignUpProfileSchema>;
 
 export const SignUpProfileSchema = Yup.object({
-  avatar: Yup.string().required('Foto obrigatória'),
   name: Yup.string().required('Nome obrigatório'),
   social_name: Yup.string(),
   cpf: Yup.string()
@@ -54,20 +53,7 @@ export const SignUpProfileSchema = Yup.object({
     .test('test-invalid-cpf', 'Insira um CPF válido', document =>
       document ? validateCPF(normalize(document)) : false,
     ),
-  rg: Yup.string(),
-  // .required('RG obrigatório'),
-  email: Yup.string().email('E-mail Inválido').required('E-mail obrigatório'),
-  phone: Yup.object({
-    phoneNumber: Yup.string().required('Número de telefone obrigatório'),
-    ddi: Yup.string(),
-    country: Yup.string(),
-    image: Yup.string(),
-  }).required('Telefone obrigatório'),
-});
-
-export type SignUpAddressForm = Yup.InferType<typeof SignUpAddressSchema>;
-
-export const SignUpAddressSchema = Yup.object({
+  phone: Yup.string().required('Telefone obrigatório'),
   zipCode: Yup.string().required('CEP obrigatório').min(9, 'CEP inválido'),
   street: Yup.string().required('Logradouro obrigatório'),
   number: Yup.string().required('Número obrigatório'),
@@ -77,43 +63,10 @@ export const SignUpAddressSchema = Yup.object({
   complement: Yup.string(),
 });
 
-export type SignUpBankAccountForm = Yup.InferType<
-  typeof SignUpBankAccountSchema
->;
+export type SignUpAccessForm = Yup.InferType<typeof SignUpAccessSchema>;
 
-export const SignUpBankAccountSchema = Yup.object({
-  holder_name: Yup.string().required('Nome do titular obrigatório'),
-  card_number: Yup.string().required('Número do cartão obrigatório'),
-  cvv: Yup.string().required('CVV obrigatório'),
-  validate: Yup.string()
-    .required('Validade obrigatório')
-    .test('is-valid-date', 'Validade inválida', value => {
-      if (!value) {
-        return false;
-      }
-      const [month, year] = value.split('/').map(Number);
-      if (month < 1 || month > 12) {
-        return false;
-      }
-      const now = new Date();
-      const currentMonth = now.getMonth() + 1;
-      const currentYear = now.getFullYear();
-      const fullYear = year < 100 ? year + 2000 : year;
-      if (fullYear < currentYear) {
-        return false;
-      }
-      if (fullYear === currentYear && month < currentMonth) {
-        return false;
-      }
-
-      return true;
-    }),
-  brand: Yup.string(),
-});
-
-export type SignUpPasswordForm = Yup.InferType<typeof SignUpPasswordSchema>;
-
-export const SignUpPasswordSchema = Yup.object({
+export const SignUpAccessSchema = Yup.object({
+  email: Yup.string().email('E-mail inválido').required('E-mail obrigatório'),
   password: Yup.string()
     .required('Senha obrigatória')
     .min(8, 'A senha deve conter, no mínimo, 8 caracteres')

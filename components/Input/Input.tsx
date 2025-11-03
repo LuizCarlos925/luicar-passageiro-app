@@ -127,7 +127,7 @@ const Input = <TFieldValues extends FieldValues>({
           size={16}
           fontWeight={labelWeight}
           color={labelColor}
-          style={{ marginBottom: 5, ...labelStyle }}
+          style={{ marginBottom: 8, ...labelStyle }}
         >
           {label}
         </Text>

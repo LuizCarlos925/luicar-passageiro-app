@@ -18,6 +18,7 @@ import {
   ForgotPasswordSchema,
 } from '@/validation/Login.validation';
 import { StyleSheet, View } from 'react-native';
+import { colors } from '@/global/theme';
 
 const ForgotPassword = () => {
   const { setModal } = useModal();
@@ -48,7 +49,11 @@ const ForgotPassword = () => {
   };
 
   return (
-    <GlobalContainer paddingHorizontal={20} gap={40}>
+    <GlobalContainer
+      paddingHorizontal={20}
+      gap={40}
+      containerStyle={{ backgroundColor: colors.primary_10 }}
+    >
       <BackButton title="Recuperar senha" />
 
       <View style={styles.wrapper}>

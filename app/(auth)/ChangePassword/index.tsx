@@ -18,6 +18,7 @@ import {
   RecoverPasswordForm,
   RecoverPasswordSchema,
 } from '@/validation/Login.validation';
+import { colors } from '@/global/theme';
 
 const ChangePassword = () => {
   const { setModal } = useModal();
@@ -43,7 +44,11 @@ const ChangePassword = () => {
   };
 
   return (
-    <GlobalContainer paddingHorizontal={20} gap={40}>
+    <GlobalContainer
+      paddingHorizontal={20}
+      gap={40}
+      containerStyle={{ backgroundColor: colors.primary_10 }}
+    >
       <BackButton title="Recuperar senha" />
 
       <Text size={32} fontWeight={700} style={styles.text}>

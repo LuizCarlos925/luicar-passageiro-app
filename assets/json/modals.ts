@@ -18,8 +18,9 @@ export const modalsOptions = {
   },
   signUp: {
     type: 'Success',
-    title: 'Cadastro concluído.',
-    description: undefined,
+    title: 'Sucesso!',
+    description:
+      'Seu cadastro foi concluído com sucesso! Agora é só aproveitar os benefícios do app!',
     textButton1: 'Continuar',
     textButton2: undefined,
     isVerticalButtons: false,

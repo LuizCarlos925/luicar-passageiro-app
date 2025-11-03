@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { router, useFocusEffect } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,12 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
-
+import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
-// import { AvatarPicker } from '@/components/AvatarPicker/AvatarPicker';
 
-import { theme } from '@/global/theme';
-import { shadow } from '@/global/shadow';
+import { colors } from '@/global/theme';
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -20,48 +19,59 @@ import {
   SignUpProfileSchema,
 } from '@/validation/Login.validation';
 
-import { api } from '@/services/api';
 import { handleError } from '@/utils/handleError';
-import { InputWrapper } from './styles';
+import { getAdressByZipCode } from '@/services/cep';
+import { Step } from '@/components/Step';
 
 const Profile = () => {
   const { signUpData, setSignUpData } = useAuth();
 
-  const { control, handleSubmit, reset } = useForm<SignUpProfileForm>({
-    resolver: yupResolver(SignUpProfileSchema),
-    defaultValues: {
-      phone: {
-        ddi: '55',
-        image:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/36px-Flag_of_Brazil.svg.png',
-        country: 'Brasil',
-      },
-      rg: '',
-      cpf: '',
-    },
-  });
+  const { control, handleSubmit, clearErrors, setValue, reset, watch } =
+    useForm<SignUpProfileForm>({
+      resolver: yupResolver(SignUpProfileSchema),
+    });
+
+  const zipCode = watch('zipCode');
 
   useFocusEffect(
     useCallback(() => {
-      reset({ ...signUpData });
+      reset(signUpData);
     }, []),
   );
 
-  // 35489183870
+  const handleZipBlurDevolution = async () => {
+    if (zipCode && zipCode.length === 9) {
+      try {
+        const res = await getAdressByZipCode(zipCode);
+
+        clearErrors('zipCode');
+        setValue('street', res.logradouro, { shouldValidate: true });
+        setValue('city', res.localidade, { shouldValidate: true });
+        setValue('district', res.bairro, { shouldValidate: true });
+        setValue('state', res.uf, { shouldValidate: true });
+      } catch (error) {
+        return null;
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleZipBlurDevolution();
+  }, [zipCode]);
 
   const onSubmit = async (form: SignUpProfileForm) => {
     try {
-      const { data } = await api.post('validateUserPassenger', {
-        cpf: form.cpf,
-        rg: form.rg,
-        email: form.email,
-      });
+      // const { data } = await api.post('validateUserPassenger', {
+      //   cpf: form.cpf,
+      //   rg: form.rg,
+      //   email: form.email,
+      // });
 
       setSignUpData(prev => ({
         ...prev,
         ...form,
       }));
-      router.push('/(auth)/SignUp/Address');
+      router.push('/(auth)/SignUp/Access');
     } catch (error) {
       handleError(error);
     }
@@ -69,45 +79,25 @@ const Profile = () => {
 
   return (
     <GlobalContainer
-      containerStyle={{
-        backgroundColor: theme.colors.neutro_10,
-      }}
+      containerStyle={{ backgroundColor: colors.primary_10 }}
       scrollContainerStyle={{ alignItems: 'flex-start' }}
       paddingHorizontal={20}
-      gap={10}
+      gap={16}
     >
-      <Text
-        size={38}
-        fontWeight={700}
-        color={theme.colors.primary_100}
-        marginTop={30}
-      >
-        Cadastre-se
-      </Text>
-      <Text size={16} color={theme.colors.gray_1e}>
-        Já possui uma conta?{' '}
-        <Text
-          size={16}
-          fontWeight={700}
-          color={theme.colors.primary_60}
-          onPress={() => router.push('/(auth)/Login')}
-        >
-          Faça login
+      <BackButton style={{ marginTop: 16 }} />
+
+      <Step currentStep={1} />
+
+      <View style={styles.wrapper}>
+        <Text size={32} fontWeight={700} style={styles.text}>
+          Vamos iniciar o seu cadastro
         </Text>
-      </Text>
+        <Text size={16} style={styles.text} marginTop={8}>
+          Informe seus dados pessoais
+        </Text>
+      </View>
 
-      <Text
-        size={22}
-        fontWeight={600}
-        color={theme.colors.gray_1e}
-        marginTop={20}
-      >
-        Dados pessoais
-      </Text>
-
-      <InputWrapper style={shadow.default}>
-        {/* <AvatarPicker name="avatar" control={control} /> */}
-
+      <View style={styles.wrapper}>
         <Input
           name="name"
           control={control}
@@ -130,33 +120,89 @@ const Profile = () => {
           type="cpf"
         />
         <Input
-          name="rg"
+          name="phone"
           control={control}
-          label="RG"
-          placeholder="Digite seu RG"
+          label="Telefone"
+          type="cel-phone"
+          placeholder="Digite seu telefone"
+        />
+
+        <Text size={16} color={colors.primary_100} style={{ marginBottom: 8 }}>
+          Dados de endereço
+        </Text>
+
+        <Input
+          name="zipCode"
+          control={control}
+          label="CEP"
+          placeholder="Digite seu CEP"
+          type="zip-code"
         />
         <Input
-          name="email"
+          name="state"
           control={control}
-          label="E-mail"
-          placeholder="Digite seu e-mail"
-          keyboardType="email-address"
-          autoCapitalize="none"
+          label="Estado"
+          placeholder="Digite seu estado"
+          autoCapitalize="characters"
         />
-      </InputWrapper>
+        <Input
+          name="district"
+          control={control}
+          label="Bairro"
+          placeholder="Digite seu bairro"
+          autoCapitalize="characters"
+        />
+        <Input
+          name="street"
+          control={control}
+          label="Logradouro"
+          placeholder="Digite seu logradouro"
+          autoCapitalize="characters"
+        />
+        <Input
+          name="number"
+          control={control}
+          label="Número"
+          placeholder="Digite o número"
+          type="only-numbers"
+        />
+
+        <Input
+          name="complement"
+          control={control}
+          label="Digite o complemento"
+          placeholder="Complemento (opcional)"
+          autoCapitalize="characters"
+        />
+      </View>
 
       <Button onPress={handleSubmit(onSubmit)} style={{ marginTop: 20 }}>
-        Continuar
+        Próximo
       </Button>
-      <Button
-        onPress={() => router.push('/(auth)/Welcome')}
-        style={{ marginBottom: 40 }}
-        outline
+      <Text
+        onPress={() => router.dismissTo('/(auth)/Login')}
+        style={styles.footer}
       >
-        Voltar
-      </Button>
+        Já possui uma conta? Acessar
+      </Text>
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    width: '100%',
+    gap: 8,
+  },
+  text: {
+    textAlign: 'center',
+  },
+  footer: {
+    width: '100%',
+    marginTop: -4,
+    marginBottom: 40,
+    textAlign: 'center',
+  },
+});
 
 export default Profile;

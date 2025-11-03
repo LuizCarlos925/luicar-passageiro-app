@@ -30,7 +30,7 @@ const ScrollContainer = ({
   return (
     <ContainerWrapper>
       <Container
-        contentContainerStyle={{ paddingRight: 24, ...contentContainerStyle }}
+        contentContainerStyle={{ paddingRight: 8, ...contentContainerStyle }}
         showsVerticalScrollIndicator={false}
         onScroll={event => {
           scrollY.value =
