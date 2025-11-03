@@ -34,6 +34,7 @@ import AuthProvider from '@/hooks/useAuth';
 import ModalProvider from '@/hooks/useModal';
 
 import { handleError } from '@/utils/handleError';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 export { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 
@@ -76,17 +77,19 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <ModalProvider>
-            <AuthProvider>
-              <BottomSheetModalProvider>
-                <SafeAreaProvider>
-                  <StatusBar style="auto" />
-                  <Slot />
-                  <Toast config={toastConfig} />
-                </SafeAreaProvider>
-              </BottomSheetModalProvider>
-            </AuthProvider>
-          </ModalProvider>
+          <KeyboardProvider>
+            <ModalProvider>
+              <AuthProvider>
+                <BottomSheetModalProvider>
+                  <SafeAreaProvider>
+                    <StatusBar style="auto" />
+                    <Slot />
+                    <Toast config={toastConfig} />
+                  </SafeAreaProvider>
+                </BottomSheetModalProvider>
+              </AuthProvider>
+            </ModalProvider>
+          </KeyboardProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

@@ -20,8 +20,6 @@ import {
   SignUpAccessForm,
   SignUpProfileForm,
 } from '@/validation/Login.validation';
-// import { ModalBlocked } from '@/components/ModalBlocked/ModalBlocked';
-// import { ModalTerms } from '@/components/ModalTerms/ModalTerms';
 
 export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
 
@@ -31,7 +29,7 @@ interface IUserProvider {
   signUpData: ISignUpData;
   setSignUpData: React.Dispatch<React.SetStateAction<ISignUpData>>;
   logout: (isDelete?: boolean) => Promise<void>;
-  login: (form: LoginForm) => Promise<boolean>;
+  login: (form: LoginForm) => void;
   refetchUser: () => Promise<void>;
   isLoading: boolean;
   isFeedTab: boolean;
@@ -86,30 +84,29 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   };
 
   const login = async (formLogin: LoginForm) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
+      // const { data } = await api.post<ILoginResponse>('/auth/local', {
+      //   ...formLogin,
+      //   role: 'authenticated',
+      // });
 
-      const { data } = await api.post<ILoginResponse>('/auth/local', {
-        ...formLogin,
-        role: 'authenticated',
-      });
+      // if (data?.message === 'Sua conta está bloqueada') {
+      //   setIsBlocked(data.reason || '');
+      //   return false;
+      // }
 
-      if (data?.message === 'Sua conta está bloqueada') {
-        setIsBlocked(data.reason || '');
-        return false;
-      }
+      // if (data?.user?.role?.id !== 1) {
+      //   throw new Error('Essa conta não tem acesso a este aplicativo');
+      // }
 
-      if (data?.user?.role?.id !== 1) {
-        throw new Error('Essa conta não tem acesso a este aplicativo');
-      }
+      // await setItemAsync('accessToken', data.jwt);
 
-      await setItemAsync('accessToken', data.jwt);
+      // if (data?.refreshToken && formLogin?.rememberMe) {
+      //   await setItemAsync('refreshToken', data.refreshToken);
+      // }
 
-      if (data?.refreshToken && formLogin?.rememberMe) {
-        await setItemAsync('refreshToken', data.refreshToken);
-      }
-
-      await refetchUser();
+      // await refetchUser();
 
       // const isAccepted = await handleVerifyTerms();
 
@@ -118,16 +115,12 @@ const AuthProvider = ({ children }: ChildrenProps) => {
       // } else {
       //   setIsAcceptedTerms(isAccepted);
       // }
-
-      setIsLoading(false);
-
-      return false;
     } catch (err: any) {
       setIsLoading(false);
       deleteItemAsync('accessToken');
       deleteItemAsync('refreshToken');
-      return true;
     }
+    setIsLoading(false);
   };
 
   const logout = async (isDeleting?: boolean) => {
@@ -228,18 +221,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         setIsUnderConstruction,
       }}
     >
-      {/* <ModalBlocked
-        isVisible={!!isBlocked}
-        onPress={() => {
-          setIsBlocked('');
-          logout();
-        }}
-        reason={isBlocked}
-      />
-      <ModalTerms
-        isVisible={!isAcceptedTerms}
-        onPress={() => setIsAcceptedTerms(true)}
-      /> */}
       {children}
     </AuthContext.Provider>
   );

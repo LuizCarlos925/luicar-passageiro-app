@@ -16,10 +16,11 @@ export const colors = {
   neutro_100: '#2D2D2D',
 
   secondary_10: '#D2D2D2',
-  secondary_20: '#A4A4A4',
-  secondary_40: '#777777',
-  secondary_60: '#494949',
-  secondary_80: '#1C1C1C',
+  secondary_20: '#D2D2D2',
+  secondary_40: '#A4A4A4',
+  secondary_60: '#777777',
+  secondary_80: '#494949',
+  secondary_100: '#1C1C1C',
 
   error_40: '#FFE0E3',
   error_60: '#DE3737',
