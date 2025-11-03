@@ -9,6 +9,7 @@ import { RefreshControl } from 'react-native-gesture-handler';
 import { Header, IHeaderProps } from '@/components/Header/Header';
 
 import { colors, theme } from '@/global/theme';
+import { ITab, TabBar } from '@/components/TabBar/TabBar';
 
 interface Props {
   alignItems?: 'center' | 'flex-start';
@@ -81,7 +82,7 @@ export const GlobalContainer = ({
               flexGrow: 1,
               paddingHorizontal,
               alignItems,
-              paddingBottom: showTabBar ? 20 : 0,
+              paddingBottom: showTabBar ? 100 : 0,
               gap,
             },
             scrollContainerStyle,
@@ -110,7 +111,7 @@ export const GlobalContainer = ({
           {
             alignItems,
             paddingHorizontal,
-            paddingBottom: showTabBar ? 20 : 0,
+            paddingBottom: showTabBar ? 100 : 0,
             gap,
           },
           contentWrapperStyle,
@@ -136,12 +137,9 @@ export const GlobalContainer = ({
       {header && <Header {...header} />}
       {handleContainer()}
       {component && component}
-      {/* {showTabBar && (
-        <TabBar
-          currentScreen={currentScreen as ITab}
-          showTabBar={!isOpenKeyboard && showTabBar}
-        />
-      )} */}
+      {showTabBar && !isOpenKeyboard && (
+        <TabBar currentScreen={currentScreen as ITab} />
+      )}
     </View>
   );
 };
