@@ -39,7 +39,7 @@ const ChangePassword = () => {
 
       setTimeout(() => {
         setModal({
-          name: 'changePasswordSuccess',
+          name: 'updateSuccess',
           onPress: router.back,
           onPressBack: router.back,
         });

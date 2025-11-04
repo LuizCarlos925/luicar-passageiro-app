@@ -1,16 +1,13 @@
 import React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import Text from '@/components/Text/Text';
 
 import { theme } from '@/global/theme';
 
-import { Container, SwitchButton } from './styles';
-
 interface Props {
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
-  marginTop?: number;
-  marginBottom?: number;
 }
 
 const OPTIONS = [
@@ -22,43 +19,54 @@ const OPTIONS = [
     id: 'address',
     name: 'Endereço',
   },
-  {
-    id: 'bank',
-    name: 'Cartão de crédito',
-  },
-  {
-    id: 'auth',
-    name: 'Acesso',
-  },
 ];
 
-export const SwitchProfile = ({
-  selected,
-  setSelected,
-  marginBottom,
-  marginTop,
-}: Props) => {
+export const SwitchProfile = ({ selected, setSelected }: Props) => {
   return (
-    <Container style={{ marginTop, marginBottom }}>
+    <View style={styles.container}>
       {OPTIONS?.map(item => (
-        <SwitchButton
+        <Pressable
           key={item?.id}
           onPress={() => setSelected(item?.id)}
-          isSelected={selected === item?.id}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                selected === item?.id
+                  ? theme.colors.primary_100
+                  : theme.colors.neutro_10,
+            },
+          ]}
         >
           <Text
-            size={selected === item?.id ? 12 : 10}
-            fontWeight={selected === item?.id ? 600 : 500}
+            size={16}
+            fontWeight={selected === item?.id ? 500 : 400}
             color={
               selected === item?.id
-                ? theme.colors.primary_60
-                : theme.colors.neutro_70
+                ? theme.colors.neutro_00
+                : theme.colors.secondary_60
             }
           >
             {item.name}
           </Text>
-        </SwitchButton>
+        </Pressable>
       ))}
-    </Container>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    gap: 16,
+  },
+  button: {
+    flex: 1,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 34,
+  },
+});

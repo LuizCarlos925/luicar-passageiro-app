@@ -4,6 +4,7 @@ export { default as ChevronIcon } from './Chevron.svg';
 export { default as ChevronLeftIcon } from './ChevronLeft.svg';
 export { default as ClockOutlineIcon } from './ClockOutline.svg';
 export { default as CreditCardIcon } from './CreditCard.svg';
+export { default as EditIcon } from './Edit.svg';
 export { default as EyeClosedIcon } from './EyeClosed.svg';
 export { default as EyeOpenIcon } from './EyeOpen.svg';
 export { default as FaqIcon } from './Faq.svg';
@@ -21,6 +22,7 @@ export { default as StartingPointIcon } from './StartingPoint.svg';
 export { default as SupportIcon } from './Support.svg';
 export { default as TermsIcon } from './Terms.svg';
 export { default as TrashIcon } from './Trash.svg';
+export { default as Trash2Icon } from './Trash2.svg';
 
 // modal
 export { default as ModalAlert } from './modal/Alert.svg';

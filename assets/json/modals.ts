@@ -123,7 +123,7 @@ export const modalsOptions = {
     textButton1: 'Cancelar',
     textButton2: 'Alterar senha',
   },
-  changePasswordSuccess: {
+  updateSuccess: {
     type: 'Success',
     title: 'Sucesso!',
     description: 'Alterações salvas com sucesso!',

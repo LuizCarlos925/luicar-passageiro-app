@@ -39,7 +39,8 @@ export const Column = styled.View`
 export const ContentWrapper = styled.View`
   width: 100%;
 
-  padding: 0 16px;
+  padding: 0 20px;
+  gap: 16px;
 `;
 
 export const FlagWrapper = styled.View`
