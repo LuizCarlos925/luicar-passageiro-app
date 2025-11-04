@@ -12,7 +12,7 @@ const Terms = () => {
     <GlobalContainer
       alignItems="flex-start"
       paddingHorizontal={16}
-      gap={30}
+      gap={16}
       scrollable={false}
     >
       <BackButton />
@@ -21,13 +21,13 @@ const Terms = () => {
         Termos de uso
       </Text>
 
-      <Text size={16} color={colors.secondary_60}>
-        Termos de uso do aplicativo Luicar{'\n'}
-        Data da última atualização: 06/09/2025
-      </Text>
-
       <ScrollContainer>
         <Text size={16} color={colors.secondary_60}>
+          Termos de uso do aplicativo Luicar{'\n'}
+          Data da última atualização: 06/09/2025
+        </Text>
+
+        <Text size={16} color={colors.secondary_60} marginTop={20}>
           lorem ipsum dolor sit amet consectetur. Lacus massa laoreet quam
           viverra. Orci malesuada sodales quis odio purus in venenatis. In
           turpis eu egestas posuere faucibus. Vel interdum mauris eu vel in

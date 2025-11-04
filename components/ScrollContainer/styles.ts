@@ -2,10 +2,8 @@ import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 export const ContainerWrapper = styled.View`
-  flex: 1;
+  flex-grow: 1;
   flex-direction: row;
-
-  margin-top: 20px;
 `;
 
 export const Container = styled.ScrollView`
@@ -26,5 +24,5 @@ export const ScrollViewIndicator = styled(Animated.View)`
 
   border-radius: 8px;
 
-  background-color: ${({ theme }) => theme.colors.primary_60};
+  background-color: ${({ theme }) => theme.colors.primary_100};
 `;
