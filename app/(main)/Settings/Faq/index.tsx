@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-
-import { ChevronLeftIcon } from '@/assets/icons';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import Text from '@/components/Text/Text';
-import { Divider } from '@/components/Divider/Divider';
+
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
-import { theme } from '@/global/theme';
-import { shadow } from '@/global/shadow';
+import { colors } from '@/global/theme';
 
 import { FAQ } from '@/mock/faq';
-import {
-  AnswerText,
-  Container,
-  QuestionText,
-  Row,
-  TextWrapper,
-} from './styles';
+import { IconComponent } from '@/components/Icon/Icon';
 
 const Faq = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number | null>(null);
@@ -32,47 +23,92 @@ const Faq = () => {
   };
 
   return (
-    <GlobalContainer alignItems="flex-start" paddingHorizontal={16} gap={30}>
-      <BackButton />
-      <TextWrapper>
-        <Text size={22} fontWeight={600} color={theme.colors.primary_100}>
-          FAQ
-        </Text>
-        <Text size={15} color={theme.colors.primary_100}>
-          Encontre soluções rápidas
-        </Text>
-      </TextWrapper>
+    <GlobalContainer alignItems="flex-start" paddingHorizontal={20} gap={16}>
+      <BackButton title="FAQ" />
 
-      <Container style={shadow.light}>
-        {FAQ?.map((item, index) => (
-          <View key={item.id}>
-            <Row onPress={() => handleSelectQuestion(item.id)}>
-              <QuestionText>
-                <QuestionText isNumber>{item.id} - </QuestionText>
+      <View style={styles.wrapper}>
+        <Text size={24} fontWeight={700} color={colors.secondary_100}>
+          Perguntas frequentes
+        </Text>
+        <Text size={16}>Encontre soluções rápidas</Text>
+      </View>
+
+      <View style={styles.content}>
+        {FAQ?.map(item => (
+          <View
+            key={item.id}
+            style={[
+              styles.faqContainer,
+              currentQuestion === item.id && {
+                borderColor: colors.primary_100,
+              },
+            ]}
+          >
+            <Pressable
+              onPress={() => handleSelectQuestion(item.id)}
+              style={styles.row}
+            >
+              <Text size={16} fontWeight={600} color={colors.secondary_100}>
+                {item.id}.{' '}
+              </Text>
+              <Text
+                size={16}
+                fontWeight={600}
+                color={colors.secondary_100}
+                style={{ flex: 1 }}
+              >
                 {item.question}
-              </QuestionText>
+              </Text>
 
-              <ChevronLeftIcon
-                height={16}
-                color={theme.colors.primary_60}
+              <IconComponent
+                name="ChevronIcon"
+                size={16}
+                color={colors.secondary_80}
                 style={{
+                  alignSelf: 'center',
                   transform: [
                     {
-                      rotateZ: currentQuestion === item.id ? '90deg' : '270deg',
+                      rotateZ: currentQuestion === item.id ? '270deg' : '90deg',
                     },
                   ],
                 }}
               />
-            </Row>
+            </Pressable>
+
             {currentQuestion === item.id && (
-              <AnswerText>{item?.response}</AnswerText>
+              <Text fontWeight={500} style={{ marginBottom: 8 }}>
+                {item?.response}
+              </Text>
             )}
-            {FAQ && FAQ?.length > index + 1 && <Divider />}
           </View>
         ))}
-      </Container>
+      </View>
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  content: {
+    width: '100%',
+    gap: 8,
+  },
+  wrapper: {
+    gap: 4,
+  },
+  faqContainer: {
+    width: '100%',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    gap: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.secondary_20,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+});
 
 export default Faq;
