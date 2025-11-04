@@ -22,7 +22,7 @@ import { IconComponent } from '@/components/Icon/Icon';
 
 const RideFinished = () => {
   const { control, handleSubmit } = useForm<EvaluateForm>({
-    resolver: yupResolver(EvaluateSchema),
+    resolver: yupResolver(EvaluateSchema as any),
   });
 
   const onSubmit = async (form: EvaluateForm) => {
