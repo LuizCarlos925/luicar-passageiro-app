@@ -1,110 +1,159 @@
 import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as Constants from 'expo-constants';
 
 import * as Icon from '@/assets/icons';
 
 import Text from '@/components/Text/Text';
-import { Card } from '@/components/Card/Card';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
-import BackButton from '@/components/BackButton/BackButton';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 import { GlobalContainer } from '@/components/Container/Container';
 
-import { width } from '@/global/constants';
-import { theme } from '@/global/theme';
+import { colors, theme } from '@/global/theme';
 
 import { useModal } from '@/hooks/useModal';
 import { useAuth } from '@/hooks/useAuth';
 import { SETTINGS_MENUS } from '@/assets/json/settingsMenu';
 
-import { OptionButton, ProfileName, ProfileRow, VersionText } from './styles';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { shadow } from '@/global/shadow';
+import { width } from '@/global/constants';
 
 const Settings = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { setModal } = useModal();
 
   return (
-    <GlobalContainer
-      alignItems="flex-start"
-      paddingHorizontal={16}
-      showTabBar
-      withoutPaddingTop
-      statusBarTextColor="light"
-    >
-      {/* <Icon.SettingsHeaderIcon
+    <GlobalContainer paddingHorizontal={20} showTabBar withoutPaddingTop>
+      <Icon.SettingsHeaderIcon
         width={width}
-        style={{ position: 'absolute', top: 0, zIndex: -1 }}
-      /> */}
-
-      <BackButton
-        color={theme.colors.neutro_00}
-        style={{ zIndex: 2, marginTop: 40 }}
+        style={{ position: 'absolute', top: -12, zIndex: -1 }}
       />
 
-      <Card marginTop={90} padding={20}>
+      <View style={styles.card}>
         <AvatarImage
-          uri={user?.passenger?.image?.url}
+          uri="https://randomuser.me/api/portraits/men/75.jpg"
           size={116}
           style={{
-            position: 'absolute',
-            top: -58,
+            marginTop: -78,
             alignSelf: 'center',
             borderWidth: 2,
             borderColor: theme.colors.neutro_00,
           }}
         />
 
-        <ProfileRow>
-          <ProfileName>
-            {user?.passenger?.socialName || user?.passenger?.name} {`\u2022`}{' '}
-          </ProfileName>
-          <AntDesign name="star" size={12} color="#F1DE3B" />
-          <ProfileName style={{ fontSize: 12, lineHeight: 15 }}> 0</ProfileName>
-        </ProfileRow>
-        <VersionText>
+        <View style={styles.rowProfile}>
+          <Text size={16} fontWeight={600} color={colors.secondary_100}>
+            Gabriel souza Lima {`\u2022`}
+          </Text>
+
+          <IconComponent name="StarIcon" size={16} />
+          <Text size={16} fontWeight={600} color={colors.secondary_100}>
+            0
+          </Text>
+        </View>
+
+        <Text color={colors.secondary_60} style={styles.text}>
           Versão {Constants.default.expoConfig?.version}
-        </VersionText>
+        </Text>
 
         <Divider style={{ marginTop: 15 }} />
 
         {SETTINGS_MENUS.map(item => (
-          <OptionButton key={item.id} onPress={() => router.push(item.path)}>
+          <Pressable
+            key={item.id}
+            onPress={() => router.push(item.path)}
+            style={styles.optionBtn}
+          >
             <IconComponent
               name={item?.icon}
               size={20}
-              color={theme.colors.primary_100}
+              color={theme.colors.secondary_100}
             />
             <Text
               fontWeight={600}
-              color={theme.colors.primary_100}
+              color={theme.colors.secondary_100}
               style={{ flex: 1 }}
             >
               {item.title}
             </Text>
 
-            <Icon.ChevronLeftIcon
-              height={16}
-              color={theme.colors.gray_90}
-              style={{ transform: [{ rotateZ: '180deg' }] }}
+            <IconComponent
+              name="ChevronIcon"
+              size={16}
+              color={colors.secondary_100}
             />
-          </OptionButton>
+          </Pressable>
         ))}
-      </Card>
 
-      <OptionButton
-        onPress={() => setModal({ name: 'logout', onPress: () => logout() })}
-        style={{ paddingLeft: 16 }}
-      >
-        <Icon.LogoutIcon />
-        <Text size={16} fontWeight={500} color={theme.colors.red_d1}>
-          Sair
-        </Text>
-      </OptionButton>
+        <Divider />
+
+        <Pressable
+          onPress={() => setModal({ name: 'logout', onPress: () => logout() })}
+          style={styles.optionBtn}
+        >
+          <IconComponent name="LogoutIcon" />
+          <Text
+            fontWeight={500}
+            color={colors.secondary_60}
+            style={{ flex: 1 }}
+          >
+            Sair
+          </Text>
+
+          <IconComponent
+            name="ChevronIcon"
+            size={16}
+            color={colors.secondary_100}
+          />
+        </Pressable>
+
+        <Pressable
+          onPress={() => setModal({ name: 'logout', onPress: () => logout() })}
+          style={styles.optionBtn}
+        >
+          <IconComponent name="TrashIcon" />
+          <Text fontWeight={500} color={colors.error_60} style={{ flex: 1 }}>
+            Excluir conta
+          </Text>
+          <IconComponent
+            name="ChevronIcon"
+            size={16}
+            color={colors.secondary_100}
+          />
+        </Pressable>
+      </View>
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    width: '100%',
+    marginTop: 120,
+    padding: 20,
+    gap: 8,
+    borderRadius: 12,
+    backgroundColor: colors.neutro_00,
+    ...shadow.default,
+  },
+  rowProfile: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+  text: {
+    textAlign: 'center',
+  },
+  optionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    gap: 12,
+  },
+});
 
 export default Settings;
