@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
   image: {
     width: 112,
     height: 112,
-    resizeMode: 'contain',
   },
   text: {
     textAlign: 'center',

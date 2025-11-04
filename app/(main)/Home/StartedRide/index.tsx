@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Text from '@/components/Text/Text';
 import { Button } from '@/components/Button/Button';
@@ -13,52 +13,52 @@ import { formatCurrency } from '@/utils/format';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DriverCard } from '@/components/DriverCard/DriverCard';
+import { differenceInSeconds, intervalToDuration } from 'date-fns';
+import { router, useFocusEffect } from 'expo-router';
 import { ContentWrapper, InfoWrapper } from './styles';
 
 const StartedRide = () => {
   const { top } = useSafeAreaInsets();
 
-  // const targetDate = new Date();
-  // const difference = differenceInSeconds(new Date(), targetDate);
+  const targetDate = new Date();
+  const difference = differenceInSeconds(new Date(), targetDate);
 
-  // const [count, setCount] = useState(difference * 1000);
+  const [started, setStarted] = useState(false);
+  const [count, setCount] = useState(difference * 1000);
   const [isVisibleCancel, setIsVisibleCancel] = useState(false);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCount(prevTime => prevTime + 1000);
-  //   }, 1000);
+  useEffect(() => {
+    if (started) {
+      const timer = setInterval(() => {
+        setCount(prevTime => prevTime + 1000);
+      }, 1000);
 
-  //   return () => clearInterval(timer);
-  // }, [count]);
+      return () => clearInterval(timer);
+    }
+  }, [count, started]);
 
-  // const timer = intervalToDuration({ start: 0, end: count });
+  const timer = intervalToDuration({ start: 0, end: count });
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const interval = setInterval(() => {
-  //       handleFinishedRide();
-  //     }, 20000);
+  useEffect(() => {
+    if (started) {
+      const timeout = setTimeout(() => {
+        setStarted(false);
+        router.replace('/(main)/Home/RideFinished');
+      }, 15000);
 
-  //     return () => clearInterval(interval);
-  //   }, []),
-  // );
+      return () => clearTimeout(timeout);
+    }
+  }, [started]);
 
-  // const handleFinishedRide = async () => {
-  //   try {
-  //     //
-  //   } catch (err) {
-  //     handleError(err);
-  //   }
-  // };
+  useFocusEffect(
+    useCallback(() => {
+      const timeout = setTimeout(() => {
+        setStarted(true);
+      }, 15000);
 
-  // const handleCancel = async (reason: string) => {
-  //   try {
-  //     setIsVisibleCancel(false);
-  //   } catch (err) {
-  //     handleError(err);
-  //   }
-  // };
+      return () => clearTimeout(timeout);
+    }, []),
+  );
 
   return (
     <GlobalContainer
@@ -85,12 +85,20 @@ const StartedRide = () => {
           >
             Seu motorista está a caminho do embarque
           </Text>
-          <Text color={colors.neutro_00}>
-            Partida em:{' '}
-            <Text fontWeight={700} color={colors.neutro_00}>
-              4 minutos
+
+          {started ? (
+            <Text size={24} fontWeight={700} color={colors.neutro_00}>
+              {timer.minutes?.toString().padStart(2, '0')}:
+              {timer.seconds?.toString().padStart(2, '0')}
             </Text>
-          </Text>
+          ) : (
+            <Text color={colors.neutro_00}>
+              Partida em:{' '}
+              <Text fontWeight={700} color={colors.neutro_00}>
+                4 minutos
+              </Text>
+            </Text>
+          )}
         </InfoWrapper>
       </View>
 

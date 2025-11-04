@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     right: 12,
     width: 104,
     height: 72,
-    resizeMode: 'contain',
   },
   ratingWrapper: {
     position: 'absolute',
