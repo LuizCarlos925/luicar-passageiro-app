@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 
 import Text from '@/components/Text/Text';
 import BackButton from '@/components/BackButton/BackButton';
@@ -15,7 +16,7 @@ const Terms = () => {
       gap={16}
       scrollable={false}
     >
-      <BackButton />
+      <BackButton style={styles.backBtn} />
 
       <Text size={24} fontWeight={700} color={colors.secondary_100}>
         Termos de uso
@@ -45,5 +46,11 @@ const Terms = () => {
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  backBtn: {
+    marginTop: 16,
+  },
+});
 
 export default Terms;

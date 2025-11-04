@@ -20,7 +20,7 @@ export const PasswordRulesWrapper = styled.View`
 
   border-radius: 15px;
 
-  background-color: ${({ theme }) => theme.colors.secondary_10};
+  background-color: ${({ theme }) => theme.colors.primary_20};
 `;
 
 export const PasswordRulesRow = styled.View`

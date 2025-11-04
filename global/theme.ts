@@ -22,6 +22,9 @@ export const colors = {
   secondary_80: '#494949',
   secondary_100: '#1C1C1C',
 
+  alert_40: '#FFFACB',
+  alert_60: '#E1CF36',
+
   error_40: '#FFE0E3',
   error_60: '#DE3737',
 

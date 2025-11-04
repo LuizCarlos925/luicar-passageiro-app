@@ -23,6 +23,7 @@ export { default as TermsIcon } from './Terms.svg';
 export { default as TrashIcon } from './Trash.svg';
 
 // modal
+export { default as ModalAlert } from './modal/Alert.svg';
 export { default as ModalError } from './modal/Error.svg';
 export { default as ModalSuccess } from './modal/Success.svg';
 

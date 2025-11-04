@@ -12,7 +12,7 @@ import { width } from '@/global/constants';
 
 const { height: deviceHeight } = Dimensions.get('screen');
 
-export type ModalType = 'Success' | 'Error';
+export type ModalType = 'Success' | 'Error' | 'Alert';
 
 export interface Props {
   isVisible: boolean;
@@ -27,6 +27,11 @@ export interface Props {
 }
 
 const modalTypes = {
+  Alert: {
+    icon: 'ModalAlert',
+    primary_color: colors.alert_60,
+    secondary_color: colors.alert_40,
+  },
   Error: {
     icon: 'ModalError',
     primary_color: colors.error_60,
