@@ -20,7 +20,7 @@ export const SETTINGS_MENUS: ISettingsMenus[] = [
     id: 2,
     title: 'Meus cartões',
     icon: 'CreditCardIcon',
-    path: '/(main)/Settings/CreditCards',
+    path: '/(main)/Settings/CreditCard',
   },
   {
     id: 3,

@@ -25,6 +25,12 @@ export { default as TermsIcon } from './Terms.svg';
 export { default as TrashIcon } from './Trash.svg';
 export { default as Trash2Icon } from './Trash2.svg';
 
+// brands
+export { default as BrandCreditCard } from './brand/CreditCard.svg';
+export { default as BrandElo } from './brand/EloLogo.svg';
+export { default as BrandMasterCard } from './brand/MasterCardLogo.svg';
+export { default as BrandVisa } from './brand/VisaLogo.svg';
+
 // modal
 export { default as ModalAlert } from './modal/Alert.svg';
 export { default as ModalError } from './modal/Error.svg';

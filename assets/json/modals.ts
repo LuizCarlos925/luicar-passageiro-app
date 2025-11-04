@@ -6,7 +6,6 @@ export const modalsOptions = {
       'O link de redefinição foi enviado com sucesso! Não esqueça de conferir a caixa de spam',
     textButton1: 'Continuar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   changePassword: {
     type: 'Success',
@@ -14,7 +13,6 @@ export const modalsOptions = {
     description: 'Sua senha foi redefinida com sucesso!',
     textButton1: 'Continuar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   signUp: {
     type: 'Success',
@@ -23,7 +21,6 @@ export const modalsOptions = {
       'Seu cadastro foi concluído com sucesso! Agora é só aproveitar os benefícios do app!',
     textButton1: 'Continuar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   logout: {
     type: 'Error',
@@ -31,7 +28,6 @@ export const modalsOptions = {
     description: 'Você está prestes a sair da sua conta',
     textButton1: 'Voltar',
     textButton2: 'Sair',
-    isVerticalButtons: true,
   },
   changePasswordAlert: {
     type: 'Alert',
@@ -47,7 +43,6 @@ export const modalsOptions = {
     description: 'Alterações salvas com sucesso!',
     textButton1: 'Continuar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   avatar: {
     type: 'Image',
@@ -55,7 +50,28 @@ export const modalsOptions = {
     description: 'Escolha a origem do arquivo',
     textButton1: 'Buscar na galeria',
     textButton2: 'Usar câmera',
-    isVerticalButtons: false,
+  },
+  deleteCreditCard: {
+    type: 'Error',
+    title: 'Atenção!',
+    description:
+      'Você está prestes a excluir o cartão selecionado. Essa ação não poderá ser desfeita. Tem certeza que deseja continuar?',
+    textButton1: 'Cancelar',
+    textButton2: 'Continuar',
+  },
+  deleteCreditCardSuccess: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description: 'Cartão removido com sucesso!',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
+  creditCardSuccess: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description: 'Cartão adicionado com sucesso!',
+    textButton1: 'Continuar',
+    textButton2: undefined,
   },
 
   signUpError: {
@@ -65,7 +81,6 @@ export const modalsOptions = {
       'Cadastro criado com sucesso, mas cartão não aprovado. Cadastre novamente o cartão após o login.',
     textButton1: 'Continuar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   saveAddressSuccess: {
     type: 'Success',
@@ -73,15 +88,6 @@ export const modalsOptions = {
     description: undefined,
     textButton1: 'Voltar',
     textButton2: undefined,
-    isVerticalButtons: false,
-  },
-  creditCardSuccess: {
-    type: 'Success',
-    title: 'Cartão salvo com sucesso!',
-    description: undefined,
-    textButton1: 'Voltar',
-    textButton2: undefined,
-    isVerticalButtons: false,
   },
   paymentSuccess: {
     type: 'Success',
@@ -89,7 +95,6 @@ export const modalsOptions = {
     description: undefined,
     textButton1: 'Ok!',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   paymentError: {
     type: 'Error',
@@ -97,7 +102,6 @@ export const modalsOptions = {
     description: 'Erro no pagamento. Tente novamente!',
     textButton1: 'Voltar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   noPaymentSelected: {
     type: 'Error',
@@ -105,7 +109,6 @@ export const modalsOptions = {
     description: 'Por favor, selecione um método de pagamento para continuar.',
     textButton1: 'Voltar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   cancelRide: {
     type: 'Error',
@@ -113,7 +116,6 @@ export const modalsOptions = {
     description: 'Estamos procurando um motorista',
     textButton1: 'Voltar',
     textButton2: 'Sim, cancelar',
-    isVerticalButtons: true,
   },
   cancelRideSuccess: {
     type: 'Success',
@@ -121,7 +123,6 @@ export const modalsOptions = {
     description: 'Sua corrida foi cancelada com sucesso!',
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   makeOfferSuccess: {
     type: 'Success',
@@ -130,7 +131,6 @@ export const modalsOptions = {
       'Lembre-se, motoristas geralmente aceitam corridas com preços mais elevados',
     textButton1: 'Voltar',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   waitingDriver: {
     type: 'Info',
@@ -138,7 +138,6 @@ export const modalsOptions = {
     description: 'Seu motorista está terminando uma viagem aguarde.',
     textButton1: 'Ok',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   deleteAccount: {
     type: 'Error',
@@ -146,7 +145,6 @@ export const modalsOptions = {
     description: 'Você está prestes a %%EXCLUIR%% sua conta permanentemente',
     textButton1: 'Voltar',
     textButton2: 'Excluir conta',
-    isVerticalButtons: true,
   },
   deleteAccountSuccess: {
     type: 'Success',
@@ -154,7 +152,6 @@ export const modalsOptions = {
     description: undefined,
     textButton1: 'Ok',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   addCreditCardSuccess: {
     type: 'Success',
@@ -162,7 +159,6 @@ export const modalsOptions = {
     description: undefined,
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   saveMyLocation: {
     type: 'Success',
@@ -170,7 +166,6 @@ export const modalsOptions = {
     description: undefined,
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   scheduleSuccess: {
     type: 'Success',
@@ -178,7 +173,6 @@ export const modalsOptions = {
     description: 'Obrigado por escolher o Yuse!',
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   scheduleError: {
     type: 'Error',
@@ -186,7 +180,6 @@ export const modalsOptions = {
     description: 'Não recebemos seu pagamento, tente novamente!',
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
   goBack: {
     type: 'Error',
@@ -194,7 +187,6 @@ export const modalsOptions = {
     description: 'Ao voltar, você pode perder seu progresso.',
     textButton1: 'Cancelar',
     textButton2: 'Sim, voltar',
-    isVerticalButtons: true,
   },
   block: {
     type: 'Error',
@@ -202,7 +194,6 @@ export const modalsOptions = {
     description: '',
     textButton1: 'Não',
     textButton2: 'Sim',
-    isVerticalButtons: true,
   },
   blockSuccess: {
     type: 'Success',
@@ -210,6 +201,5 @@ export const modalsOptions = {
     description: 'Este usuário foi bloqueado com sucesso!',
     textButton1: 'OK',
     textButton2: undefined,
-    isVerticalButtons: false,
   },
 };
