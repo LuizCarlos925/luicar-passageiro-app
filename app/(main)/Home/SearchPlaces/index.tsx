@@ -104,7 +104,10 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      setModal({ name: 'paymentSuccess' });
+      setModal({
+        name: 'paymentSuccess',
+        onPress: () => router.push('/(main)/Home/LookingForDriver'),
+      });
     } catch (err) {
       requestPermission().then(response => {
         if (response.granted) {
