@@ -49,7 +49,7 @@ export const CardHistoryRating = ({ trip, onPress }: Props) => {
 
       <Row>
         <TrailWrapper>
-          <IconComponent name="PinIcon" size={12} />
+          <IconComponent name="PinIcon" size={12} color={colors.primary_60} />
           <VerticalLine />
           <IconComponent name="FlagIcon" size={12} />
         </TrailWrapper>

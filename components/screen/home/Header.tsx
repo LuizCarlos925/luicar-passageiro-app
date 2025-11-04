@@ -5,6 +5,7 @@ import Text from '@/components/Text/Text';
 import { IconComponent } from '@/components/Icon/Icon';
 
 import { colors } from '@/global/theme';
+import { router } from 'expo-router';
 
 const Header = () => {
   return (
@@ -27,7 +28,10 @@ const Header = () => {
         Para onde vamos hoje?
       </Text>
 
-      <Pressable style={styles.button}>
+      <Pressable
+        onPress={() => router.push('/(main)/Home/SearchPlaces')}
+        style={styles.button}
+      >
         <IconComponent name="SearchIcon" size={18} color={colors.primary_100} />
         <Text size={16} fontWeight={500}>
           Para onde?

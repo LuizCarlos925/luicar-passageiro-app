@@ -1,22 +1,6 @@
 import styled from 'styled-components/native';
 import { TextInputMask } from 'react-native-masked-text';
 
-export const InputContainer = styled.View`
-  flex-direction: row;
-  width: 100%;
-  height: 45px;
-
-  align-items: center;
-
-  padding: 0 12px;
-  gap: 6px;
-
-  border-width: 1px;
-  border-radius: 8px;
-
-  background-color: ${({ theme }) => theme.colors.neutro_00};
-`;
-
 export const ErrorMessage = styled.Text`
   font-size: 9px;
 

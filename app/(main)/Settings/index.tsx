@@ -123,7 +123,7 @@ const Settings = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => setModal({ name: 'logout', onPress: () => logout() })}
+          onPress={() => router.push('/(main)/Settings/DeleteAccount')}
           style={styles.optionBtn}
         >
           <IconComponent name="TrashIcon" />

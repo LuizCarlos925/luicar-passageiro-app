@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {
   FieldValues,
   useController,
@@ -13,12 +19,10 @@ import {
 import Text from '@/components/Text/Text';
 import { IconComponent, IconT } from '@/components/Icon/Icon';
 
-import { theme } from '@/global/theme';
+import { colors, theme } from '@/global/theme';
 
-import { shadow } from '@/global/shadow';
 import { EyeClosedIcon, EyeOpenIcon } from '@/assets/icons';
 import {
-  InputContainer,
   ErrorMessage,
   TextInput,
   TextInputMasked,
@@ -63,7 +67,6 @@ const Input = <TFieldValues extends FieldValues>({
   labelColor = theme.colors.gray_1e,
   iconColor = theme.colors.neutro_100,
   onPressIcon,
-  hasShadow,
   disableErrorMessage,
   iconRight,
   onPressIconRight,
@@ -132,11 +135,11 @@ const Input = <TFieldValues extends FieldValues>({
           {label}
         </Text>
       )}
-      <InputContainer
+      <View
         style={[
-          containerStyle,
-          hasShadow && shadow.default,
+          styles.inputWrapper,
           { borderColor: handleBorderColor() },
+          containerStyle,
         ]}
       >
         {renderIcon()}
@@ -188,10 +191,24 @@ const Input = <TFieldValues extends FieldValues>({
             )}
           </ButtonEye>
         )}
-      </InputContainer>
+      </View>
       {!disableErrorMessage && <ErrorMessage>{error?.message}</ErrorMessage>}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  inputWrapper: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 45,
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    gap: 6,
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: colors.neutro_00,
+  },
+});
 
 export default Input;

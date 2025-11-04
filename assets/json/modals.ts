@@ -24,10 +24,11 @@ export const modalsOptions = {
   },
   logout: {
     type: 'Error',
-    title: 'Deseja continuar?',
-    description: 'Você está prestes a sair da sua conta',
-    textButton1: 'Voltar',
-    textButton2: 'Sair',
+    title: 'Atenção!',
+    description:
+      'Tem certeza que deseja sair da conta? Será necessário realizar o login novamente.',
+    textButton1: 'Cancelar',
+    textButton2: 'Continuar',
   },
   changePasswordAlert: {
     type: 'Alert',

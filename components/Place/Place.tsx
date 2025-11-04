@@ -4,7 +4,7 @@ import { PinIcon } from '@/assets/icons';
 
 import Text from '@/components/Text/Text';
 
-import { theme } from '@/global/theme';
+import { colors } from '@/global/theme';
 
 import { Container, TextWrapper } from './styles';
 
@@ -25,12 +25,12 @@ export const Place = ({
 }: Props) => {
   return (
     <Container onPress={onPress} isSelected={isSelected} hasBorder={hasBorder}>
-      <PinIcon color={theme.colors.primary_60} />
+      <PinIcon color={colors.primary_60} />
       <TextWrapper>
-        <Text size={16} color={theme.colors.secondary_100}>
+        <Text size={16} color={colors.secondary_100}>
           {title}
         </Text>
-        <Text color={theme.colors.secondary_60} numberOfLines={1}>
+        <Text color={colors.secondary_60} numberOfLines={1}>
           {description}
         </Text>
       </TextWrapper>
