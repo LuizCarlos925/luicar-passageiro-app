@@ -35,7 +35,7 @@ export const CardDriver = ({ driver, onPress }: Props) => {
         </Text>
 
         <Row>
-          <IconComponent name="StarIcon" size={14} />
+          <IconComponent name="StarIcon" size={14} color={colors.primary_100} />
           <Text size={12}>{rating?.toFixed(1)}</Text>
 
           <TextMarker />

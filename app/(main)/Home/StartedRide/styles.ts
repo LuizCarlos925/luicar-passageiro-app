@@ -1,9 +1,10 @@
+import { width } from '@/global/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components/native';
 
 export const HeaderContainer = styled.View`
   flex-direction: row;
-  width: 100%;
+  width: ${width}px;
 
   justify-content: space-between;
 
@@ -18,7 +19,6 @@ export const MenuButton = styled.Pressable`
 export const ContentWrapper = styled.View`
   width: 100%;
 
-  margin-bottom: 90px;
   padding: 0 16px;
   gap: 15px;
 `;
@@ -32,8 +32,6 @@ export const Row = styled.View`
 `;
 
 export const InfoWrapper = styled.View`
-  flex: 1;
-
   gap: 5px;
 `;
 

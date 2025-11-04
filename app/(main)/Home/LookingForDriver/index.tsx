@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { ActivityIndicator, BackHandler, StyleSheet, View } from 'react-native';
 
@@ -15,7 +15,7 @@ import { height, width } from '@/global/constants';
 import { useModal } from '@/hooks/useModal';
 
 import { formatCurrency } from '@/utils/format';
-import { handleError, handleSuccess } from '@/utils/handleError';
+import { handleError } from '@/utils/handleError';
 import { IconComponent } from '@/components/Icon/Icon';
 
 import { WaitingLottie } from '@/assets/animations';
@@ -37,7 +37,7 @@ const LookingForDriver = () => {
   useFocusEffect(
     useCallback(() => {
       const interval = setInterval(() => {
-        handleSuccess('Estamos procurando um motorista para você, aguarde!');
+        router.replace('/(main)/Home/StartedRide');
       }, 15000);
 
       return () => clearInterval(interval);

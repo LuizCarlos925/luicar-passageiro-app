@@ -4,6 +4,7 @@ export { default as ChevronIcon } from './Chevron.svg';
 export { default as ChevronLeftIcon } from './ChevronLeft.svg';
 export { default as ClockOutlineIcon } from './ClockOutline.svg';
 export { default as CreditCardIcon } from './CreditCard.svg';
+export { default as DiamondIcon } from './Diamond.svg';
 export { default as EditIcon } from './Edit.svg';
 export { default as EyeClosedIcon } from './EyeClosed.svg';
 export { default as EyeOpenIcon } from './EyeOpen.svg';

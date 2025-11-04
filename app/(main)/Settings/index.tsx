@@ -55,7 +55,7 @@ const Settings = () => {
             Gabriel souza Lima {`\u2022`}
           </Text>
 
-          <IconComponent name="StarIcon" size={16} />
+          <IconComponent name="StarIcon" size={16} color={colors.primary_100} />
           <Text size={16} fontWeight={600} color={colors.secondary_100}>
             0
           </Text>

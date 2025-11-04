@@ -131,7 +131,7 @@ const Profile = () => {
               </Text>
               <Text color={colors.secondary_40}>{`\u2022`}</Text>
 
-              <IconComponent name="StarIcon" />
+              <IconComponent name="StarIcon" color={colors.primary_100} />
               <Text size={16} fontWeight={600}>
                 4.0
               </Text>
