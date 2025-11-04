@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as Location from 'expo-location';
+import QRCode from 'react-native-qrcode-svg';
+import * as Clipboard from 'expo-clipboard';
 
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
@@ -21,6 +23,10 @@ import { colors } from '@/global/theme';
 import { handleError } from '@/utils/handleError';
 import { formatReverseGeocode } from '@/utils/formatAddress';
 
+import { useModal } from '@/hooks/useModal';
+import { getCardFlag } from '@/utils/creditCardFlag';
+import { IconComponent } from '@/components/Icon/Icon';
+
 import { Header } from './styles';
 
 type IForm = {
@@ -33,6 +39,8 @@ const SearchPlaces = () => {
     origin: string;
     destination: string;
   }>();
+
+  const { setModal } = useModal();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, requestPermission] = Location.useForegroundPermissions({
@@ -59,6 +67,14 @@ const SearchPlaces = () => {
       setValue('startingPoint', origin);
     }
   }, [origin, destination]);
+
+  const handleCopy = async () => {
+    try {
+      await Clipboard.setStringAsync('dasda');
+    } catch (err) {
+      handleError('Não foi possível copiar o código');
+    }
+  };
 
   const getLocation = async () => {
     try {
@@ -88,7 +104,7 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      //
+      setModal({ name: 'paymentSuccess' });
     } catch (err) {
       requestPermission().then(response => {
         if (response.granted) {
@@ -169,8 +185,51 @@ const SearchPlaces = () => {
           />
         </View>
 
+        {method === 'creditCard' && (
+          <View style={styles.creditCard}>
+            {getCardFlag('5437 7388 1413 5551', colors.neutro_00, {
+              width: 10,
+              height: 10,
+            })}
+
+            <Text color={colors.secondary_100} style={styles.text}>
+              Nome do cartão{' '}
+              <Text fontWeight={700} color={colors.secondary_100}>
+                **** 1962
+              </Text>
+            </Text>
+
+            <IconComponent
+              name="SwitchIcon"
+              onPress={() => router.push('/(main)/Settings/CreditCard')}
+            />
+          </View>
+        )}
+
+        {method === 'pix' && (
+          <View style={styles.pixWrapper}>
+            <View style={styles.qrCodeWrapper}>
+              <QRCode size={132} value="dasda" />
+            </View>
+
+            <Button onPress={handleCopy} outline style={styles.copyButton}>
+              Copiar código
+            </Button>
+          </View>
+        )}
+
+        {method === 'cash' && (
+          <View style={styles.row}>
+            <IconComponent name="InfoAlertIcon" />
+
+            <Text size={12} style={{ flex: 1 }}>
+              Atenção! Esteja com o valor trocado para facilitar o pagamento.
+            </Text>
+          </View>
+        )}
+
         <Button onPress={onSubmit} isLoading={isLoading} style={styles.button}>
-          Continuar
+          Solicitar motorista
         </Button>
       </View>
     </GlobalContainer>
@@ -201,6 +260,33 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 'auto',
+  },
+  creditCard: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    gap: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.secondary_20,
+  },
+  text: {
+    flex: 1,
+  },
+  pixWrapper: {
+    alignItems: 'center',
+    gap: 16,
+  },
+  qrCodeWrapper: {
+    overflow: 'hidden',
+    width: 132,
+    height: 132,
+    borderRadius: 12,
+  },
+  copyButton: {
+    width: 180,
   },
 });
 

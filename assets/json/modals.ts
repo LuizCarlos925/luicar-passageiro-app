@@ -74,6 +74,14 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  paymentSuccess: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description:
+      'Pagamento efetuado com sucesso! Aguarde, estamos procurando um motorista!',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
 
   signUpError: {
     type: 'Success',
@@ -88,13 +96,6 @@ export const modalsOptions = {
     title: 'Endereço salvo com sucesso!',
     description: undefined,
     textButton1: 'Voltar',
-    textButton2: undefined,
-  },
-  paymentSuccess: {
-    type: 'Success',
-    title: 'Pagamento efetuado com sucesso!',
-    description: undefined,
-    textButton1: 'Ok!',
     textButton2: undefined,
   },
   paymentError: {

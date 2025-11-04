@@ -6,11 +6,14 @@ import { Car2 } from '@/assets/images';
 import Text from '@/components/Text/Text';
 
 import { colors } from '@/global/theme';
+
 import { formatCurrency } from '@/utils/format';
 
-type Props = {};
+type Props = {
+  name?: string;
+};
 
-const CardVehicle = ({}: Props) => {
+const CardVehicle = ({ name }: Props) => {
   return (
     <View style={styles.container}>
       <Image source={Car2} style={styles.image} />
