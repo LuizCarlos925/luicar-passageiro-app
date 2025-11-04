@@ -11,12 +11,25 @@ import { mockHistory } from '@/mock/history';
 
 const History = () => {
   return (
-    <GlobalContainer paddingHorizontal={20} showTabBar>
+    <GlobalContainer
+      alignItems="flex-start"
+      paddingHorizontal={20}
+      gap={24}
+      showTabBar
+    >
+      <Text
+        size={24}
+        fontWeight={700}
+        color={colors.primary_100}
+        marginTop={24}
+      >
+        Histórico de corridas
+      </Text>
       <FlatList
         keyExtractor={([date]) => date}
         data={Object.entries(mockHistory)}
         renderItem={({ item: [date, trips] }) => (
-          <View style={{ width: '100%', gap: 10 }}>
+          <View style={{ width: '100%', gap: 24 }}>
             <Text size={14} fontWeight={600} color={colors.neutro_70}>
               {formatDateNominal(date)}
             </Text>
@@ -35,7 +48,7 @@ const History = () => {
           </View>
         )}
         style={{ width: '100%' }}
-        contentContainerStyle={{ padding: 4, gap: 20 }}
+        contentContainerStyle={{ padding: 4, gap: 24 }}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}

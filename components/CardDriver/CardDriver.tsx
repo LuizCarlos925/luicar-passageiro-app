@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { StarIcon } from '@/assets/icons';
-
 import Text from '@/components/Text/Text';
 
-import { theme } from '@/global/theme';
+import { colors, theme } from '@/global/theme';
 
-import { border } from '@/global/shadow';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 
+import { Pressable, StyleSheet } from 'react-native';
+import { IconComponent } from '@/components/Icon/Icon';
 import {
   Container,
   ProfileWrapper,
@@ -19,66 +18,56 @@ import {
 
 type Props = {
   driver?: Driver;
-  tripsQuantity?: number;
-  hasBorder?: boolean;
-  isRatingGreen?: boolean;
   onPress?: () => void;
 };
 
-export const CardDriver = ({
-  driver,
-  tripsQuantity,
-  hasBorder,
-  isRatingGreen,
-  onPress,
-}: Props) => {
-  const rating = '0.0';
+export const CardDriver = ({ driver, onPress }: Props) => {
+  const rating = Math.floor(Math.random() * 2) + 4;
+  const hasRating = rating >= 4.5;
 
   return (
-    <Container
-      style={hasBorder && border.default}
-      hasBorder={hasBorder}
-      onPress={onPress}
-    >
-      <AvatarImage uri={driver?.image?.url || ''} size={35} />
+    <Container onPress={onPress}>
+      <AvatarImage uri={driver?.image?.url || ''} size={38} />
 
       <ProfileWrapper>
-        {driver?.socialName ? (
-          <Text size={16} fontWeight={600} color={theme.colors.primary_100}>
-            {driver?.socialName}
-          </Text>
-        ) : (
-          <Text size={16} fontWeight={600} color={theme.colors.primary_100}>
-            {driver?.firstName} {driver?.lastName}
-          </Text>
-        )}
+        <Text size={16} fontWeight={600} color={theme.colors.secondary_100}>
+          Flávio Oliveira
+        </Text>
 
         <Row>
-          <StarIcon width={10} height={10} />
-          <Text size={11} color={theme.colors.primary_100}>
-            {rating}
-          </Text>
+          <IconComponent name="StarIcon" size={14} />
+          <Text size={12}>{rating?.toFixed(1)}</Text>
+
           <TextMarker />
-          <Text size={11} color={theme.colors.primary_100}>
-            {tripsQuantity || 0} viagens
-          </Text>
+
+          <IconComponent name="CarIcon" size={16} />
+          <Text size={12}>2405 viagens</Text>
         </Row>
       </ProfileWrapper>
 
-      {!hasBorder && driver?.review?.my_rating && (
-        <RatingWrapper isActive={isRatingGreen}>
-          <Text
-            size={16}
-            fontWeight={600}
-            color={
-              isRatingGreen ? theme.colors.neutro_00 : theme.colors.primary_100
-            }
-          >
-            {driver?.review?.my_rating}
-          </Text>
-          <StarIcon />
+      {hasRating ? (
+        <RatingWrapper>
+          <IconComponent name="StarFilledIcon" size={18} />
+          <Text fontWeight={600}>{rating?.toFixed(1)}</Text>
         </RatingWrapper>
+      ) : (
+        <Pressable onPress={() => null} style={styles.rateBtn}>
+          <Text fontWeight={600} color={colors.primary_100}>
+            Avaliar
+          </Text>
+        </Pressable>
       )}
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  rateBtn: {
+    width: 70,
+    height: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: colors.primary_20,
+  },
+});

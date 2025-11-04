@@ -8,6 +8,8 @@ export const Container = styled.Pressable`
 
   border-radius: 15px;
 
+  border: 1px solid ${({ theme }) => theme.colors.secondary_20};
+
   background-color: ${({ theme }) => theme.colors.neutro_00};
 `;
 
@@ -32,7 +34,7 @@ export const VehicleWrapper = styled.View`
   border: 1px solid ${({ theme }) => theme.colors.gray_9e}70;
   border-radius: 12px;
 
-  background-color: ${({ theme }) => theme.colors.neutro_00};
+  background-color: #f1f1f1;
 `;
 
 export const TextWrapper = styled.View`

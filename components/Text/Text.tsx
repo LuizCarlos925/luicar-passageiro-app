@@ -39,7 +39,6 @@ const Text = ({
         fontFamily: fontWeights[fontWeight],
         fontSize: size,
         marginTop,
-        lineHeight: size + 2,
         textAlign,
         ...style,
       }}
