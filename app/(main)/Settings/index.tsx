@@ -19,10 +19,17 @@ import { SETTINGS_MENUS } from '@/assets/json/settingsMenu';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { shadow } from '@/global/shadow';
 import { width } from '@/global/constants';
+import { ModalSupport } from '@/components/screen';
 
 const Settings = () => {
   const { logout } = useAuth();
   const { setModal } = useModal();
+
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const handleSupportPress = () => {
+    setIsVisible(false);
+  };
 
   return (
     <GlobalContainer paddingHorizontal={20} showTabBar withoutPaddingTop>
@@ -63,7 +70,13 @@ const Settings = () => {
         {SETTINGS_MENUS.map(item => (
           <Pressable
             key={item.id}
-            onPress={() => router.push(item.path)}
+            onPress={() => {
+              if (item.title === 'Suporte') {
+                setIsVisible(true);
+                return;
+              }
+              router.push(item.path);
+            }}
             style={styles.optionBtn}
           >
             <IconComponent
@@ -124,6 +137,12 @@ const Settings = () => {
           />
         </Pressable>
       </View>
+
+      <ModalSupport
+        isVisible={isVisible}
+        onPress={handleSupportPress}
+        onBackPress={() => setIsVisible(false)}
+      />
     </GlobalContainer>
   );
 };

@@ -38,7 +38,7 @@ export const SETTINGS_MENUS: ISettingsMenus[] = [
     id: 5,
     title: 'Suporte',
     icon: 'SupportIcon',
-    path: '/(main)/Settings/Support',
+    path: '' as any,
   },
   {
     id: 6,
