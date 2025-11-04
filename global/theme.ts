@@ -62,7 +62,7 @@ export const colors = {
 
   yellow_ff: '#FFF500',
   yellow_f1: '#F1DE3B',
-};
+} as const;
 
 export const fonts = {
   light: 'NataSansLight',

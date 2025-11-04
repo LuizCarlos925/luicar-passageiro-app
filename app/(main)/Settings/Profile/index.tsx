@@ -32,7 +32,29 @@ import {
 } from './styles';
 
 const Profile = () => {
+  const { setModal } = useModal();
+
   const [section, setSection] = useState('profile');
+  const [avatarUri, setAvatarUri] = useState(
+    'https://randomuser.me/api/portraits/men/75.jpg',
+  );
+
+  const handleTakePhoto = async () => {
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: 'images',
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      });
+
+      if (!result.canceled) {
+        setAvatarUri(result.assets[0].uri);
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  };
 
   const handlePickImage = async () => {
     try {
@@ -44,7 +66,7 @@ const Profile = () => {
       });
 
       if (!result.canceled) {
-        //
+        setAvatarUri(result.assets[0].uri);
       }
     } catch (err) {
       handleError(err);
@@ -68,17 +90,31 @@ const Profile = () => {
         <Row
           style={{ position: 'absolute', bottom: -50, paddingHorizontal: 16 }}
         >
-          <ProfileButton onPress={handlePickImage}>
-            <AvatarImage
-              uri="https://randomuser.me/api/portraits/men/75.jpg"
-              size={116}
-              style={styles.avatar}
-            />
+          <ProfileButton
+            onPress={() =>
+              setModal({
+                name: 'avatar',
+                onPress: handlePickImage,
+                onPressBack: handleTakePhoto,
+              })
+            }
+          >
+            <AvatarImage uri={avatarUri} size={116} style={styles.avatar} />
 
             <IconComponent
-              name="Trash2Icon"
+              name={avatarUri ? 'Trash2Icon' : 'EditIcon'}
               size={16}
-              onPress={handlePickImage}
+              color={colors.neutro_00}
+              onPress={
+                avatarUri
+                  ? () => setAvatarUri('')
+                  : () =>
+                      setModal({
+                        name: 'avatar',
+                        onPress: handlePickImage,
+                        onPressBack: handleTakePhoto,
+                      })
+              }
               style={styles.avatarBtn}
             />
           </ProfileButton>

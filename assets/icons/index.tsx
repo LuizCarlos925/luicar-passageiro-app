@@ -9,6 +9,7 @@ export { default as EyeClosedIcon } from './EyeClosed.svg';
 export { default as EyeOpenIcon } from './EyeOpen.svg';
 export { default as FaqIcon } from './Faq.svg';
 export { default as FlagIcon } from './Flag.svg';
+export { default as GalleryIcon } from './Gallery.svg';
 export { default as LogoIcon } from './Logo.svg';
 export { default as LogoutIcon } from './Logout.svg';
 export { default as LogoWhiteIcon } from './LogoWhite.svg';

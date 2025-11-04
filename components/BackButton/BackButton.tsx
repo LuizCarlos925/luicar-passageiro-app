@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { ChevronLeftIcon } from '@/assets/icons';
 
 import Text from '@/components/Text/Text';
+import { colors } from '@/global/theme';
 
 interface IBackButtonProps {
   title?: string;
@@ -18,7 +19,7 @@ interface IBackButtonProps {
 const BackButton = ({
   title,
   size = 20,
-  color,
+  color = colors.secondary_60,
   onPress,
   style,
 }: IBackButtonProps) => {

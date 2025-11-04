@@ -12,7 +12,7 @@ import { width } from '@/global/constants';
 
 const { height: deviceHeight } = Dimensions.get('screen');
 
-export type ModalType = 'Success' | 'Error' | 'Alert';
+export type ModalType = 'Success' | 'Error' | 'Alert' | 'Image';
 
 export interface Props {
   isVisible: boolean;
@@ -41,6 +41,11 @@ const modalTypes = {
     icon: 'ModalSuccess',
     primary_color: colors.success_60,
     secondary_color: colors.success_40,
+  },
+  Image: {
+    icon: 'GalleryIcon',
+    primary_color: colors.primary_60,
+    secondary_color: colors.primary_40,
   },
 } as const;
 
@@ -124,6 +129,17 @@ const Buttons = ({
   onPress,
   onBackPress,
 }: ButtonsProps) => {
+  if (type === 'Image') {
+    return (
+      <>
+        <Button onPress={onBackPress} outline>
+          {textButton1}
+        </Button>
+        <Button onPress={onPress}>{textButton2}</Button>
+      </>
+    );
+  }
+
   if (textButton2) {
     return (
       <View style={styles.row}>
