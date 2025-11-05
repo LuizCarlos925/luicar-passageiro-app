@@ -20,10 +20,11 @@ import PaymentMethod from './PaymentMethod';
 
 type Props = {
   value?: number;
-  onPress: () => void;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
-const TipBS = ({ onPress, value }: Props) => {
+const TipBS = ({ onClose, value, onSubmit }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const router = useRouter();
@@ -38,6 +39,15 @@ const TipBS = ({ onPress, value }: Props) => {
     }
   };
 
+  const handlePayment = async () => {
+    try {
+      onClose();
+      onSubmit();
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
   return (
     <BottomSheetView style={[styles.container, { paddingBottom: bottom + 20 }]}>
       <View>
@@ -48,7 +58,7 @@ const TipBS = ({ onPress, value }: Props) => {
 
           <IconComponent
             name="CloseIcon"
-            onPress={onPress}
+            onPress={onClose}
             size={16}
             style={{ padding: 8 }}
           />
@@ -124,7 +134,7 @@ const TipBS = ({ onPress, value }: Props) => {
         </View>
       )}
 
-      <Button onPress={() => null} style={{ opacity: method ? 1 : 0.7 }}>
+      <Button onPress={handlePayment} style={{ opacity: method ? 1 : 0.7 }}>
         Pagar bonificação para motorista
       </Button>
     </BottomSheetView>

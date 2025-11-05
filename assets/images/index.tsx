@@ -1,5 +1,6 @@
 export { default as Blur } from './Blur.png';
 export { default as CancelImg } from './Cancel.png';
+export { default as CoinsImg } from './Coins.png';
 export { default as CreditCardImg } from './CreditCard.png';
 export { default as DefaultAvatarImg } from './DefaultAvatar.png';
 export { default as EmptyHistoryImg } from './EmptyHistory.png';

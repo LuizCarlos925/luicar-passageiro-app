@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
@@ -20,13 +20,13 @@ import { colors } from '@/global/theme';
 import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
+import ModalPayment from '@/components/screen/home/ModalPayment';
 
 const RideFinished = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
 
-  const [valueSelected, setValueSelected] = React.useState<
-    number | undefined
-  >();
+  const [isVisible, setIsVisible] = useState(false);
+  const [valueSelected, setValueSelected] = useState<number | undefined>();
 
   const { control, handleSubmit } = useForm<EvaluateForm>({
     resolver: yupResolver(EvaluateSchema as any),
@@ -60,19 +60,27 @@ const RideFinished = () => {
       gap={16}
       paddingHorizontal={20}
       component={
-        <BottomSheet
-          ref={bottomSheetRef}
-          snapPoints={[250, 350]}
-          index={-1}
-          handleComponent={() => <View style={styles.lineHandler} />}
-          backgroundStyle={{ backgroundColor: colors.neutro_00 }}
-          enablePanDownToClose
-        >
-          <TipBS
-            value={valueSelected}
-            onPress={() => bottomSheetRef.current?.close()}
+        <>
+          <BottomSheet
+            ref={bottomSheetRef}
+            snapPoints={[250, 350]}
+            index={-1}
+            handleComponent={() => <View style={styles.lineHandler} />}
+            backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+            enablePanDownToClose
+          >
+            <TipBS
+              value={valueSelected}
+              onClose={() => bottomSheetRef.current?.close()}
+              onSubmit={() => setIsVisible(true)}
+            />
+          </BottomSheet>
+          <ModalPayment
+            isVisible={isVisible}
+            onPress={() => setIsVisible(false)}
+            onBackPress={() => setIsVisible(false)}
           />
-        </BottomSheet>
+        </>
       }
     >
       <Text size={20} fontWeight={600} marginTop={24}>
@@ -83,6 +91,13 @@ const RideFinished = () => {
         uri="https://randomuser.me/api/portraits/men/65.jpg"
         size={80}
       />
+      <View style={styles.ratingWrapper}>
+        <IconComponent name="StarIcon" size={12} color={colors.neutro_00} />
+
+        <Text size={12} fontWeight={600} color={colors.neutro_00}>
+          4.9
+        </Text>
+      </View>
 
       <View style={styles.textWrapper}>
         <Text size={24} fontWeight={700} color={colors.secondary_100}>
@@ -170,6 +185,17 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 20,
     backgroundColor: '#d2d6db',
+  },
+  ratingWrapper: {
+    flexDirection: 'row',
+    width: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -28,
+    padding: 2,
+    gap: 4,
+    borderRadius: 4,
+    backgroundColor: colors.primary_80,
   },
 });
 
