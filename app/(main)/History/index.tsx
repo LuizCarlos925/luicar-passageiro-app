@@ -15,6 +15,8 @@ import { ITrip } from '@/interfaces/history';
 import { formatDateNominal } from '@/utils/format';
 
 import { mockHistory } from '@/mock/history';
+import { EmptyHistoryImg } from '@/assets/images';
+import { Image } from 'expo-image';
 
 const History = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -78,13 +80,30 @@ const History = () => {
             ))}
           </View>
         )}
-        style={{ width: '100%' }}
-        contentContainerStyle={{ padding: 4, gap: 24 }}
+        style={{ flex: 1, width: '100%' }}
+        contentContainerStyle={{ flexGrow: 1, padding: 4, gap: 24 }}
+        ListEmptyComponent={<Empty />}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
       />
     </GlobalContainer>
+  );
+};
+
+const Empty = () => {
+  return (
+    <View style={styles.empty}>
+      <Image source={EmptyHistoryImg} style={styles.image} />
+
+      <Text size={20} fontWeight={700} style={styles.text}>
+        Nenhuma corrida até agora
+      </Text>
+      <Text color={colors.secondary_60} style={styles.text}>
+        Assim que você viajar com a Luicar, poderá ver o histórico de corridas
+        aqui
+      </Text>
+    </View>
   );
 };
 
@@ -96,6 +115,19 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 20,
     backgroundColor: '#d2d6db',
+  },
+  empty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  image: {
+    width: '80%',
+    height: 200,
+  },
+  text: {
+    textAlign: 'center',
   },
 });
 
