@@ -6,6 +6,7 @@ export { default as EmptyHistoryImg } from './EmptyHistory.png';
 export { default as HeaderBg } from './HeaderBg.png';
 export { default as LocationImg } from './Location.png';
 export { default as Onboarding } from './Onboarding.png';
+export { default as SeatBelt } from './SeatBelt.png';
 export { default as Support } from './Support.png';
 
 // cars

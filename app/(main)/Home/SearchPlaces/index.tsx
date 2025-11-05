@@ -9,7 +9,6 @@ import * as Clipboard from 'expo-clipboard';
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
-import { Divider } from '@/components/Divider/Divider';
 import {
   ButtonPaymentMethod,
   ButtonWoman,
@@ -19,6 +18,7 @@ import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
+import { width } from '@/global/constants';
 
 import { handleError } from '@/utils/handleError';
 import { formatReverseGeocode } from '@/utils/formatAddress';
@@ -49,9 +49,7 @@ const SearchPlaces = () => {
 
   const { control, setValue } = useForm<IForm>();
 
-  const [currentLocation, setCurrentLocation] = useState<string | undefined>(
-    'Rua tal tal, 123',
-  );
+  const [currentLocation, setCurrentLocation] = useState(origin);
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -159,7 +157,7 @@ const SearchPlaces = () => {
         <ButtonWoman name="isWoman" control={control} />
         <CardVehicle />
 
-        <Divider style={{ maxHeight: 8 }} />
+        <View style={styles.divider} />
 
         <View style={styles.textWrapper}>
           <Text size={16} fontWeight={600} color={colors.secondary_80}>
@@ -274,6 +272,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.secondary_20,
+  },
+  divider: {
+    width,
+    height: 8,
+    alignSelf: 'center',
+    backgroundColor: colors.secondary_20,
   },
   text: {
     flex: 1,

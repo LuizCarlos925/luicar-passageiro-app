@@ -1,6 +1,7 @@
 export { default as CarIcon } from './Car.svg';
 export { default as CashBackIcon } from './CashBack.svg';
 export { default as ChangePasswordIcon } from './ChangePassword.svg';
+export { default as ChatIcon } from './Chat.svg';
 export { default as ChevronIcon } from './Chevron.svg';
 export { default as ChevronLeftIcon } from './ChevronLeft.svg';
 export { default as ClockOutlineIcon } from './ClockOutline.svg';
@@ -22,6 +23,7 @@ export { default as PersonIcon } from './Person.svg';
 export { default as PinIcon } from './Pin.svg';
 export { default as PinFilledIcon } from './PinFilled.svg';
 export { default as PixIcon } from './Pix.svg';
+export { default as QuestIcon } from './Quest.svg';
 export { default as SearchIcon } from './Search.svg';
 export { default as SettingsHeaderIcon } from './SettingsHeader.svg';
 export { default as StarIcon } from './Star.svg';

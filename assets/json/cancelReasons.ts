@@ -1,32 +1,45 @@
-export const CANCEL_REASONS = [
+import { IconT } from '@/components/Icon/Icon';
+
+type CancelReason = {
+  id: string;
+  reason: string;
+  icon: IconT;
+};
+
+export const CANCEL_REASONS: CancelReason[] = [
   {
     id: '1',
     reason: 'Motorista demorou muito para chegar',
-    icon: 'noShow',
+    icon: 'ReasonWatch',
   },
   {
     id: '2',
     reason: 'Viagem solicitada por engano',
-    icon: 'badCar',
+    icon: 'ReasonClose',
   },
   {
     id: '3',
     reason: 'Local de embarque errado',
-    icon: 'changePlans',
+    icon: 'ReasonSend',
   },
   {
     id: '4',
     reason: 'Não apareceu no local de embarque',
-    icon: 'safetyReason',
+    icon: 'ReasonPin',
   },
   {
     id: '5',
     reason: 'Problema técnico com app ou conexão',
-    icon: 'otherReason',
+    icon: 'ReasonSignal',
   },
   {
-    id: '5',
+    id: '6',
+    reason: 'Mudança de planos',
+    icon: 'ReasonBack',
+  },
+  {
+    id: '7',
     reason: 'Outros',
-    icon: 'otherReason',
+    icon: 'ReasonEllipsis',
   },
 ];

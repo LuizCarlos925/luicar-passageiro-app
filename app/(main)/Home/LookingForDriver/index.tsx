@@ -19,6 +19,8 @@ import { handleError } from '@/utils/handleError';
 import { IconComponent } from '@/components/Icon/Icon';
 
 import { WaitingLottie } from '@/assets/animations';
+import ModalWaitingCancel from '@/components/screen/home/ModalWaitingCancel';
+import { CancelRideBS } from '@/components/screen';
 import {
   Column,
   ContentWrapper,
@@ -31,18 +33,21 @@ import {
 const LookingForDriver = () => {
   const { setModal } = useModal();
 
-  const bottomSheetRef = useRef(null);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
 
-  useFocusEffect(
-    useCallback(() => {
-      const interval = setInterval(() => {
-        router.replace('/(main)/Home/StartedRide');
-      }, 15000);
+  const [isVisible, setIsVisible] = React.useState(false);
 
-      return () => clearInterval(interval);
-    }, []),
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const interval = setInterval(() => {
+  //       router.replace('/(main)/Home/StartedRide');
+  //     }, 15000);
+
+  //     return () => clearInterval(interval);
+  //   }, []),
+  // );
 
   const handleCancelRide = async () => {
     try {
@@ -56,10 +61,7 @@ const LookingForDriver = () => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setModal({
-          name: 'cancelRide',
-          onPress: () => handleCancelRide(),
-        });
+        setIsVisible(true);
         return true;
       },
     );
@@ -68,7 +70,32 @@ const LookingForDriver = () => {
   }, [setModal]);
 
   return (
-    <GlobalContainer paddingHorizontal={20} gap={30}>
+    <GlobalContainer
+      paddingHorizontal={20}
+      gap={30}
+      component={
+        <>
+          <ModalWaitingCancel
+            isVisible={isVisible}
+            onPress={() => {
+              setIsVisible(false);
+              bsCancelRef.current?.expand();
+            }}
+            onBackPress={() => setIsVisible(false)}
+          />
+          <BottomSheet
+            ref={bsCancelRef}
+            index={-1}
+            snapPoints={[250, 350]}
+            handleComponent={() => <View style={styles.lineHandler} />}
+            backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+            enablePanDownToClose
+          >
+            <CancelRideBS onPress={() => bsCancelRef.current?.close()} />
+          </BottomSheet>
+        </>
+      }
+    >
       <Text
         size={24}
         fontWeight={700}
@@ -212,12 +239,10 @@ const LookingForDriver = () => {
           </RideInfoWrapper>
 
           <Button
-            onPress={() =>
-              setModal({
-                name: 'cancelRide',
-                onPress: () => handleCancelRide(),
-              })
-            }
+            onPress={() => {
+              bottomSheetRef.current?.collapse();
+              setIsVisible(true);
+            }}
             style={{ marginTop: 'auto' }}
           >
             Cancelar corrida
@@ -234,6 +259,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 10,
+  },
+  lineHandler: {
+    width: 85,
+    height: 6,
+    alignSelf: 'center',
+    marginVertical: 15,
+    borderRadius: 20,
+    backgroundColor: '#d2d6db',
   },
 });
 

@@ -9,15 +9,16 @@ import { Header } from '@/components/screen';
 import { Place } from '@/components/Place/Place';
 import { ModalLocation } from '@/components/screen';
 import Carousel from '@/components/Carousel/Carousel';
+import { IconComponent } from '@/components/Icon/Icon';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { ADS } from '@/mock/advertisements';
-import { DESTINATIONS } from '@/mock/destinations';
-import { COMPANIES } from '@/mock/companies';
-import { IconComponent } from '@/components/Icon/Icon';
 import { formatCurrency } from '@/utils/format';
+
+import { ADS } from '@/mock/advertisements';
+import { COMPANIES } from '@/mock/companies';
+import { DESTINATIONS } from '@/mock/destinations';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
