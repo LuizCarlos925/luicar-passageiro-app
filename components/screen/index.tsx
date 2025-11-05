@@ -5,6 +5,7 @@ export { default as ButtonPaymentMethod } from './home/PaymentMethod';
 export { default as ButtonWoman } from './home/ButtonWoman';
 export { default as CardVehicle } from './home/CardVehicle';
 export { default as CardCompanyCategory } from './home/CardCompanyCategory';
+export { default as ModalLocation } from './home/ModalLocation';
 export { default as SeeMoreBS } from './home/SeeMoreBS';
 
 export { default as ModalDeleteAccount } from './settings/delete-account/ModalDelete';

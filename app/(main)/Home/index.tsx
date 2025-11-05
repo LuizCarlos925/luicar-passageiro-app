@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
+import * as Location from 'expo-location';
 
 import Text from '@/components/Text/Text';
 import { Header } from '@/components/screen';
 import { Place } from '@/components/Place/Place';
+import { ModalLocation } from '@/components/screen';
 import Carousel from '@/components/Carousel/Carousel';
 import { GlobalContainer } from '@/components/Container/Container';
 
@@ -16,6 +18,16 @@ import { DESTINATIONS } from '@/mock/destinations';
 import { COMPANIES } from '@/mock/companies';
 
 const Home = () => {
+  const [status, requestPermission] = Location.useForegroundPermissions();
+
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  useEffect(() => {
+    if (status && !status?.granted) {
+      setIsVisible(true);
+    }
+  }, [status]);
+
   return (
     <GlobalContainer
       header={{ component: <Header /> }}
@@ -69,6 +81,15 @@ const Home = () => {
           ))}
         </View>
       </View>
+
+      <ModalLocation
+        isVisible={isVisible}
+        onPress={() => {
+          requestPermission();
+          setIsVisible(false);
+        }}
+        onBackPress={() => setIsVisible(false)}
+      />
     </GlobalContainer>
   );
 };

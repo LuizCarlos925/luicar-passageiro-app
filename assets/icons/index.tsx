@@ -45,6 +45,15 @@ export { default as ModalAlert } from './modal/Alert.svg';
 export { default as ModalError } from './modal/Error.svg';
 export { default as ModalSuccess } from './modal/Success.svg';
 
+// reasons
+export { default as ReasonBack } from './reasons/Back.svg';
+export { default as ReasonClose } from './reasons/Close.svg';
+export { default as ReasonEllipsis } from './reasons/Ellipsis.svg';
+export { default as ReasonPin } from './reasons/Pin.svg';
+export { default as ReasonSend } from './reasons/Send.svg';
+export { default as ReasonSignal } from './reasons/Signal.svg';
+export { default as ReasonWatch } from './reasons/Watch.svg';
+
 // tabbar
 export { default as TabbarHome } from './tabbar/Home.svg';
 export { default as TabbarHistory } from './tabbar/History.svg';
