@@ -1,9 +1,12 @@
+import { useRef } from 'react';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 import Text from '@/components/Text/Text';
 import { IconComponent } from '@/components/Icon/Icon';
-import { CardCompanyCategory } from '@/components/screen';
+import { CardCompanyCategory, SeeMoreBS } from '@/components/screen';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
@@ -11,10 +14,11 @@ import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
 import { PRODUCTS } from '@/mock/products';
-import { useRouter } from 'expo-router';
 
 const Company = () => {
   const router = useRouter();
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <GlobalContainer paddingHorizontal={20} gap={16}>
@@ -50,7 +54,12 @@ const Company = () => {
         </View>
       </View>
 
-      <Text fontWeight={700} color={colors.primary_100}>
+      <Text
+        fontWeight={700}
+        color={colors.primary_100}
+        onPress={() => bottomSheetRef.current?.expand()}
+        style={styles.seeMore}
+      >
         Ver mais
       </Text>
 
@@ -69,6 +78,17 @@ const Company = () => {
           />
         ))}
       </View>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={[250, 350]}
+        index={-1}
+        handleComponent={() => <View style={styles.lineHandler} />}
+        backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+        enablePanDownToClose
+      >
+        <SeeMoreBS onPress={() => bottomSheetRef.current?.close()} />
+      </BottomSheet>
     </GlobalContainer>
   );
 };
@@ -101,6 +121,20 @@ const styles = StyleSheet.create({
   categoryWrapper: {
     width: '100%',
     gap: 12,
+  },
+  seeMore: {
+    width: '100%',
+    alignItems: 'center',
+    padding: 4,
+    textAlign: 'center',
+  },
+  lineHandler: {
+    width: 85,
+    height: 6,
+    alignSelf: 'center',
+    marginVertical: 15,
+    borderRadius: 20,
+    backgroundColor: '#d2d6db',
   },
 });
 
