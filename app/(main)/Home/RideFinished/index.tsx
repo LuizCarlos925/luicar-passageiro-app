@@ -1,11 +1,15 @@
 import React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 import Text from '@/components/Text/Text';
+import { TipBS } from '@/components/screen';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
+import { IconComponent } from '@/components/Icon/Icon';
 import { TipOptions } from '@/components/TipOptions/TipOptions';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 import { GlobalContainer } from '@/components/Container/Container';
@@ -17,10 +21,13 @@ import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
 
-import { Pressable, StyleSheet, View } from 'react-native';
-import { IconComponent } from '@/components/Icon/Icon';
-
 const RideFinished = () => {
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
+
+  const [valueSelected, setValueSelected] = React.useState<
+    number | undefined
+  >();
+
   const { control, handleSubmit } = useForm<EvaluateForm>({
     resolver: yupResolver(EvaluateSchema as any),
   });
@@ -49,7 +56,25 @@ const RideFinished = () => {
   };
 
   return (
-    <GlobalContainer gap={16} paddingHorizontal={20}>
+    <GlobalContainer
+      gap={16}
+      paddingHorizontal={20}
+      component={
+        <BottomSheet
+          ref={bottomSheetRef}
+          snapPoints={[250, 350]}
+          index={-1}
+          handleComponent={() => <View style={styles.lineHandler} />}
+          backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+          enablePanDownToClose
+        >
+          <TipBS
+            value={valueSelected}
+            onPress={() => bottomSheetRef.current?.close()}
+          />
+        </BottomSheet>
+      }
+    >
       <Text size={20} fontWeight={600} marginTop={24}>
         Corrida finalizada
       </Text>
@@ -90,6 +115,7 @@ const RideFinished = () => {
           <Text size={14} color={colors.error_60}>
             Denunciar motorista
           </Text>
+
           <IconComponent name="InfoAlertIcon" />
         </Pressable>
       </View>
@@ -97,10 +123,10 @@ const RideFinished = () => {
       <View style={styles.divider} />
 
       <TipOptions
-        onPress={value =>
-          router.push({ pathname: '/(main)/Home/Tip', params: { value } })
-        }
-        isSent={false}
+        onPress={value => {
+          setValueSelected(value);
+          bottomSheetRef.current?.expand();
+        }}
       />
 
       <View style={styles.wrapper}>
@@ -136,6 +162,14 @@ const styles = StyleSheet.create({
     borderColor: colors.error_60,
     borderRadius: 8,
     backgroundColor: '#fffbf8',
+  },
+  lineHandler: {
+    width: 85,
+    height: 6,
+    alignSelf: 'center',
+    marginVertical: 15,
+    borderRadius: 20,
+    backgroundColor: '#d2d6db',
   },
 });
 

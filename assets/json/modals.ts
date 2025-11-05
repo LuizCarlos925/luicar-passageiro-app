@@ -112,4 +112,11 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  paymentWithCash: {
+    type: 'Alert',
+    title: 'Atenção!',
+    description: 'Esteja com o valor trocado para facilitar o pagamento.',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
 };

@@ -39,15 +39,15 @@ const LookingForDriver = () => {
 
   const [isVisible, setIsVisible] = React.useState(false);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const interval = setInterval(() => {
-  //       router.replace('/(main)/Home/StartedRide');
-  //     }, 15000);
+  useFocusEffect(
+    useCallback(() => {
+      const interval = setInterval(() => {
+        router.replace('/(main)/Home/StartedRide');
+      }, 15000);
 
-  //     return () => clearInterval(interval);
-  //   }, []),
-  // );
+      return () => clearInterval(interval);
+    }, []),
+  );
 
   const handleCancelRide = async () => {
     try {
