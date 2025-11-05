@@ -29,6 +29,7 @@ export { default as SwitchIcon } from './Switch.svg';
 export { default as TermsIcon } from './Terms.svg';
 export { default as TrashIcon } from './Trash.svg';
 export { default as Trash2Icon } from './Trash2.svg';
+export { default as WarningIcon } from './Warning.svg';
 export { default as WomanIcon } from './Woman.svg';
 
 // brands

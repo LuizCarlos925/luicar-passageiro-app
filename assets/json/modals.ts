@@ -82,6 +82,13 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  deleteAccountSuccess: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description: 'Conta removida com sucesso!',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
 
   signUpError: {
     type: 'Success',
@@ -141,20 +148,7 @@ export const modalsOptions = {
     textButton1: 'Ok',
     textButton2: undefined,
   },
-  deleteAccount: {
-    type: 'Error',
-    title: 'Deseja continuar?',
-    description: 'Você está prestes a %%EXCLUIR%% sua conta permanentemente',
-    textButton1: 'Voltar',
-    textButton2: 'Excluir conta',
-  },
-  deleteAccountSuccess: {
-    type: 'Success',
-    title: 'Conta excluída com sucesso!',
-    description: undefined,
-    textButton1: 'Ok',
-    textButton2: undefined,
-  },
+
   addCreditCardSuccess: {
     type: 'Success',
     title: 'Cartão adicionado com sucesso!',

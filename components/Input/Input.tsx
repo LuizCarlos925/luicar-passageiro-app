@@ -19,7 +19,7 @@ import {
 import Text from '@/components/Text/Text';
 import { IconComponent, IconT } from '@/components/Icon/Icon';
 
-import { colors, theme } from '@/global/theme';
+import { colors } from '@/global/theme';
 
 import { EyeClosedIcon, EyeOpenIcon } from '@/assets/icons';
 import {
@@ -64,8 +64,8 @@ const Input = <TFieldValues extends FieldValues>({
   width = '100%',
   iconLeft,
   labelWeight = 400,
-  labelColor = theme.colors.gray_1e,
-  iconColor = theme.colors.neutro_100,
+  labelColor = colors.gray_1e,
+  iconColor = colors.neutro_100,
   onPressIcon,
   disableErrorMessage,
   iconRight,
@@ -85,14 +85,14 @@ const Input = <TFieldValues extends FieldValues>({
 
   const handleBorderColor = () => {
     if (focused) {
-      return theme.colors.primary_100;
+      return colors.primary_100;
     }
 
     if (error?.message) {
-      return theme.colors.red_d1;
+      return colors.red_d1;
     }
 
-    return theme.colors.neutro_20;
+    return colors.neutro_20;
   };
 
   const {
@@ -155,7 +155,7 @@ const Input = <TFieldValues extends FieldValues>({
             refInput={field.ref}
             type={type}
             secureTextEntry={passwordHidden}
-            placeholderTextColor={theme.colors.neutro_40}
+            placeholderTextColor={colors.neutro_40}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             {...props}
@@ -170,7 +170,7 @@ const Input = <TFieldValues extends FieldValues>({
             }}
             ref={field.ref}
             secureTextEntry={passwordHidden}
-            placeholderTextColor={theme.colors.neutro_40}
+            placeholderTextColor={colors.neutro_40}
             value={field.value}
             onFocus={() => setFocused(true)}
             onBlur={() => {
@@ -185,9 +185,9 @@ const Input = <TFieldValues extends FieldValues>({
         {password && (
           <ButtonEye onPress={() => setPasswordHidden(!passwordHidden)}>
             {passwordHidden ? (
-              <EyeClosedIcon color={theme.colors.secondary_60} />
+              <EyeClosedIcon color={colors.primary_100} />
             ) : (
-              <EyeOpenIcon color={theme.colors.secondary_60} />
+              <EyeOpenIcon color={colors.secondary_60} />
             )}
           </ButtonEye>
         )}
