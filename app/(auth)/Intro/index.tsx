@@ -1,20 +1,17 @@
-import Animated from 'react-native-reanimated';
-// import { PointIntro, SeIntro, YIntro, YuIntro } from '@/assets';
-import { useAnimatedStyles, useIntroAnimations } from '@/hooks/useAnimations';
+import { View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+
 import { useAuth } from '@/hooks/useAuth';
-import { GradientContainer, LogoWrapper } from './styles';
 
 const Intro = () => {
   const { isAuthenticated } = useAuth();
 
   const [hasFinishedAnimation, setHasFinishedAnimation] = useState(false);
 
-  const animations = useIntroAnimations();
-  const styles = useAnimatedStyles(animations);
-
   useEffect(() => {
+    SplashScreen.hideAsync();
     setTimeout(() => {
       setHasFinishedAnimation(true);
     }, 3000);
@@ -30,33 +27,7 @@ const Intro = () => {
     }
   }, [hasFinishedAnimation]);
 
-  return (
-    <GradientContainer>
-      <Animated.View style={[styles.yAnimatedStyle]}>
-        {/* <YIntro /> */}
-        <Animated.View
-          style={[
-            styles.pointAnimatedStyle,
-            {
-              position: 'absolute',
-              right: 0,
-              bottom: 0,
-            },
-          ]}
-        >
-          {/* <PointIntro /> */}
-        </Animated.View>
-      </Animated.View>
-      <LogoWrapper style={styles.logoAnimatedStyle}>
-        <Animated.View style={styles.yuAnimatedStyle}>
-          {/* <YuIntro /> */}
-        </Animated.View>
-        <Animated.View style={styles.seAnimatedStyle}>
-          {/* <SeIntro /> */}
-        </Animated.View>
-      </LogoWrapper>
-    </GradientContainer>
-  );
+  return <View />;
 };
 
 export default Intro;

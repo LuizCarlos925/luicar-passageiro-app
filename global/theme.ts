@@ -15,7 +15,7 @@ export const colors = {
   neutro_80: '#454545',
   neutro_100: '#2D2D2D',
 
-  secondary_10: '#D2D2D2',
+  secondary_10: '#F7F7F7',
   secondary_20: '#D2D2D2',
   secondary_40: '#A4A4A4',
   secondary_60: '#777777',

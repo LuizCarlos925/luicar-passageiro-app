@@ -1,3 +1,5 @@
+export { default as Trail } from './history/Trail';
+
 export { default as Header } from './home/Header';
 export { default as ButtonPaymentMethod } from './home/PaymentMethod';
 export { default as ButtonWoman } from './home/ButtonWoman';

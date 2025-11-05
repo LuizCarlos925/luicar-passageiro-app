@@ -1,4 +1,5 @@
 import React from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 
 import Text from '@/components/Text/Text';
 
@@ -6,7 +7,6 @@ import { colors, theme } from '@/global/theme';
 
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 
-import { Pressable, StyleSheet } from 'react-native';
 import { IconComponent } from '@/components/Icon/Icon';
 import {
   Container,
@@ -17,7 +17,7 @@ import {
 } from './styles';
 
 type Props = {
-  driver?: Driver;
+  driver?: any;
   onPress?: () => void;
 };
 
