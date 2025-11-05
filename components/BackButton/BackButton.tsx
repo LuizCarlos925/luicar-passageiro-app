@@ -19,7 +19,7 @@ interface IBackButtonProps {
 const BackButton = ({
   title,
   size = 20,
-  color = colors.secondary_60,
+  color = colors.secondary_80,
   onPress,
   style,
 }: IBackButtonProps) => {
@@ -39,7 +39,7 @@ const BackButton = ({
         width={size - 4}
         height={size - 4}
         color={color}
-        style={styles.icon}
+        style={[styles.icon, { bottom: title ? 18 : 14 }]}
       />
 
       {title && (

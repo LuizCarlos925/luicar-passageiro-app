@@ -7,6 +7,7 @@ import { LogoWhiteIcon } from '@/assets/icons';
 import Text from '@/components/Text/Text';
 import { Button } from '@/components/Button/Button';
 import { IconComponent } from '@/components/Icon/Icon';
+import { ModalDeleteAccount } from '@/components/screen';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
@@ -14,7 +15,6 @@ import { width } from '@/global/constants';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
-import ModalDelete from '@/components/screen/settings/delete-account/ModaDelete';
 
 const DeleteAccount = () => {
   const router = useRouter();
@@ -90,7 +90,7 @@ const DeleteAccount = () => {
         <Button onPress={() => setIsVisible(true)}>Excluir conta</Button>
       </View>
 
-      <ModalDelete
+      <ModalDeleteAccount
         isVisible={isVisible}
         onPress={handleDeleteAccount}
         onBackPress={() => setIsVisible(false)}

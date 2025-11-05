@@ -64,7 +64,7 @@ const Home = () => {
               key={company?.id}
               logo={company?.logoUrl}
               name={company?.name}
-              onPress={() => null}
+              onPress={() => router.push('/(main)/Home/Company')}
             />
           ))}
         </View>

@@ -18,6 +18,7 @@ export { default as LogoWhiteIcon } from './LogoWhite.svg';
 export { default as MoneyIcon } from './Money.svg';
 export { default as PersonIcon } from './Person.svg';
 export { default as PinIcon } from './Pin.svg';
+export { default as PinFilledIcon } from './PinFilled.svg';
 export { default as PixIcon } from './Pix.svg';
 export { default as SearchIcon } from './Search.svg';
 export { default as SettingsHeaderIcon } from './SettingsHeader.svg';
