@@ -134,12 +134,16 @@ export const GlobalContainer = ({
       ]}
     >
       {Platform.OS === 'android' && <StatusBar style={statusBarTextColor} />}
+
       {header && <Header {...header} />}
+
       {handleContainer()}
-      {component && component}
+
       {showTabBar && !isOpenKeyboard && (
         <TabBar currentScreen={currentScreen as ITab} />
       )}
+
+      {component && component}
     </View>
   );
 };

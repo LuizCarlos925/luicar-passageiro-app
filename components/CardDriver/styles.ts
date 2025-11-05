@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.Pressable<{ hasBorder?: boolean }>`
+export const Container = styled.View<{ hasBorder?: boolean }>`
   flex-direction: row;
   width: 100%;
 

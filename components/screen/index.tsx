@@ -1,3 +1,5 @@
+export { default as RatingBS } from './history/RatingBS';
+export { default as ReportBS } from './history/ReportBS';
 export { default as Trail } from './history/Trail';
 
 export { default as Header } from './home/Header';

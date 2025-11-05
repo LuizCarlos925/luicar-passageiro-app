@@ -2,12 +2,11 @@ import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
 import Text from '@/components/Text/Text';
+import { IconComponent } from '@/components/Icon/Icon';
+import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 
 import { colors, theme } from '@/global/theme';
 
-import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
-
-import { IconComponent } from '@/components/Icon/Icon';
 import {
   Container,
   ProfileWrapper,
@@ -51,7 +50,7 @@ export const CardDriver = ({ driver, onPress }: Props) => {
           <Text fontWeight={600}>{rating?.toFixed(1)}</Text>
         </RatingWrapper>
       ) : (
-        <Pressable onPress={() => null} style={styles.rateBtn}>
+        <Pressable onPress={onPress} style={styles.rateBtn}>
           <Text fontWeight={600} color={colors.primary_100}>
             Avaliar
           </Text>

@@ -1,21 +1,51 @@
-import { CardHistoryRating } from '@/components/CardHistoryRating/CardHistoryRating';
-import { GlobalContainer } from '@/components/Container/Container';
-import Text from '@/components/Text/Text';
-import { colors } from '@/global/theme';
-import { formatDateNominal } from '@/utils/format';
+import { useRef, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { FlatList, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+
+import Text from '@/components/Text/Text';
+import { RatingBS, ReportBS } from '@/components/screen';
+import { GlobalContainer } from '@/components/Container/Container';
+import { CardHistoryRating } from '@/components/CardHistoryRating/CardHistoryRating';
+
+import { colors } from '@/global/theme';
 
 import { ITrip } from '@/interfaces/history';
+
+import { formatDateNominal } from '@/utils/format';
+
 import { mockHistory } from '@/mock/history';
 
 const History = () => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const [isReport, setIsReport] = useState(false);
+
   return (
     <GlobalContainer
       alignItems="flex-start"
       paddingHorizontal={20}
       gap={24}
       showTabBar
+      component={
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={[250, 350]}
+          handleComponent={() => <View style={styles.lineHandler} />}
+          backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+          enablePanDownToClose
+        >
+          {isReport ? (
+            <ReportBS onPressClose={() => setIsReport(false)} />
+          ) : (
+            <RatingBS
+              onPressClose={() => bottomSheetRef.current?.close()}
+              onPressReport={() => setIsReport(true)}
+            />
+          )}
+        </BottomSheet>
+      }
     >
       <Text
         size={24}
@@ -43,6 +73,7 @@ const History = () => {
                     params: { id: trip?.id },
                   })
                 }
+                onPressRate={() => bottomSheetRef.current?.expand()}
               />
             ))}
           </View>
@@ -56,5 +87,16 @@ const History = () => {
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  lineHandler: {
+    width: 85,
+    height: 6,
+    alignSelf: 'center',
+    marginVertical: 15,
+    borderRadius: 20,
+    backgroundColor: '#d2d6db',
+  },
+});
 
 export default History;

@@ -27,9 +27,10 @@ import {
 interface Props {
   trip: IHistoryData[string][0];
   onPress: () => void;
+  onPressRate: () => void;
 }
 
-export const CardHistoryRating = ({ trip, onPress }: Props) => {
+export const CardHistoryRating = ({ trip, onPress, onPressRate }: Props) => {
   return (
     <Container onPress={onPress}>
       <View style={styles.dateWrapper}>
@@ -43,7 +44,7 @@ export const CardHistoryRating = ({ trip, onPress }: Props) => {
 
       <Divider />
 
-      <CardDriver driver={trip?.driver} />
+      <CardDriver driver={trip?.driver} onPress={onPressRate} />
 
       <Divider />
 

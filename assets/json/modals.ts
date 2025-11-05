@@ -97,6 +97,13 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  ratingSuccess: {
+    type: 'Success',
+    title: 'Avaliação registrada com sucesso!',
+    description: 'Obrigado pela avaliação',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
 
   signUpError: {
     type: 'Success',
