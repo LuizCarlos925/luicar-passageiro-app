@@ -41,15 +41,6 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
         }
         textButton1={modalsOptions?.[isVisible?.name]?.textButton1}
         textButton2={modalsOptions?.[isVisible?.name]?.textButton2}
-        isYesNo={!!modalsOptions?.[isVisible?.name]?.textButton2}
-        isVerticalButtons={modalsOptions?.[isVisible?.name]?.isVerticalButtons}
-        highlightedTextColor={
-          (modalsOptions?.[isVisible?.name] as any)?.highlightedTextColor
-        }
-        highlightedTextLineHeight={
-          (modalsOptions?.[isVisible?.name] as any)?.highlightedTextLineHeight
-        }
-        gap={(modalsOptions?.[isVisible?.name] as any)?.gap}
         onBackPress={() => {
           if (isVisible?.onPressBack) {
             isVisible.onPressBack();
@@ -62,7 +53,6 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
           }
           setModal({} as IModal);
         }}
-        customModalTitle={modalsOptions?.[isVisible?.name]?.customModalTitle}
       />
     </ModalContext.Provider>
   );

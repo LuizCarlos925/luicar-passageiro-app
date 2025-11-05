@@ -89,6 +89,14 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  reportSubmitted: {
+    type: 'Success',
+    title: 'Denúncia enviada com sucesso!',
+    description:
+      'Lamentamos pelo ocorrido. Agradecemos por relatar o incidente. Recebemos sua denúncia e vamos analisá-la com cuidado.\n\nEstamos comprometidos em garantir a sua segurança.',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
 
   signUpError: {
     type: 'Success',
