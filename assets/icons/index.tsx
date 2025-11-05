@@ -1,4 +1,5 @@
 export { default as CarIcon } from './Car.svg';
+export { default as CashBackIcon } from './CashBack.svg';
 export { default as ChangePasswordIcon } from './ChangePassword.svg';
 export { default as ChevronIcon } from './Chevron.svg';
 export { default as ChevronLeftIcon } from './ChevronLeft.svg';

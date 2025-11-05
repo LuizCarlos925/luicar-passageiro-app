@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
 
 import Text from '@/components/Text/Text';
 import { RatingBS, ReportBS } from '@/components/screen';
@@ -16,7 +17,6 @@ import { formatDateNominal } from '@/utils/format';
 
 import { mockHistory } from '@/mock/history';
 import { EmptyHistoryImg } from '@/assets/images';
-import { Image } from 'expo-image';
 
 const History = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);

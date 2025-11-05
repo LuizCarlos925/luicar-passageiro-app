@@ -16,6 +16,8 @@ import { colors } from '@/global/theme';
 import { ADS } from '@/mock/advertisements';
 import { DESTINATIONS } from '@/mock/destinations';
 import { COMPANIES } from '@/mock/companies';
+import { IconComponent } from '@/components/Icon/Icon';
+import { formatCurrency } from '@/utils/format';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
@@ -35,6 +37,19 @@ const Home = () => {
       showTabBar
     >
       <View style={styles.content}>
+        {Math.random() < 0.5 && (
+          <View style={styles.cashBackWrapper}>
+            <IconComponent name="CashBackIcon" size={36} />
+
+            <View>
+              <Text size={16} fontWeight={600}>
+                Cashback disponível
+              </Text>
+              <Text size={16}>{formatCurrency(10)}</Text>
+            </View>
+          </View>
+        )}
+
         <View style={styles.destinationsWrapper}>
           <Text size={16} fontWeight={700} color={colors.secondary_100}>
             Principais destinos
@@ -112,6 +127,18 @@ const Company = ({ logo, name, onPress }: CompanyProps) => {
 };
 
 const styles = StyleSheet.create({
+  cashBackWrapper: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    gap: 28,
+    borderWidth: 1,
+    borderColor: colors.primary_100,
+    backgroundColor: colors.primary_10,
+  },
   content: {
     width: '100%',
     gap: 24,
