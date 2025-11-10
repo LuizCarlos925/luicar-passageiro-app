@@ -15,7 +15,7 @@ import { GlobalContainer } from '@/components/Container/Container';
 import { colors } from '@/global/theme';
 
 import { useLocations } from '@/services/Home/address.service';
-import { useBalance } from '@/services/YuseCash/balance.service';
+import { useBalance } from '@/services/Home/balance.service';
 import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';

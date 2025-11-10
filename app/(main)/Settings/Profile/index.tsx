@@ -199,6 +199,8 @@ const BodyProfile = ({ user }: Props) => {
 
   const { setModal } = useModal();
 
+  const [isEditing, setIsEditing] = useState(false);
+
   const { control, handleSubmit } = useForm<ProfileForm>({
     defaultValues: {
       name: user?.passenger?.name,
@@ -262,7 +264,10 @@ const BodyProfile = ({ user }: Props) => {
           control={control}
           label="Telefone"
           type="cel-phone"
-          editable
+          editable={isEditing}
+          containerStyle={{
+            borderColor: isEditing ? colors.primary_100 : colors.secondary_20,
+          }}
           width="90%"
         />
 
@@ -271,6 +276,7 @@ const BodyProfile = ({ user }: Props) => {
           size={18}
           color={colors.secondary_60}
           style={{ marginTop: 16 }}
+          onPress={() => setIsEditing(prev => !prev)}
         />
       </View>
 

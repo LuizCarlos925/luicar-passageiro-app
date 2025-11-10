@@ -13,6 +13,8 @@ import { colors } from '@/global/theme';
 
 import { useModal } from '@/hooks/useModal';
 
+import { api } from '@/services/api';
+
 import { handleError } from '@/utils/handleError';
 
 import { ReportForm, ReportSchema } from '@/validation/Report.validation';
@@ -30,6 +32,11 @@ const Report = () => {
 
   const onSubmit = async (form: ReportForm) => {
     try {
+      await api.post('/createDriverDenunciation', {
+        tripId: id,
+        description: form?.report,
+      });
+
       setModal({ name: 'reportSubmitted', onPress: router.back });
     } catch (err) {
       handleError(err);

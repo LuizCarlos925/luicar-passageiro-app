@@ -11,21 +11,37 @@ import { IconComponent } from '@/components/Icon/Icon';
 import { shadow } from '@/global/shadow';
 import { colors } from '@/global/theme';
 import { useModal } from '@/hooks/useModal';
+import { api } from '@/services/api';
+import { handleError } from '@/utils/handleError';
+import { ReportForm, ReportSchema } from '@/validation/Report.validation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {
+  tripId: number | null;
   onPressClose: () => void;
 };
 
-const ReportBS = ({ onPressClose }: Props) => {
+const ReportBS = ({ tripId, onPressClose }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const { setModal } = useModal();
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<ReportForm>({
+    resolver: yupResolver(ReportSchema as any),
+  });
 
-  const onSubmit = async (form: any) => {
-    setModal({ name: 'reportSubmitted' });
-    onPressClose();
+  const onSubmit = async (form: ReportForm) => {
+    try {
+      await api.post('/createDriverDenunciation', {
+        tripId,
+        description: form?.report,
+      });
+
+      setModal({ name: 'reportSubmitted' });
+      onPressClose();
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   return (
@@ -48,7 +64,7 @@ const ReportBS = ({ onPressClose }: Props) => {
       </View>
 
       <Input
-        name="comment"
+        name="report"
         control={control}
         label="Deixe um comentário"
         placeholder="Descreva o ocorrido"

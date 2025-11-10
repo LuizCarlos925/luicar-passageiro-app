@@ -1,31 +1,38 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import { router } from 'expo-router';
+import { Entypo } from '@expo/vector-icons';
 
 import Text from '@/components/Text/Text';
+import { CardMyCreditCard } from '@/components/screen';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
-import { router } from 'expo-router';
-import { Entypo } from '@expo/vector-icons';
-import { CardMyCreditCard } from '@/components/screen';
+
 import { useModal } from '@/hooks/useModal';
+import { useAuth } from '@/hooks/useAuth';
+
+import { api } from '@/services/api';
+
+import { handleError } from '@/utils/handleError';
 
 const CreditCard = () => {
+  const { user, refetchUser } = useAuth();
+
   const { setModal } = useModal();
 
-  const [cards, setCards] = React.useState([
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-  ]);
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`/deleteCard?cardId=${id}`);
+      refetchUser();
 
-  const handleDelete = (id: string) => {
-    setCards(prevCards => prevCards.filter(card => card.id !== id));
-
-    setTimeout(() => {
-      setModal({ name: 'deleteCreditCardSuccess' });
-    }, 500);
+      setTimeout(() => {
+        setModal({ name: 'deleteCreditCardSuccess' });
+      }, 500);
+    } catch (err) {
+      handleError(err);
+    }
   };
 
   return (
@@ -34,9 +41,10 @@ const CreditCard = () => {
       <Text size={24} fontWeight={700} color={colors.secondary_100}>
         Meus cartões
       </Text>
-      {cards.map(item => (
+      {user?.passenger?.cards?.map(item => (
         <CardMyCreditCard
           key={item.id}
+          card={item}
           onPressDelete={() =>
             setModal({
               name: 'deleteCreditCard',

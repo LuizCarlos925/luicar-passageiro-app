@@ -12,22 +12,40 @@ import { SelectRating } from '@/components/SelectRating/SelectRating';
 import { shadow } from '@/global/shadow';
 import { colors } from '@/global/theme';
 import { useModal } from '@/hooks/useModal';
+import { api } from '@/services/api';
+import { handleError } from '@/utils/handleError';
+import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {
+  tripId: number | null;
   onPressClose: () => void;
   onPressReport: () => void;
 };
 
-const RatingBS = ({ onPressClose, onPressReport }: Props) => {
+const RatingBS = ({ tripId, onPressClose, onPressReport }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const { setModal } = useModal();
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<EvaluateForm>({
+    resolver: yupResolver(EvaluateSchema as any),
+  });
 
-  const onSubmit = async (form: any) => {
-    onPressClose();
-    setModal({ name: 'ratingSuccess' });
+  const onSubmit = async (form: EvaluateForm) => {
+    try {
+      await api.post('/createDriverReview', {
+        rating: form?.rating,
+        title: form?.title,
+        description: form?.comment,
+        tripId,
+      });
+
+      onPressClose();
+      setModal({ name: 'ratingSuccess' });
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   return (

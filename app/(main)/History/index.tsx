@@ -23,6 +23,7 @@ const History = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [isReport, setIsReport] = useState(false);
+  const [tripId, setTripId] = useState<number | null>(null);
 
   const { data: history, isFetching } = useHistory();
 
@@ -42,9 +43,10 @@ const History = () => {
           enablePanDownToClose
         >
           {isReport ? (
-            <ReportBS onPressClose={() => setIsReport(false)} />
+            <ReportBS tripId={tripId} onPressClose={() => setIsReport(false)} />
           ) : (
             <RatingBS
+              tripId={tripId}
               onPressClose={() => bottomSheetRef.current?.close()}
               onPressReport={() => setIsReport(true)}
             />
@@ -86,7 +88,10 @@ const History = () => {
                       params: { id: trip?.id },
                     })
                   }
-                  onPressRate={() => bottomSheetRef.current?.expand()}
+                  onPressRate={() => {
+                    setTripId(trip?.id);
+                    bottomSheetRef.current?.expand();
+                  }}
                 />
               ))}
             </View>

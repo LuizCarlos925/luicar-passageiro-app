@@ -17,6 +17,7 @@ import { colors } from '@/global/theme';
 import { useHistoryDetails } from '@/services/History/history.service';
 
 import { formatCurrency } from '@/utils/format';
+import { format, parseISO } from 'date-fns';
 
 const TripDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -24,6 +25,19 @@ const TripDetails = () => {
   const router = useRouter();
 
   const { data: trip } = useHistoryDetails(id);
+
+  const renderDate = () => {
+    if (trip?.tripStartedAt) {
+      return format(parseISO(trip.tripStartedAt), 'dd/MM/yyyy');
+    }
+    if (trip?.acceptedAt) {
+      return format(parseISO(trip.acceptedAt), 'dd/MM/yyyy');
+    }
+    if (trip?.createdAt) {
+      return format(parseISO(trip.createdAt), 'dd/MM/yyyy');
+    }
+    return '';
+  };
 
   return (
     <GlobalContainer alignItems="flex-start" paddingHorizontal={20} gap={16}>
@@ -34,9 +48,8 @@ const TripDetails = () => {
       </Text>
 
       <CardDriver
-        driver={{
-          image: { url: 'https://randomuser.me/api/portraits/men/16.jpg' },
-        }}
+        driver={trip?.driver}
+        tripsQuantity={Number(trip?.driverTripCount || 0)}
       />
       <View style={styles.tag}>
         <IconComponent name="DiamondIcon" size={12} color={colors.neutro_00} />
@@ -53,7 +66,7 @@ const TripDetails = () => {
         </Text>
 
         <Text size={20} fontWeight={600} color={colors.secondary_100}>
-          {formatCurrency(150)}
+          {formatCurrency(trip?.valuePayment)}
         </Text>
       </View>
 
@@ -63,7 +76,7 @@ const TripDetails = () => {
             Forma de pagamento
           </Text>
           <Text size={12} color={colors.secondary_60}>
-            Dinheiro
+            {trip?.paymentMethod}
           </Text>
         </View>
 
@@ -72,7 +85,7 @@ const TripDetails = () => {
             Data
           </Text>
           <Text size={12} color={colors.secondary_60}>
-            27/08/2025
+            {renderDate()}
           </Text>
         </View>
       </View>
@@ -86,7 +99,21 @@ const TripDetails = () => {
         <Text>Detalhes da viagem</Text>
       </View>
 
-      <Trail />
+      <Trail
+        origin={{
+          address: trip?.locals?.[0]?.addressString || '',
+          time: trip?.arrivalOriginAt
+            ? format(parseISO(trip?.arrivalOriginAt), 'HH:mm')
+            : '',
+        }}
+        destination={{
+          address: trip?.locals?.[1]?.addressString || '',
+          time: trip?.destinationArrivalAt
+            ? format(parseISO(trip?.destinationArrivalAt), 'HH:mm')
+            : '',
+        }}
+        duration={trip?.routeTime?.replace('mins', 'min') || ''}
+      />
 
       <Text size={16} fontWeight={600} color={colors.secondary_100}>
         Informações do veículo
@@ -101,7 +128,7 @@ const TripDetails = () => {
           </Text>
 
           <Text size={16} fontWeight={600} color={colors.primary_100}>
-            QII3W20
+            {trip?.vehicle?.plateNumber}
           </Text>
         </View>
 
@@ -110,7 +137,7 @@ const TripDetails = () => {
             Marca/Modelo
           </Text>
 
-          <Text fontWeight={600}>Volkswagen Gol</Text>
+          <Text fontWeight={600}>{trip?.vehicle?.vehicle_model?.model}</Text>
         </View>
 
         <View style={styles.wrapper}>
@@ -118,12 +145,17 @@ const TripDetails = () => {
             Cor
           </Text>
 
-          <Text fontWeight={600}>Vermelho</Text>
+          <Text fontWeight={600}>{trip?.vehicle?.color?.name}</Text>
         </View>
       </View>
 
       <Pressable
-        onPress={() => router.push('/(main)/Home/Report')}
+        onPress={() =>
+          router.push({
+            pathname: '/(main)/Home/Report',
+            params: { id: trip?.id },
+          })
+        }
         style={styles.buttonReport}
       >
         <Text size={14} color={colors.error_60}>

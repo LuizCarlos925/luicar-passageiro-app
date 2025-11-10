@@ -16,6 +16,10 @@ import { width } from '@/global/constants';
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
+import { api } from '@/services/api';
+
+import { handleError } from '@/utils/handleError';
+
 const DeleteAccount = () => {
   const router = useRouter();
 
@@ -28,13 +32,15 @@ const DeleteAccount = () => {
     try {
       setIsVisible(false);
 
+      await api.delete('/deleteUser');
+
       setModal({
         name: 'deleteAccountSuccess',
         onPress: logout,
         onPressBack: logout,
       });
     } catch (error) {
-      // Handle error if needed
+      handleError(error);
     }
   };
 

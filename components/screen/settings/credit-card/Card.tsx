@@ -5,21 +5,24 @@ import { IconComponent } from '@/components/Icon/Icon';
 
 import { colors } from '@/global/theme';
 
-import { getCardFlag } from '@/utils/creditCardFlag';
+import { ICard } from '@/interfaces/user';
+
+import { getCardFlagList } from '@/utils/creditCardFlag';
 
 type Props = {
+  card: ICard;
   onPressDelete: () => void;
 };
 
-const Card = ({ onPressDelete }: Props) => {
+const Card = ({ card, onPressDelete }: Props) => {
   return (
     <Pressable style={styles.container}>
-      {getCardFlag('5437 7388 1413 5551', colors.neutro_00)}
+      {getCardFlagList(card?.brand)}
 
       <Text color={colors.secondary_100} style={styles.text}>
-        Nome do cartão{' '}
+        {card?.name}{' '}
         <Text fontWeight={700} color={colors.secondary_100}>
-          **** 1962
+          **** {card?.lastDigits}
         </Text>
       </Text>
 

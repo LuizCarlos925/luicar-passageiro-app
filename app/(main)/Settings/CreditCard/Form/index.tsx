@@ -25,7 +25,7 @@ const Form = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { control, handleSubmit, watch } = useForm<CreditCardForm>({
-    resolver: yupResolver(CreditCardSchema),
+    resolver: yupResolver(CreditCardSchema as any),
   });
 
   const onSubmit = async (form: CreditCardForm) => {

@@ -5,7 +5,19 @@ import { IconComponent } from '@/components/Icon/Icon';
 
 import { colors } from '@/global/theme';
 
-const Trail = () => {
+type Props = {
+  destination: {
+    address: string;
+    time: string;
+  };
+  origin: {
+    address: string;
+    time: string;
+  };
+  duration: string;
+};
+
+const Trail = ({ destination, origin, duration }: Props) => {
   return (
     <View style={[styles.row, { gap: 20 }]}>
       <View style={styles.trailWrapper}>
@@ -17,18 +29,14 @@ const Trail = () => {
       </View>
 
       <View style={[styles.routerWrapper, { gap: 20 }]}>
-        <Address
-          type="Saída"
-          address="Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
-          time="10:00"
-        />
+        <Address type="Saída" address={origin.address} time={origin.time} />
 
-        <Route time="10 min" />
+        <Route time={duration} />
 
         <Address
           type="Destino"
-          address="Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
-          time="10:30"
+          address={destination.address}
+          time={destination.time}
         />
       </View>
     </View>
