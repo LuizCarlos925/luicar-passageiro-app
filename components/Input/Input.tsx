@@ -38,17 +38,9 @@ export type InputProps<TFieldValues extends FieldValues> = {
   options?: TextInputMaskOptionProp;
   password?: boolean;
   label?: string;
-  labelWeight?: 400 | 500 | 600 | 700;
-  labelColor?: string;
   width?: number | `${number}%`;
   iconLeft?: IconT;
   iconColor?: string;
-  onPressIcon?: () => void;
-  onPressIconRight?: () => void;
-  hasShadow?: boolean;
-  googleMaps?: boolean;
-  disableErrorMessage?: boolean;
-  iconRight?: IconT;
 } & TextInputProps &
   UseControllerProps<TFieldValues>;
 
@@ -63,13 +55,7 @@ const Input = <TFieldValues extends FieldValues>({
   label,
   width = '100%',
   iconLeft,
-  labelWeight = 400,
-  labelColor = colors.gray_1e,
   iconColor = colors.neutro_100,
-  onPressIcon,
-  disableErrorMessage,
-  iconRight,
-  onPressIconRight,
   ...props
 }: InputProps<TFieldValues>) => {
   const [focused, setFocused] = useState(false);
@@ -106,18 +92,8 @@ const Input = <TFieldValues extends FieldValues>({
   const renderIcon = () => {
     if (iconLeft) {
       return (
-        <IconWrapper onPress={onPressIcon}>
+        <IconWrapper>
           <IconComponent name={iconLeft} size={16} color={iconColor} />
-        </IconWrapper>
-      );
-    }
-  };
-
-  const renderIconRight = () => {
-    if (iconRight) {
-      return (
-        <IconWrapper onPress={onPressIconRight} hitSlop={10}>
-          <IconComponent name={iconRight} size={16} color={iconColor} />
         </IconWrapper>
       );
     }
@@ -126,12 +102,7 @@ const Input = <TFieldValues extends FieldValues>({
   return (
     <View style={{ width, marginTop }}>
       {label && (
-        <Text
-          size={16}
-          fontWeight={labelWeight}
-          color={labelColor}
-          style={{ marginBottom: 8, ...labelStyle }}
-        >
+        <Text size={16} style={{ marginBottom: 8, ...labelStyle }}>
           {label}
         </Text>
       )}
@@ -145,7 +116,7 @@ const Input = <TFieldValues extends FieldValues>({
         {renderIcon()}
         {type ? (
           <TextInputMasked
-            onChangeText={text => {
+            onChangeText={(text: string) => {
               if (props.onChangeText) {
                 props.onChangeText(text);
               }
@@ -162,7 +133,7 @@ const Input = <TFieldValues extends FieldValues>({
           />
         ) : (
           <TextInput
-            onChangeText={text => {
+            onChangeText={(text: string) => {
               if (props.onChangeText) {
                 props.onChangeText(text);
               }
@@ -180,7 +151,6 @@ const Input = <TFieldValues extends FieldValues>({
             {...props}
           />
         )}
-        {renderIconRight()}
 
         {password && (
           <ButtonEye onPress={() => setPasswordHidden(!passwordHidden)}>
@@ -192,7 +162,7 @@ const Input = <TFieldValues extends FieldValues>({
           </ButtonEye>
         )}
       </View>
-      {!disableErrorMessage && <ErrorMessage>{error?.message}</ErrorMessage>}
+      {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
     </View>
   );
 };
