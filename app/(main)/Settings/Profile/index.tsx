@@ -20,6 +20,8 @@ import { colors, theme } from '@/global/theme';
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
+import { api } from '@/services/api';
+import { deleteImage, uploadImage } from '@/services/images.service';
 import { useRatingPassenger } from '@/services/Settings/rating.service';
 
 import { handleError } from '@/utils/handleError';
@@ -27,7 +29,7 @@ import { handleError } from '@/utils/handleError';
 import { AddressForm, ProfileForm } from '@/validation/Profile.validation';
 
 import { IUser } from '@/interfaces/user';
-import { api } from '@/services/api';
+
 import {
   Column,
   ContentWrapper,
@@ -44,54 +46,65 @@ const Profile = () => {
   const userAvatar = user.passenger?.image?.url || '';
 
   const [section, setSection] = useState('profile');
-  const [avatarUri, setAvatarUri] = useState(userAvatar);
 
   const { data: rating } = useRatingPassenger(user?.passenger?.id);
 
-  const handleTakePhoto = async () => {
+  const handleSaveAvatar = async (uri: string) => {
     try {
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: 'images',
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.5,
+      await uploadImage({
+        ref: 'api::passenger.passenger',
+        refId: user?.passenger?.id?.toString() || '',
+        field: 'image',
+        uri,
       });
 
-      if (!result.canceled) {
-        setAvatarUri(result.assets[0].uri);
-      }
+      refetchUser();
     } catch (err) {
       handleError(err);
     }
   };
 
-  const handlePickImage = async () => {
+  const handleDeleteAvatar = async () => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: 'images',
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.5,
-      });
+      await deleteImage(user?.passenger?.image?.id || 0);
 
-      if (!result.canceled) {
-        const formData = new FormData();
-
-        formData.append('ref', 'api::passenger.passenger');
-        formData.append('refId', user?.passenger?.id?.toString());
-        formData.append('field', 'image');
-        formData.append('files', {
-          uri: result?.assets?.[0]?.uri,
-          name: result?.assets?.[0]?.uri?.split('/')?.pop() as string,
-          type: 'image/jpg',
-        });
-
-        await api.post('/upload', formData);
-
-        refetchUser();
-      }
+      refetchUser();
     } catch (err) {
       handleError(err);
+    }
+  };
+
+  const handleChangeAvatar = async () => {
+    setModal({
+      name: 'avatar',
+      onPress: handlePickImage,
+      onPressBack: handleTakePhoto,
+    });
+  };
+
+  const handleTakePhoto = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: 'images',
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      handleSaveAvatar(result?.assets?.[0]?.uri || '');
+    }
+  };
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: 'images',
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      handleSaveAvatar(result?.assets?.[0]?.uri || '');
     }
   };
 
@@ -112,31 +125,14 @@ const Profile = () => {
         <Row
           style={{ position: 'absolute', bottom: -50, paddingHorizontal: 16 }}
         >
-          <ProfileButton
-            onPress={() =>
-              setModal({
-                name: 'avatar',
-                onPress: handlePickImage,
-                onPressBack: handleTakePhoto,
-              })
-            }
-          >
-            <AvatarImage uri={avatarUri} size={116} style={styles.avatar} />
+          <ProfileButton onPress={handleChangeAvatar}>
+            <AvatarImage uri={userAvatar} size={116} style={styles.avatar} />
 
             <IconComponent
-              name={avatarUri ? 'Trash2Icon' : 'EditIcon'}
+              name={userAvatar ? 'Trash2Icon' : 'EditIcon'}
               size={16}
               color={colors.neutro_00}
-              onPress={
-                avatarUri
-                  ? () => setAvatarUri('')
-                  : () =>
-                      setModal({
-                        name: 'avatar',
-                        onPress: handlePickImage,
-                        onPressBack: handleTakePhoto,
-                      })
-              }
+              onPress={userAvatar ? handleDeleteAvatar : handleChangeAvatar}
               style={styles.avatarBtn}
             />
           </ProfileButton>
