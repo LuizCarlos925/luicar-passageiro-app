@@ -1,25 +1,29 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Image } from 'expo-image';
+
+import { Car1 } from '@/assets/images';
 
 import Text from '@/components/Text/Text';
 import { Trail } from '@/components/screen';
+import { IconComponent } from '@/components/Icon/Icon';
 import BackButton from '@/components/BackButton/BackButton';
 import { CardDriver } from '@/components/CardDriver/CardDriver';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { formatCurrency } from '@/utils/format';
+import { useHistoryDetails } from '@/services/History/history.service';
 
-import { IconComponent } from '@/components/Icon/Icon';
-import { Image } from 'expo-image';
-import { Car1 } from '@/assets/images';
+import { formatCurrency } from '@/utils/format';
 
 const TripDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const router = useRouter();
+
+  const { data: trip } = useHistoryDetails(id);
 
   return (
     <GlobalContainer alignItems="flex-start" paddingHorizontal={20} gap={16}>
@@ -119,7 +123,7 @@ const TripDetails = () => {
       </View>
 
       <Pressable
-        onPress={() => router.dismissTo('/(main)/Home/Report')}
+        onPress={() => router.push('/(main)/Home/Report')}
         style={styles.buttonReport}
       >
         <Text size={14} color={colors.error_60}>

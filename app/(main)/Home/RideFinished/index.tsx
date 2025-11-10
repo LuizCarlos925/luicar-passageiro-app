@@ -124,7 +124,7 @@ const RideFinished = () => {
         />
 
         <Pressable
-          onPress={() => router.dismissTo('/(main)/Home/Report')}
+          onPress={() => router.push('/(main)/Home/Report')}
           style={styles.buttonReport}
         >
           <Text size={14} color={colors.error_60}>

@@ -1,0 +1,29 @@
+export interface IPayment {
+  id: number;
+  status: string;
+  date: null;
+  tripType: null;
+  feesAndTaxesValue: null;
+  totalValue: number;
+  driverAllocatedValue: null;
+  invoicedValue: null;
+  routeTime: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  time: null;
+  inProgress: boolean;
+  subcategoryValue: number;
+  distance: string;
+  paymentMethod: string;
+  externalId: null;
+  tokenCard: null;
+  paymentCode: string;
+  paymentUrl: null;
+  cancellationReason: null;
+  paid: boolean;
+  deliveryType: string;
+  acceptedAt: null;
+  routePolyline: string;
+  yuseCash: number;
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { router } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +10,11 @@ import { Button } from '@/components/Button/Button';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
+import { colors } from '@/global/theme';
+
 import { useModal } from '@/hooks/useModal';
+
+import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
 
@@ -17,8 +22,6 @@ import {
   ForgotPasswordForm,
   ForgotPasswordSchema,
 } from '@/validation/Login.validation';
-import { StyleSheet, View } from 'react-native';
-import { colors } from '@/global/theme';
 
 const ForgotPassword = () => {
   const { setModal } = useModal();
@@ -26,21 +29,21 @@ const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { control, handleSubmit } = useForm<ForgotPasswordForm>({
-    resolver: yupResolver(ForgotPasswordSchema),
+    resolver: yupResolver(ForgotPasswordSchema as any),
   });
 
   const onSubmit = async (form: ForgotPasswordForm) => {
     setIsLoading(true);
     try {
-      // await api.post('/forgotPassword', {
-      //   email: form.email?.toLocaleLowerCase(),
-      //   role: 'authenticated',
-      // });
+      await api.post('/forgotPassword', {
+        email: form.email?.toLocaleLowerCase(),
+        role: 'authenticated',
+      });
 
       setModal({
         name: 'forgotPassword',
-        onPressBack: () => router.push('/(auth)/ChangePassword'),
-        onPress: () => router.push('/(auth)/ChangePassword'),
+        onPressBack: router.back,
+        onPress: router.back,
       });
     } catch (err) {
       handleError(err);

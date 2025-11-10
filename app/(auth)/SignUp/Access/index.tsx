@@ -1,24 +1,26 @@
 import React, { useCallback } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { router, useFocusEffect } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Step } from '@/components/Step';
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
+import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
 import { useAuth } from '@/hooks/useAuth';
 
+import { verifyData } from '@/services/SignUp/verifyData.service';
+
 import {
   SignUpAccessForm,
   SignUpAccessSchema,
 } from '@/validation/Login.validation';
-import BackButton from '@/components/BackButton/BackButton';
-import { StyleSheet, View } from 'react-native';
-import { Step } from '@/components/Step';
 
 const Access = () => {
   const { signUpData, setSignUpData } = useAuth();
@@ -34,6 +36,12 @@ const Access = () => {
   );
 
   const onSubmit = async (form: SignUpAccessForm) => {
+    const isValid = await verifyData({ email: form.email });
+
+    if (!isValid) {
+      return;
+    }
+
     setSignUpData(prev => ({
       ...prev,
       ...form,

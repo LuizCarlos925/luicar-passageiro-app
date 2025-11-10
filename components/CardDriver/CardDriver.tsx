@@ -7,6 +7,10 @@ import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 
 import { colors, theme } from '@/global/theme';
 
+import { IDriver } from '@/interfaces/history';
+
+import { useDriverRating } from '@/services/Rides/driverRating.service';
+
 import {
   Container,
   ProfileWrapper,
@@ -16,13 +20,13 @@ import {
 } from './styles';
 
 type Props = {
-  driver?: any;
+  driver?: IDriver;
+  tripsQuantity?: number;
   onPress?: () => void;
 };
 
-export const CardDriver = ({ driver, onPress }: Props) => {
-  const rating = Math.floor(Math.random() * 2) + 4;
-  const hasRating = rating >= 4.5;
+export const CardDriver = ({ driver, tripsQuantity = 0, onPress }: Props) => {
+  const { data: rating } = useDriverRating(driver?.id);
 
   return (
     <Container onPress={onPress}>
@@ -30,24 +34,24 @@ export const CardDriver = ({ driver, onPress }: Props) => {
 
       <ProfileWrapper>
         <Text size={16} fontWeight={600} color={theme.colors.secondary_100}>
-          Flávio Oliveira
+          {driver?.socialName || `${driver?.firstName} ${driver?.lastName}`}
         </Text>
 
         <Row>
           <IconComponent name="StarIcon" size={14} color={colors.primary_100} />
-          <Text size={12}>{rating?.toFixed(1)}</Text>
+          <Text size={12}>{rating}</Text>
 
           <TextMarker />
 
           <IconComponent name="CarIcon" size={16} />
-          <Text size={12}>2405 viagens</Text>
+          <Text size={12}>{tripsQuantity} viagens</Text>
         </Row>
       </ProfileWrapper>
 
-      {hasRating ? (
+      {rating ? (
         <RatingWrapper>
           <IconComponent name="StarFilledIcon" size={18} />
-          <Text fontWeight={600}>{rating?.toFixed(1)}</Text>
+          <Text fontWeight={600}>{driver?.review?.my_rating}</Text>
         </RatingWrapper>
       ) : (
         <Pressable onPress={onPress} style={styles.rateBtn}>

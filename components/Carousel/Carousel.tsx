@@ -6,7 +6,7 @@ import { getImageUrl } from '@/services/api';
 import { ImageWrapper } from './styles';
 
 export interface IImages {
-  id: string;
+  id: number;
   image: string;
   link: string;
 }
@@ -23,9 +23,10 @@ interface ViewableItemsChangedProps {
 const AUTO_PLAY_INTERVAL = 3000; // Milliseconds
 
 const Carousel = ({ images }: CarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: ViewableItemsChangedProps) => {

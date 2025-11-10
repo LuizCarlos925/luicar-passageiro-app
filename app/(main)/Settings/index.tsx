@@ -1,31 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import * as Constants from 'expo-constants';
 
 import * as Icon from '@/assets/icons';
+import { SETTINGS_MENUS } from '@/assets/json/settingsMenu';
 
 import Text from '@/components/Text/Text';
+import { ModalSupport } from '@/components/screen';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 import { GlobalContainer } from '@/components/Container/Container';
 
-import { colors, theme } from '@/global/theme';
-
-import { useModal } from '@/hooks/useModal';
-import { useAuth } from '@/hooks/useAuth';
-import { SETTINGS_MENUS } from '@/assets/json/settingsMenu';
-
-import { Pressable, StyleSheet, View } from 'react-native';
 import { shadow } from '@/global/shadow';
 import { width } from '@/global/constants';
-import { ModalSupport } from '@/components/screen';
+import { colors, theme } from '@/global/theme';
+
+import { useAuth } from '@/hooks/useAuth';
+import { useModal } from '@/hooks/useModal';
+
+import { useRatingPassenger } from '@/services/Settings/rating.service';
 
 const Settings = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { setModal } = useModal();
 
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const { data: rating } = useRatingPassenger(user?.passenger?.id);
 
   const handleSupportPress = () => {
     setIsVisible(false);
@@ -40,7 +43,7 @@ const Settings = () => {
 
       <View style={styles.card}>
         <AvatarImage
-          uri="https://randomuser.me/api/portraits/men/75.jpg"
+          uri={user?.passenger?.image?.url || ''}
           size={116}
           style={{
             marginTop: -78,
@@ -51,13 +54,20 @@ const Settings = () => {
         />
 
         <View style={styles.rowProfile}>
-          <Text size={16} fontWeight={600} color={colors.secondary_100}>
-            Gabriel souza Lima {`\u2022`}
+          <Text
+            size={16}
+            fontWeight={600}
+            color={colors.secondary_100}
+            style={{ flexShrink: 1 }}
+          >
+            {user?.passenger?.socialName || user?.passenger?.name}
           </Text>
+
+          <Text>{`\u2022`}</Text>
 
           <IconComponent name="StarIcon" size={16} color={colors.primary_100} />
           <Text size={16} fontWeight={600} color={colors.secondary_100}>
-            0
+            {rating?.averageRating || 0}
           </Text>
         </View>
 
@@ -103,7 +113,7 @@ const Settings = () => {
         <Divider />
 
         <Pressable
-          onPress={() => setModal({ name: 'logout', onPress: () => logout() })}
+          onPress={() => setModal({ name: 'logout', onPress: logout })}
           style={styles.optionBtn}
         >
           <IconComponent name="LogoutIcon" />

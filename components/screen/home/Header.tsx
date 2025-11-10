@@ -1,24 +1,30 @@
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
 
 import Text from '@/components/Text/Text';
 import { IconComponent } from '@/components/Icon/Icon';
 
 import { colors } from '@/global/theme';
-import { router } from 'expo-router';
+
+import { useAuth } from '@/hooks/useAuth';
+
+import { getImageUrl } from '@/services/api';
 
 const Header = () => {
+  const { user } = useAuth();
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <Image
-          source={{ uri: 'https://randomuser.me/api/portraits/men/75.jpg' }}
+          source={{ uri: getImageUrl(user?.passenger?.image?.url) }}
           style={styles.image}
         />
         <View style={styles.textWrapper}>
           <Text color={colors.neutro_00}>Bom ter você de volta,</Text>
           <Text size={20} fontWeight={600} color={colors.neutro_00}>
-            Gabriel
+            {user?.passenger?.socialName || user?.passenger?.name}
           </Text>
         </View>
         <IconComponent name="LogoWhiteIcon" size={71} />

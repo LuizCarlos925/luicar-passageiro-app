@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
@@ -14,16 +14,22 @@ import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
+import { useLocations } from '@/services/Home/address.service';
+import { useBalance } from '@/services/YuseCash/balance.service';
+import { useAdvertising } from '@/services/Home/advertising.service';
+
 import { formatCurrency } from '@/utils/format';
 
-import { ADS } from '@/mock/advertisements';
 import { COMPANIES } from '@/mock/companies';
-import { DESTINATIONS } from '@/mock/destinations';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
 
-  const [isVisible, setIsVisible] = React.useState(false);
+  const { data: locations } = useLocations('destino');
+  const { data: ads } = useAdvertising();
+  const { data: balance } = useBalance();
+
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (status && !status?.granted) {
@@ -38,7 +44,7 @@ const Home = () => {
       showTabBar
     >
       <View style={styles.content}>
-        {Math.random() < 0.5 && (
+        {!!balance?.balance && (
           <View style={styles.cashBackWrapper}>
             <IconComponent name="CashBackIcon" size={36} />
 
@@ -46,7 +52,7 @@ const Home = () => {
               <Text size={16} fontWeight={600}>
                 Cashback disponível
               </Text>
-              <Text size={16}>{formatCurrency(10)}</Text>
+              <Text size={16}>{formatCurrency(balance.balance)}</Text>
             </View>
           </View>
         )}
@@ -56,7 +62,7 @@ const Home = () => {
             Principais destinos
           </Text>
 
-          {DESTINATIONS?.slice(0, 2)?.map((item, index) => (
+          {locations?.slice(0, 2)?.map((item, index) => (
             <Place
               key={item?.id}
               title={item?.address || item?.address_string}
@@ -67,20 +73,22 @@ const Home = () => {
                   params: { destination: item?.address_string },
                 })
               }
-              hasBorder={DESTINATIONS.length > index + 1 && index === 0}
+              hasBorder={locations.length > index + 1 && index === 0}
             />
           ))}
         </View>
 
-        <Carousel
-          images={
-            ADS?.map(item => ({
-              id: item?.id,
-              image: item?.image?.url,
-              link: item?.link,
-            })) || []
-          }
-        />
+        {ads && (
+          <Carousel
+            images={
+              ads?.map(item => ({
+                id: item?.id,
+                image: item?.image?.url,
+                link: item?.link,
+              })) || []
+            }
+          />
+        )}
 
         <Text size={16} fontWeight={700} color={colors.secondary_100}>
           Empresas parceiras

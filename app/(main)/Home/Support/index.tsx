@@ -50,13 +50,13 @@ const Support = () => {
       <Button
         onPress={() =>
           router.push({
-            pathname: '/(main)/History/Report',
+            pathname: '/(main)/Home/Report',
             params: { id },
           })
         }
         style={{ justifyContent: 'flex-start', paddingHorizontal: 20, gap: 10 }}
         fontSize={15}
-        iconLeft="ReportDriverIcon"
+        iconLeft="InfoAlertIcon"
         backgroundColor={theme.colors.red_d1}
       >
         Denunciar motorista

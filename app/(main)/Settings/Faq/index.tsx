@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import Text from '@/components/Text/Text';
-
+import { IconComponent } from '@/components/Icon/Icon';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { FAQ } from '@/mock/faq';
-import { IconComponent } from '@/components/Icon/Icon';
+import { useFAQs } from '@/services/Settings/faq.service';
 
 const Faq = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number | null>(null);
+
+  const { data: faq } = useFAQs();
 
   const handleSelectQuestion = (id: number) => {
     if (currentQuestion === id) {
@@ -34,7 +35,7 @@ const Faq = () => {
       </View>
 
       <View style={styles.content}>
-        {FAQ?.map(item => (
+        {faq?.map(item => (
           <View
             key={item.id}
             style={[

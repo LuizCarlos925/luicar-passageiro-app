@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { router, useFocusEffect } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Step } from '@/components/Step';
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -21,14 +22,14 @@ import {
 
 import { handleError } from '@/utils/handleError';
 import { getAdressByZipCode } from '@/services/cep';
-import { Step } from '@/components/Step';
+import { verifyData } from '@/services/SignUp/verifyData.service';
 
 const Profile = () => {
   const { signUpData, setSignUpData } = useAuth();
 
   const { control, handleSubmit, clearErrors, setValue, reset, watch } =
     useForm<SignUpProfileForm>({
-      resolver: yupResolver(SignUpProfileSchema),
+      resolver: yupResolver(SignUpProfileSchema as any),
     });
 
   const zipCode = watch('zipCode');
@@ -61,11 +62,11 @@ const Profile = () => {
 
   const onSubmit = async (form: SignUpProfileForm) => {
     try {
-      // const { data } = await api.post('validateUserPassenger', {
-      //   cpf: form.cpf,
-      //   rg: form.rg,
-      //   email: form.email,
-      // });
+      const isValid = await verifyData({ cpf: form.cpf });
+
+      if (!isValid) {
+        return;
+      }
 
       setSignUpData(prev => ({
         ...prev,

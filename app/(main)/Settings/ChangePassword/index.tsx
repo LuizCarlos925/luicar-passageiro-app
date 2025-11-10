@@ -14,7 +14,10 @@ import { colors, theme } from '@/global/theme';
 
 import { useModal } from '@/hooks/useModal';
 
+import { api } from '@/services/api';
+
 import { handleError } from '@/utils/handleError';
+
 import { PasswordForm, PasswordSchema } from '@/validation/Profile.validation';
 
 import { InputWrapper, PasswordRulesWrapper } from './styles';
@@ -31,11 +34,11 @@ const ChangePassword = () => {
   const onSubmit = async (form: PasswordForm) => {
     setIsLoading(true);
     try {
-      // await api.post('/auth/change-password', {
-      //   currentPassword: form.oldPassword,
-      //   password: form.password,
-      //   passwordConfirmation: form.passwordConfirm,
-      // });
+      await api.post('/auth/change-password', {
+        currentPassword: form.oldPassword,
+        password: form.password,
+        passwordConfirmation: form.passwordConfirm,
+      });
 
       setTimeout(() => {
         setModal({

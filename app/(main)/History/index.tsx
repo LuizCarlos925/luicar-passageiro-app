@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
+
+import { EmptyHistoryImg } from '@/assets/images';
 
 import Text from '@/components/Text/Text';
 import { RatingBS, ReportBS } from '@/components/screen';
@@ -13,15 +15,16 @@ import { colors } from '@/global/theme';
 
 import { ITrip } from '@/interfaces/history';
 
-import { formatDateNominal } from '@/utils/format';
+import { useHistory } from '@/services/History/history.service';
 
-import { mockHistory } from '@/mock/history';
-import { EmptyHistoryImg } from '@/assets/images';
+import { formatDateNominal } from '@/utils/format';
 
 const History = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [isReport, setIsReport] = useState(false);
+
+  const { data: history, isFetching } = useHistory();
 
   return (
     <GlobalContainer
@@ -57,36 +60,45 @@ const History = () => {
       >
         Histórico de corridas
       </Text>
-      <FlatList
-        keyExtractor={([date]) => date}
-        data={Object.entries(mockHistory)}
-        renderItem={({ item: [date, trips] }) => (
-          <View style={{ width: '100%', gap: 24 }}>
-            <Text size={14} fontWeight={600} color={colors.neutro_70}>
-              {formatDateNominal(date)}
-            </Text>
-            {trips?.map((trip: ITrip) => (
-              <CardHistoryRating
-                key={trip?.id?.toString()}
-                trip={trip}
-                onPress={() =>
-                  router.push({
-                    pathname: '/(main)/History/TripDetails',
-                    params: { id: trip?.id },
-                  })
-                }
-                onPressRate={() => bottomSheetRef.current?.expand()}
-              />
-            ))}
-          </View>
-        )}
-        style={{ flex: 1, width: '100%' }}
-        contentContainerStyle={{ flexGrow: 1, padding: 4, gap: 24 }}
-        ListEmptyComponent={<Empty />}
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-      />
+
+      {isFetching ? (
+        <ActivityIndicator
+          size={40}
+          color={colors.primary_60}
+          style={{ alignSelf: 'center', marginTop: 20 }}
+        />
+      ) : (
+        <FlatList
+          keyExtractor={([date]) => date}
+          data={Object.entries(history || {})}
+          renderItem={({ item: [date, trips] }) => (
+            <View style={{ width: '100%', gap: 24 }}>
+              <Text size={14} fontWeight={600} color={colors.neutro_70}>
+                {formatDateNominal(date)}
+              </Text>
+              {(trips as ITrip[])?.map(trip => (
+                <CardHistoryRating
+                  key={trip?.id?.toString()}
+                  trip={trip}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(main)/History/TripDetails',
+                      params: { id: trip?.id },
+                    })
+                  }
+                  onPressRate={() => bottomSheetRef.current?.expand()}
+                />
+              ))}
+            </View>
+          )}
+          style={{ flex: 1, width: '100%' }}
+          contentContainerStyle={{ flexGrow: 1, padding: 4, gap: 24 }}
+          ListEmptyComponent={<Empty />}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+        />
+      )}
     </GlobalContainer>
   );
 };

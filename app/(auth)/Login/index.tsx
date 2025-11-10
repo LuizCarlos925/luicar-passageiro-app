@@ -5,6 +5,8 @@ import { router } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { channel, updateId } from 'expo-updates';
 
+import { LogoIcon } from '@/assets/icons';
+
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -18,19 +20,17 @@ import { useAuth } from '@/hooks/useAuth';
 
 import { LoginForm, LoginSchema } from '@/validation/Login.validation';
 
-import { LogoIcon } from '@/assets/icons';
-
 const Login = () => {
   const { login, isLoading } = useAuth();
 
   const [showUpdateId, setShowUpdateId] = useState(false);
 
   const { control, handleSubmit } = useForm<LoginForm>({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(LoginSchema as any),
     defaultValues: __DEV__
       ? {
-          identifier: 'email@email.com',
-          password: '12345678',
+          identifier: 'thaliacsoares2002@gmail.com',
+          password: 'Teste12@',
           rememberMe: true,
         }
       : {

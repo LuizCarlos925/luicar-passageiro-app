@@ -8,7 +8,7 @@ import { Divider } from '@/components/Divider/Divider';
 import { colors, theme } from '@/global/theme';
 
 import { formatCurrency } from '@/utils/format';
-import { IHistoryData } from '@/interfaces/history';
+import { ITrip } from '@/interfaces/history';
 import { CardDriver } from '@/components/CardDriver/CardDriver';
 
 import { Image } from 'expo-image';
@@ -25,7 +25,7 @@ import {
 } from './styles';
 
 interface Props {
-  trip: IHistoryData[string][0];
+  trip: ITrip;
   onPress: () => void;
   onPressRate: () => void;
 }
@@ -44,7 +44,11 @@ export const CardHistoryRating = ({ trip, onPress, onPressRate }: Props) => {
 
       <Divider />
 
-      <CardDriver driver={trip?.driver} onPress={onPressRate} />
+      <CardDriver
+        driver={trip?.driver}
+        tripsQuantity={Number(trip?.driverTripCount || 0)}
+        onPress={onPressRate}
+      />
 
       <Divider />
 

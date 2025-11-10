@@ -17,12 +17,17 @@ import { SwitchProfile } from '@/components/SwitchProfile/SwitchProfile';
 import { width } from '@/global/constants';
 import { colors, theme } from '@/global/theme';
 
+import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
+
+import { useRatingPassenger } from '@/services/Settings/rating.service';
 
 import { handleError } from '@/utils/handleError';
 
 import { AddressForm, ProfileForm } from '@/validation/Profile.validation';
 
+import { IUser } from '@/interfaces/user';
+import { api } from '@/services/api';
 import {
   Column,
   ContentWrapper,
@@ -32,12 +37,16 @@ import {
 } from './styles';
 
 const Profile = () => {
+  const { user, refetchUser } = useAuth();
+
   const { setModal } = useModal();
 
+  const userAvatar = user.passenger?.image?.url || '';
+
   const [section, setSection] = useState('profile');
-  const [avatarUri, setAvatarUri] = useState(
-    'https://randomuser.me/api/portraits/men/75.jpg',
-  );
+  const [avatarUri, setAvatarUri] = useState(userAvatar);
+
+  const { data: rating } = useRatingPassenger(user?.passenger?.id);
 
   const handleTakePhoto = async () => {
     try {
@@ -66,7 +75,20 @@ const Profile = () => {
       });
 
       if (!result.canceled) {
-        setAvatarUri(result.assets[0].uri);
+        const formData = new FormData();
+
+        formData.append('ref', 'api::passenger.passenger');
+        formData.append('refId', user?.passenger?.id?.toString());
+        formData.append('field', 'image');
+        formData.append('files', {
+          uri: result?.assets?.[0]?.uri,
+          name: result?.assets?.[0]?.uri?.split('/')?.pop() as string,
+          type: 'image/jpg',
+        });
+
+        await api.post('/upload', formData);
+
+        refetchUser();
       }
     } catch (err) {
       handleError(err);
@@ -127,13 +149,13 @@ const Profile = () => {
                 color={colors.secondary_100}
                 style={{ flexShrink: 1 }}
               >
-                Gabriel Souza Lima
+                {user?.passenger?.socialName || user?.passenger?.name}
               </Text>
               <Text color={colors.secondary_40}>{`\u2022`}</Text>
 
               <IconComponent name="StarIcon" color={colors.primary_100} />
               <Text size={16} fontWeight={600}>
-                4.0
+                {rating?.averageRating || 0}
               </Text>
             </Row>
           </Column>
@@ -143,8 +165,8 @@ const Profile = () => {
       <ContentWrapper>
         <SwitchProfile selected={section} setSelected={setSection} />
 
-        {section === 'profile' && <BodyProfile />}
-        {section === 'address' && <BodyAddress />}
+        {section === 'profile' && <BodyProfile user={user} />}
+        {section === 'address' && <BodyAddress user={user} />}
       </ContentWrapper>
     </GlobalContainer>
   );
@@ -172,20 +194,34 @@ const styles = StyleSheet.create({
 
 export default Profile;
 
-const BodyProfile = () => {
+type Props = {
+  user: IUser;
+};
+
+const BodyProfile = ({ user }: Props) => {
+  const { refetchUser } = useAuth();
+
   const { setModal } = useModal();
 
   const { control, handleSubmit } = useForm<ProfileForm>({
     defaultValues: {
-      name: 'Gabriel Souza Lima',
-      social_name: '',
-      cpf: '044.333.650-41',
-      phone: '(11) 98588-8585',
+      name: user?.passenger?.name,
+      social_name: user?.passenger?.socialName,
+      cpf: user?.passenger?.cpf,
+      phone: user?.passenger?.phone,
     },
   });
 
   const onSubmit = async (form: ProfileForm) => {
     try {
+      await api.put('/updatePassenger', {
+        personalData: {
+          phone: form.phone,
+        },
+      });
+
+      refetchUser();
+
       setModal({ name: 'updateSuccess' });
     } catch (err) {
       handleError(err);
@@ -249,15 +285,16 @@ const BodyProfile = () => {
   );
 };
 
-const BodyAddress = () => {
+const BodyAddress = ({ user }: Props) => {
   const { control } = useForm<AddressForm>({
     defaultValues: {
-      zipCode: '08695-430',
-      state: 'SP',
-      district: 'Jardim Graziela',
-      street: 'Rua Manoel Felix da Silva',
-      number: '300',
-      complement: 'Apto 12',
+      zipCode: user?.passenger?.zipCode,
+      state: user?.passenger?.state,
+      city: user?.passenger?.city,
+      district: user?.passenger?.neighborhood,
+      street: user?.passenger?.address,
+      number: user?.passenger?.number,
+      complement: user?.passenger?.complement || undefined,
     },
   });
 

@@ -20,6 +20,7 @@ import {
   SignUpAccessForm,
   SignUpProfileForm,
 } from '@/validation/Login.validation';
+import { handleVerifyTerms } from '@/services/Home/verifyTerms.service';
 
 export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
 
@@ -32,8 +33,6 @@ interface IUserProvider {
   login: (form: LoginForm) => void;
   refetchUser: () => Promise<void>;
   isLoading: boolean;
-  isFeedTab: boolean;
-  setIsFeedTab: React.Dispatch<React.SetStateAction<boolean>>;
   isUnderConstruction: boolean;
   setIsUnderConstruction: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -57,7 +56,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<IUser>({} as IUser);
   const [signUpData, setSignUpData] = useState<ISignUpData>({} as ISignUpData);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFeedTab, setIsFeedTab] = useState(false);
+  const [isAcceptedTerms, setIsAcceptedTerms] = useState(true);
   const [isUnderConstruction, setIsUnderConstruction] = useState(false);
   const [isBlocked, setIsBlocked] = useState('');
 
@@ -86,35 +85,35 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const login = async (formLogin: LoginForm) => {
     setIsLoading(true);
     try {
-      // const { data } = await api.post<ILoginResponse>('/auth/local', {
-      //   ...formLogin,
-      //   role: 'authenticated',
-      // });
+      const { data } = await api.post<ILoginResponse>('/auth/local', {
+        ...formLogin,
+        role: 'authenticated',
+      });
 
-      // if (data?.message === 'Sua conta está bloqueada') {
-      //   setIsBlocked(data.reason || '');
-      //   return false;
-      // }
+      if (data?.message === 'Sua conta está bloqueada') {
+        setIsBlocked(data.reason || '');
+        return false;
+      }
 
-      // if (data?.user?.role?.id !== 1) {
-      //   throw new Error('Essa conta não tem acesso a este aplicativo');
-      // }
+      if (data?.user?.role?.id !== 1) {
+        throw new Error('Essa conta não tem acesso a este aplicativo');
+      }
 
-      // await setItemAsync('accessToken', data.jwt);
+      await setItemAsync('accessToken', data.jwt);
 
-      // if (data?.refreshToken && formLogin?.rememberMe) {
-      //   await setItemAsync('refreshToken', data.refreshToken);
-      // }
+      if (data?.refreshToken && formLogin?.rememberMe) {
+        await setItemAsync('refreshToken', data.refreshToken);
+      }
 
-      // await refetchUser();
+      await refetchUser();
 
-      // const isAccepted = await handleVerifyTerms();
+      const isAccepted = await handleVerifyTerms();
 
-      // if (isAccepted) {
-      router.replace('/(main)/Home');
-      // } else {
-      //   setIsAcceptedTerms(isAccepted);
-      // }
+      if (isAccepted) {
+        router.replace('/(main)/Home');
+      } else {
+        setIsAcceptedTerms(isAccepted);
+      }
     } catch (err: any) {
       setIsLoading(false);
       deleteItemAsync('accessToken');
@@ -131,8 +130,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
       setUser({} as IUser);
       await deleteItemAsync('accessToken');
       await deleteItemAsync('refreshToken');
-      router.dismissAll();
-      router.replace('/(auth)/Welcome');
+      router.dismissTo('/(auth)/Welcome');
     } catch (err) {
       handleError(err);
     }
@@ -215,8 +213,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         login,
         refetchUser,
         isLoading,
-        isFeedTab,
-        setIsFeedTab,
         isUnderConstruction,
         setIsUnderConstruction,
       }}
