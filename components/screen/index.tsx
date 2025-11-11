@@ -11,6 +11,9 @@ export { default as CardCompanyCategory } from './home/CardCompanyCategory';
 export { default as ModalLocation } from './home/ModalLocation';
 export { default as SeeMoreBS } from './home/SeeMoreBS';
 export { default as TipBS } from './home/TipBS';
+export { default as MethodCash } from './home/MethodCash';
+export { default as MethodCreditCard } from './home/MethodCreditCard';
+export { default as MethodPix } from './home/MethodPix';
 
 export { default as ModalDeleteAccount } from './settings/delete-account/ModalDelete';
 export { default as CardMyCreditCard } from './settings/credit-card/Card';

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { router, useLocalSearchParams } from 'expo-router';
-import * as Location from 'expo-location';
-import QRCode from 'react-native-qrcode-svg';
-import * as Clipboard from 'expo-clipboard';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Text from '@/components/Text/Text';
 import Input from '@/components/Input/Input';
@@ -13,105 +11,99 @@ import {
   ButtonPaymentMethod,
   ButtonWoman,
   CardVehicle,
+  MethodCash,
+  MethodCreditCard,
+  MethodPix,
 } from '@/components/screen';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
+import { useRide } from '@/context/useRide';
+
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
-import { handleError } from '@/utils/handleError';
-import { formatReverseGeocode } from '@/utils/formatAddress';
-
 import { useModal } from '@/hooks/useModal';
-import { getCardFlag } from '@/utils/creditCardFlag';
-import { IconComponent } from '@/components/Icon/Icon';
+import { useLocationForm } from '@/hooks/useLocationForm';
 
+import { api } from '@/services/api';
+
+import { RideForm, RideSchema } from '@/validation/Ride.validation';
+
+import { IGeolocation } from '@/interfaces/geolocation';
+import { handleError } from '@/utils/handleError';
 import { Header } from './styles';
 
-type IForm = {
-  startingPoint: string;
-  destination: string;
-};
-
 const SearchPlaces = () => {
-  const { origin, destination } = useLocalSearchParams<{
-    origin: string;
+  const { destination: finalLocation } = useLocalSearchParams<{
     destination: string;
   }>();
 
   const { setModal } = useModal();
+  const { handleRide } = useRide();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [status, requestPermission] = Location.useForegroundPermissions({
-    request: true,
+  const { control, handleSubmit, setValue } = useForm<RideForm>({
+    resolver: yupResolver(RideSchema),
   });
 
-  const { control, setValue } = useForm<IForm>();
+  const { origin, destination } = useWatch({
+    control,
+  });
 
-  const [currentLocation, setCurrentLocation] = useState(origin);
+  const { currentLocation } = useLocationForm({
+    setValue,
+    fieldName: 'origin',
+    shouldDirty: false,
+  });
+
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  // const { data: categories } = useCategoriesPricesCoordinate(
+  //   ride?.origin,
+  //   ride?.destination,
+  // );
 
   useEffect(() => {
-    if (destination) {
-      setValue('destination', destination);
+    if (finalLocation) {
+      setValue('destination', finalLocation);
     }
-    if (origin) {
-      setValue('startingPoint', origin);
-    }
-  }, [origin, destination]);
+  }, [finalLocation]);
 
-  const handleCopy = async () => {
+  const getGeolocation = async () => {
     try {
-      await Clipboard.setStringAsync('dasda');
-    } catch (err) {
-      handleError('Não foi possível copiar o código');
-    }
-  };
-
-  const getLocation = async () => {
-    try {
-      const { coords } = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Highest,
+      const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
+        params: {
+          addressOrigin: origin,
+          addressDestination: destination,
+        },
       });
+      setValue('origin', data.origin.address);
+      setValue('destination', data.destination.address);
 
-      const currentLocationNow = await Location.reverseGeocodeAsync(coords);
-
-      if (currentLocationNow && currentLocationNow.length > 0) {
-        const formattedAddress = formatReverseGeocode(currentLocationNow[0]);
-        setValue('startingPoint', formattedAddress, {
-          shouldDirty: false,
-        });
-        setCurrentLocation(formattedAddress);
-      }
+      return data;
     } catch (err) {
-      handleError('Não foi possível obter a localização');
-      requestPermission().then(response => {
-        if (response.granted) {
-          getLocation();
-        }
-      });
+      handleError(err);
     }
   };
 
   const onSubmit = async () => {
     setIsLoading(true);
     try {
+      // handleRide(
+      //   {
+      //     origin: data?.origin,
+      //     destination: data?.destination,
+      //   },
+      //   true,
+      // );
+
       setModal({
         name: 'paymentSuccess',
         onPress: () => router.push('/(main)/Home/LookingForDriver'),
       });
     } catch (err) {
-      requestPermission().then(response => {
-        if (response.granted) {
-          getLocation();
-        }
-      });
+      handleError(err);
     }
     setIsLoading(false);
   };
@@ -126,13 +118,13 @@ const SearchPlaces = () => {
         />
         <Input
           key={currentLocation}
-          name="startingPoint"
+          name="origin"
           control={control}
           iconLeft="PinIcon"
           placeholder="Insira o local de partida"
           containerStyle={styles.input}
           iconColor={colors.primary_100}
-          defaultValue={currentLocation}
+          defaultValue={currentLocation || undefined}
           style={{ color: colors.secondary_10 }}
         />
 
@@ -146,6 +138,7 @@ const SearchPlaces = () => {
           defaultValue={destination}
           style={{ color: colors.secondary_10 }}
           marginTop={-12}
+          onEndEditing={getGeolocation}
         />
       </Header>
 
@@ -186,50 +179,16 @@ const SearchPlaces = () => {
           />
         </View>
 
-        {method === 'creditCard' && (
-          <View style={styles.creditCard}>
-            {getCardFlag('5437 7388 1413 5551', colors.neutro_00, {
-              width: 10,
-              height: 10,
-            })}
+        {method === 'creditCard' && <MethodCreditCard />}
+        {method === 'pix' && <MethodPix pixCode="asda" />}
+        {method === 'cash' && <MethodCash />}
 
-            <Text color={colors.secondary_100} style={styles.text}>
-              Nome do cartão{' '}
-              <Text fontWeight={700} color={colors.secondary_100}>
-                **** 1962
-              </Text>
-            </Text>
-
-            <IconComponent
-              name="SwitchIcon"
-              onPress={() => router.push('/(main)/Settings/CreditCard')}
-            />
-          </View>
-        )}
-
-        {method === 'pix' && (
-          <View style={styles.pixWrapper}>
-            <View style={styles.qrCodeWrapper}>
-              <QRCode size={132} value="dasda" />
-            </View>
-
-            <Button onPress={handleCopy} outline style={styles.copyButton}>
-              Copiar código
-            </Button>
-          </View>
-        )}
-
-        {method === 'cash' && (
-          <View style={styles.row}>
-            <IconComponent name="InfoAlertIcon" />
-
-            <Text size={12} style={{ flex: 1 }}>
-              Atenção! Esteja com o valor trocado para facilitar o pagamento.
-            </Text>
-          </View>
-        )}
-
-        <Button onPress={onSubmit} isLoading={isLoading} style={styles.button}>
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          isLoading={isLoading}
+          style={styles.button}
+          disabled={!method}
+        >
           Solicitar motorista
         </Button>
       </View>
@@ -262,38 +221,11 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 'auto',
   },
-  creditCard: {
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    gap: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.secondary_20,
-  },
   divider: {
     width,
     height: 8,
     alignSelf: 'center',
     backgroundColor: colors.secondary_20,
-  },
-  text: {
-    flex: 1,
-  },
-  pixWrapper: {
-    alignItems: 'center',
-    gap: 16,
-  },
-  qrCodeWrapper: {
-    overflow: 'hidden',
-    width: 132,
-    height: 132,
-    borderRadius: 12,
-  },
-  copyButton: {
-    width: 180,
   },
 });
 
