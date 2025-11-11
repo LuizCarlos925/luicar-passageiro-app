@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
 import { ICategory } from '@/interfaces/vehicleCategory';
 import { handleError } from '@/utils/handleError';
+import { IGeolocation } from '@/interfaces/geolocation';
 
 export const useCategoriesPrices = (origin: string, destination: string) => {
   const getCategoriesPrices = async () => {
@@ -26,18 +27,23 @@ export const useCategoriesPrices = (origin: string, destination: string) => {
 };
 
 export const useCategoriesPricesCoordinate = (
-  origin: { latitude: number; longitude: number },
-  destination: { latitude: number; longitude: number },
-  departTime?: string,
+  addresses: IGeolocation | null,
 ) => {
-  if (!origin?.latitude) {
-    handleError('Origem da viagem não encontrada');
-  }
-  if (!destination?.latitude) {
-    handleError('Destino da viagem não encontrado');
-  }
-
   const getCategoriesPrices = async () => {
+    if (!addresses) {
+      handleError('Endereços de origem e destino não fornecidos');
+      return;
+    }
+
+    const { origin, destination } = addresses;
+
+    if (!origin?.latitude) {
+      handleError('Origem da viagem não encontrada');
+    }
+    if (!destination?.latitude) {
+      handleError('Destino da viagem não encontrado');
+    }
+
     const { data } = await api.get<ICategory[]>('/listCategoriesPriceV2', {
       params: {
         'coordinatesDestination[latitude]': destination.latitude,
@@ -45,7 +51,6 @@ export const useCategoriesPricesCoordinate = (
         'coordinatesOrigin[latitude]': origin.latitude,
         'coordinatesOrigin[longitude]': origin.longitude,
         deliveryType: 'passenger',
-        departTime: departTime || undefined,
       },
     });
 
@@ -55,7 +60,8 @@ export const useCategoriesPricesCoordinate = (
   };
 
   return useQuery({
-    queryKey: ['categories-prices-coordinate', origin, destination],
+    queryKey: ['categories-prices-coordinate', addresses],
     queryFn: getCategoriesPrices,
+    enabled: !!addresses,
   });
 };

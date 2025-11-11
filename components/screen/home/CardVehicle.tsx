@@ -8,12 +8,13 @@ import Text from '@/components/Text/Text';
 import { colors } from '@/global/theme';
 
 import { formatCurrency } from '@/utils/format';
+import { ISubcategory } from '@/interfaces/vehicleCategory';
 
 type Props = {
-  name?: string;
+  vehicle: ISubcategory;
 };
 
-const CardVehicle = ({ name }: Props) => {
+const CardVehicle = ({ vehicle }: Props) => {
   return (
     <View style={styles.container}>
       <Image source={Car2} style={styles.image} />
@@ -30,11 +31,11 @@ const CardVehicle = ({ name }: Props) => {
 
       <View style={{ alignItems: 'flex-end' }}>
         <Text size={16} fontWeight={600} color={colors.primary_100}>
-          {formatCurrency(60)}
+          {formatCurrency(vehicle.value)}
         </Text>
 
         <Text size={12} color={colors.secondary_80} style={styles.text}>
-          {formatCurrency(12)}
+          {formatCurrency(vehicle.value * 1.1)}
         </Text>
       </View>
     </View>

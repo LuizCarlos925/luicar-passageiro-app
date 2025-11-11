@@ -18,20 +18,21 @@ import {
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 
-import { useRide } from '@/context/useRide';
-
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
 import { useModal } from '@/hooks/useModal';
 import { useLocationForm } from '@/hooks/useLocationForm';
 
+import { IGeolocation } from '@/interfaces/geolocation';
+
 import { api } from '@/services/api';
+import { useCategoriesPricesCoordinate } from '@/services/Home/vehicles.service';
+
+import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
-import { IGeolocation } from '@/interfaces/geolocation';
-import { handleError } from '@/utils/handleError';
 import { Header } from './styles';
 
 const SearchPlaces = () => {
@@ -40,7 +41,8 @@ const SearchPlaces = () => {
   }>();
 
   const { setModal } = useModal();
-  const { handleRide } = useRide();
+
+  const [addresses, setAddresses] = useState<IGeolocation | null>(null);
 
   const { control, handleSubmit, setValue } = useForm<RideForm>({
     resolver: yupResolver(RideSchema),
@@ -59,10 +61,7 @@ const SearchPlaces = () => {
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // const { data: categories } = useCategoriesPricesCoordinate(
-  //   ride?.origin,
-  //   ride?.destination,
-  // );
+  const { data: categories } = useCategoriesPricesCoordinate(addresses);
 
   useEffect(() => {
     if (finalLocation) {
@@ -81,7 +80,7 @@ const SearchPlaces = () => {
       setValue('origin', data.origin.address);
       setValue('destination', data.destination.address);
 
-      return data;
+      setAddresses(data);
     } catch (err) {
       handleError(err);
     }
@@ -90,14 +89,6 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      // handleRide(
-      //   {
-      //     origin: data?.origin,
-      //     destination: data?.destination,
-      //   },
-      //   true,
-      // );
-
       setModal({
         name: 'paymentSuccess',
         onPress: () => router.push('/(main)/Home/LookingForDriver'),
@@ -135,7 +126,6 @@ const SearchPlaces = () => {
           placeholder="Insira o destino/CEP"
           containerStyle={styles.input}
           iconColor={colors.primary_100}
-          defaultValue={destination}
           style={{ color: colors.secondary_10 }}
           marginTop={-12}
           onEndEditing={getGeolocation}
@@ -148,7 +138,14 @@ const SearchPlaces = () => {
         </Text>
 
         <ButtonWoman name="isWoman" control={control} />
-        <CardVehicle />
+
+        {categories?.map(cat => (
+          <View key={cat.id}>
+            {cat.subcategories?.map(item => (
+              <CardVehicle key={item.id} vehicle={item} />
+            ))}
+          </View>
+        ))}
 
         <View style={styles.divider} />
 
