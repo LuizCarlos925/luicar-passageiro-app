@@ -1,26 +1,30 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { router, useFocusEffect } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { ActivityIndicator, BackHandler, StyleSheet, View } from 'react-native';
 
+import { WaitingLottie } from '@/assets/animations';
+
 import Text from '@/components/Text/Text';
+import { CancelRideBS } from '@/components/screen';
 import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
+import { IconComponent } from '@/components/Icon/Icon';
 import { GlobalContainer } from '@/components/Container/Container';
+import ModalWaitingCancel from '@/components/screen/home/ModalWaitingCancel';
 
 import { colors } from '@/global/theme';
 import { height, width } from '@/global/constants';
 
 import { useModal } from '@/hooks/useModal';
 
+import { api } from '@/services/api';
+
 import { formatCurrency } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
-import { IconComponent } from '@/components/Icon/Icon';
 
-import { WaitingLottie } from '@/assets/animations';
-import ModalWaitingCancel from '@/components/screen/home/ModalWaitingCancel';
-import { CancelRideBS } from '@/components/screen';
+import { useRide } from '@/context/useRide';
 import {
   Column,
   ContentWrapper,
@@ -33,6 +37,8 @@ import {
 const LookingForDriver = () => {
   const { setModal } = useModal();
 
+  const { ride, handleFindRide } = useRide();
+
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
@@ -42,16 +48,21 @@ const LookingForDriver = () => {
   useFocusEffect(
     useCallback(() => {
       const interval = setInterval(() => {
-        router.replace('/(main)/Home/StartedRide');
+        handleFindRide(true);
       }, 15000);
 
       return () => clearInterval(interval);
     }, []),
   );
 
-  const handleCancelRide = async () => {
+  const handleCancelRide = async (reason: string) => {
     try {
-      //
+      await api.put('/cancelTrip', {
+        id: ride?.paymentResponse?.id,
+        reason,
+      });
+
+      bsCancelRef.current?.close();
     } catch (err) {
       handleError(err);
     }
@@ -91,7 +102,10 @@ const LookingForDriver = () => {
             backgroundStyle={{ backgroundColor: colors.neutro_00 }}
             enablePanDownToClose
           >
-            <CancelRideBS onPress={() => bsCancelRef.current?.close()} />
+            <CancelRideBS
+              onPress={handleCancelRide}
+              onClose={() => bsCancelRef.current?.close()}
+            />
           </BottomSheet>
         </>
       }
@@ -122,6 +136,7 @@ const LookingForDriver = () => {
 
       <BottomSheet
         ref={bottomSheetRef}
+        index={0}
         enablePanDownToClose={false}
         snapPoints={[120, 600]}
         handleComponent={() => <LineHandler />}
@@ -144,7 +159,7 @@ const LookingForDriver = () => {
                   Valor da corrida
                 </Text>
                 <Text size={24} fontWeight={600} color={colors.neutro_00}>
-                  {formatCurrency(15.94)}
+                  {formatCurrency(ride?.paymentResponse?.valuePayment || 0)}
                 </Text>
               </Column>
               <Column style={{ alignItems: 'flex-end' }}>
@@ -152,7 +167,7 @@ const LookingForDriver = () => {
                   Forma de pagamento
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
-                  Crédito **** 1962
+                  {ride?.paymentMethod} **** 1234
                 </Text>
               </Column>
             </Row>

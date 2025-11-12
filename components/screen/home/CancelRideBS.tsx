@@ -15,10 +15,11 @@ import { shadow } from '@/global/shadow';
 import { useModal } from '@/hooks/useModal';
 
 type Props = {
-  onPress: () => void;
+  onPress: (reason: string) => void;
+  onClose?: () => void;
 };
 
-const CancelRideBS = ({ onPress }: Props) => {
+const CancelRideBS = ({ onPress, onClose }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const { setModal } = useModal();
@@ -28,7 +29,7 @@ const CancelRideBS = ({ onPress }: Props) => {
   const { selectedReason } = watch();
 
   const onSubmit = async (form: any) => {
-    onPress();
+    onPress(form.selectedReason);
 
     setTimeout(() => {
       setModal({ name: 'cancelRideWithTax' });
@@ -50,7 +51,7 @@ const CancelRideBS = ({ onPress }: Props) => {
 
         <IconComponent
           name="CloseIcon"
-          onPress={onPress}
+          onPress={onClose}
           size={16}
           style={{ padding: 8 }}
         />

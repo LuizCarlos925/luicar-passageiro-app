@@ -142,7 +142,11 @@ const SearchPlaces = () => {
         {categories?.map(cat => (
           <View key={cat.id}>
             {cat.subcategories?.map(item => (
-              <CardVehicle key={item.id} vehicle={item} />
+              <CardVehicle
+                key={item.id}
+                vehicle={item}
+                onPress={() => setValue('vehicleId', String(item.id))}
+              />
             ))}
           </View>
         ))}

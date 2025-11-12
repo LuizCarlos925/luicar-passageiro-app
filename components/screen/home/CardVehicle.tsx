@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 
 import { Car2 } from '@/assets/images';
@@ -12,11 +12,12 @@ import { ISubcategory } from '@/interfaces/vehicleCategory';
 
 type Props = {
   vehicle: ISubcategory;
+  onPress: () => void;
 };
 
-const CardVehicle = ({ vehicle }: Props) => {
+const CardVehicle = ({ vehicle, onPress }: Props) => {
   return (
-    <View style={styles.container}>
+    <Pressable onPress={onPress} style={styles.container}>
       <Image source={Car2} style={styles.image} />
 
       <View>
@@ -38,7 +39,7 @@ const CardVehicle = ({ vehicle }: Props) => {
           {formatCurrency(vehicle.value * 1.1)}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

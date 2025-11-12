@@ -78,6 +78,7 @@ const Carousel = ({ images }: CarouselProps) => {
       contentContainerStyle={{ gap: 10 }}
       horizontal
       pagingEnabled
+      snapToAlignment="center"
     />
   );
 };
