@@ -21,6 +21,7 @@ import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
 import ModalPayment from '@/components/screen/home/ModalPayment';
+import { api } from '@/services/api';
 
 const RideFinished = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
@@ -34,12 +35,12 @@ const RideFinished = () => {
 
   const onSubmit = async (form: EvaluateForm) => {
     try {
-      // await api.post('/createDriverReview', {
-      //   rating: form?.rating,
-      //   title: form?.title,
-      //   description: form?.comment,
-      //   tripId: ride?.paymentResponse?.id,
-      // });
+      await api.post('/createDriverReview', {
+        rating: form?.rating,
+        title: form?.title,
+        description: form?.comment,
+        tripId: ride?.paymentResponse?.id,
+      });
 
       router.dismissTo('/(main)/Home');
     } catch (err) {

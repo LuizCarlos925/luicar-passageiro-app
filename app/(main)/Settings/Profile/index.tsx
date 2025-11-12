@@ -77,8 +77,8 @@ const Profile = () => {
   const handleChangeAvatar = async () => {
     setModal({
       name: 'avatar',
-      onPress: handlePickImage,
-      onPressBack: handleTakePhoto,
+      onPress: handleTakePhoto,
+      onPressBack: handlePickImage,
     });
   };
 
@@ -211,6 +211,7 @@ const BodyProfile = ({ user }: Props) => {
   });
 
   const onSubmit = async (form: ProfileForm) => {
+    setIsEditing(false);
     try {
       await api.put('/updatePassenger', {
         personalData: {
@@ -275,7 +276,7 @@ const BodyProfile = ({ user }: Props) => {
           name="EditIcon"
           size={18}
           color={colors.secondary_60}
-          style={{ marginTop: 16 }}
+          style={{ marginTop: 28 }}
           onPress={() => setIsEditing(prev => !prev)}
         />
       </View>

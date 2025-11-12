@@ -104,14 +104,14 @@ const Profile = () => {
           control={control}
           label="Nome completo"
           placeholder="Digite seu nome completo"
-          autoCapitalize="characters"
+          autoCapitalize="words"
         />
         <Input
           name="social_name"
           control={control}
           label="Nome social (opcional)"
           placeholder="Digite seu nome social"
-          autoCapitalize="characters"
+          autoCapitalize="words"
         />
         <Input
           name="cpf"
@@ -151,14 +151,14 @@ const Profile = () => {
           control={control}
           label="Bairro"
           placeholder="Digite seu bairro"
-          autoCapitalize="characters"
+          autoCapitalize="words"
         />
         <Input
           name="street"
           control={control}
           label="Logradouro"
           placeholder="Digite seu logradouro"
-          autoCapitalize="characters"
+          autoCapitalize="words"
         />
         <Input
           name="number"

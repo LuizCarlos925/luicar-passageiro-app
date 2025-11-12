@@ -70,13 +70,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         },
       });
 
-      return setUser({
-        ...data,
-        passenger: {
-          ...data.passenger,
-          name: String(data.passenger.name).toUpperCase(),
-        },
-      });
+      return setUser(data);
     } catch (err) {
       handleError(err);
     }
@@ -115,7 +109,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         setIsAcceptedTerms(isAccepted);
       }
     } catch (err: any) {
-      setIsLoading(false);
+      handleError(err);
       deleteItemAsync('accessToken');
       deleteItemAsync('refreshToken');
     }

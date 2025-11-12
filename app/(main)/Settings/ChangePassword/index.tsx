@@ -12,6 +12,7 @@ import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors, theme } from '@/global/theme';
 
+import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import { api } from '@/services/api';
@@ -23,6 +24,8 @@ import { PasswordForm, PasswordSchema } from '@/validation/Profile.validation';
 import { InputWrapper, PasswordRulesWrapper } from './styles';
 
 const ChangePassword = () => {
+  const { logout } = useAuth();
+
   const { setModal } = useModal();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,12 +43,10 @@ const ChangePassword = () => {
         passwordConfirmation: form.passwordConfirm,
       });
 
+      logout();
+
       setTimeout(() => {
-        setModal({
-          name: 'updateSuccess',
-          onPress: router.back,
-          onPressBack: router.back,
-        });
+        setModal({ name: 'updateSuccess' });
       }, 500);
     } catch (err) {
       handleError(err);

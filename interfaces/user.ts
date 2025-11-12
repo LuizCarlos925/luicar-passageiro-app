@@ -44,16 +44,8 @@ export interface Passenger {
   rideNotification: boolean;
   code: string;
   image: Image;
-  feed_profile: FeedProfile;
   cards: ICard[];
   bank_account: IBankAccount;
-}
-
-export interface FeedProfile {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
 }
 
 export interface Image {

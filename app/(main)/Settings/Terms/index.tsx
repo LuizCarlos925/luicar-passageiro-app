@@ -36,6 +36,7 @@ const Terms = () => {
           Termos de uso do aplicativo Luicar{'\n'}
           Data da última atualização:{' '}
           {terms?.updatedAt && format(terms.updatedAt, 'dd/MM/yyyy')}
+          {'\n\n'}
         </Text>
 
         {isLoading ? (

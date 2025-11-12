@@ -78,7 +78,7 @@ const Home = () => {
           ))}
         </View>
 
-        {ads && (
+        {ads && ads?.length > 0 && (
           <Carousel
             images={
               ads?.map(item => ({
