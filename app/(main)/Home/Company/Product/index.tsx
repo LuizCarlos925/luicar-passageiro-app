@@ -1,19 +1,32 @@
-import BackButton from '@/components/BackButton/BackButton';
-import { GlobalContainer } from '@/components/Container/Container';
-import Text from '@/components/Text/Text';
-import { width } from '@/global/constants';
-import { colors } from '@/global/theme';
 import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+
+import Text from '@/components/Text/Text';
+import BackButton from '@/components/BackButton/BackButton';
+import { GlobalContainer } from '@/components/Container/Container';
+
+import { colors } from '@/global/theme';
+import { width } from '@/global/constants';
+
+import { getImageUrl } from '@/services/api';
+import { useCompanyProduct } from '@/services/Home/companies.service';
 
 const Product = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  const { data: product } = useCompanyProduct(id);
+
   return (
-    <GlobalContainer paddingHorizontal={20} gap={16}>
+    <GlobalContainer paddingHorizontal={20} gap={16} alignItems="flex-start">
       <BackButton style={styles.backButton} />
 
       <Image
         source={{
-          uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSfyaTZOko_17t4u7gXTn7_mIbHJLcQKDMw&s',
+          uri: getImageUrl(
+            product?.portfolio_product?.photos?.[0]?.url ||
+              product?.banner?.url,
+          ),
         }}
         style={styles.image}
       />
@@ -25,17 +38,10 @@ const Product = () => {
       </View>
 
       <Text size={32} fontWeight={700}>
-        Brabo Brabíssimo Frango
+        {product?.portfolio_product?.name || product?.name}
       </Text>
       <Text color={colors.secondary_60}>
-        Lorem ipsum dolor sit amet consectetur. Sollicitudin a quis neque
-        scelerisque. Enim orci eget accumsan nisi ut nisl. Egestas congue porta
-        in consectetur iaculis facilisi maecenas ornare sed. Mauris etiam nibh
-        odio ut sapien nunc nunc vitae id. Ullamcorper massa gravida donec
-        elementum nisi aliquam. Rhoncus quis nunc aliquam ut non libero aliquam
-        diam. Posuere consectetur vitae tellus mauris laoreet tortor adipiscing
-        odio ut. Convallis arcu sed at ut. Risus adipiscing elit turpis id orci
-        pulvinar donec.
+        {product?.portfolio_product?.description || product?.description}
       </Text>
     </GlobalContainer>
   );

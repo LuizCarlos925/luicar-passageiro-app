@@ -1,25 +1,36 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 
+import { IAnnouncement } from '@/interfaces/companyById';
+import { getImageUrl } from '@/services/api';
 import Text from '@/components/Text/Text';
 
 import { colors } from '@/global/theme';
 
 type Props = {
-  category: any;
+  category: IAnnouncement;
   onPress: () => void;
 };
 
 const CardCompanyCategory = ({ category, onPress }: Props) => {
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <Image source={{ uri: category?.image }} style={styles.image} />
+      <Image
+        source={{
+          uri: getImageUrl(
+            category?.portfolio_product?.photos?.[0]?.url ||
+              category?.banner?.url,
+          ),
+        }}
+        style={styles.image}
+      />
 
       <View style={styles.textWrapper}>
-        <Text fontWeight={600}>{category?.name}</Text>
+        <Text fontWeight={600}>
+          {category?.portfolio_product?.name || category?.name}
+        </Text>
         <Text size={12} color={colors.secondary_60}>
-          {category?.description}
-          velit in neque. Augue blandit accumsan...
+          {category?.portfolio_product?.description || category?.description}
         </Text>
       </View>
     </Pressable>

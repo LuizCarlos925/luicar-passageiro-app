@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -13,12 +13,19 @@ import { GlobalContainer } from '@/components/Container/Container';
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
-import { PRODUCTS } from '@/mock/products';
+import { useCompanyById } from '@/services/Home/companies.service';
+
+import { formatAddress } from '@/utils/formatAddress';
+import { getImageUrl } from '@/services/api';
 
 const Company = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
+
   const router = useRouter();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const { data: company } = useCompanyById(id);
 
   return (
     <GlobalContainer paddingHorizontal={20} gap={16}>
@@ -26,30 +33,25 @@ const Company = () => {
 
       <View style={styles.row}>
         <Image
-          source={{
-            uri: 'https://opopularpr.com.br/wp-content/uploads/2025/05/mc-donalds-deve-comecar-a-ser-construido-em-araucaria-ainda-neste-ano-009e.webp',
-          }}
+          source={{ uri: getImageUrl(company?.company?.photo?.url) }}
           style={styles.image}
         />
         <Text size={24} fontWeight={700} style={{ flexShrink: 1 }}>
-          Mcdonald’s - Dol - Drive Brasília
+          {company?.company?.tradeName}
         </Text>
       </View>
 
-      <Text color={colors.secondary_60}>
-        Descrição lorem ipsum dolor sit amet consectetur. Lacus tellus nibh
-        velit in neque. Augue blandit accumsan...
-      </Text>
+      <Text color={colors.secondary_60}>{company?.company?.description}</Text>
 
       <View style={styles.row}>
         <IconComponent name="PinFilledIcon" style={styles.icon} />
 
         <View style={styles.textWrapper}>
           <Text size={16} color={colors.secondary_100}>
-            Parque Centenário
+            {company?.company?.neighborhood}
           </Text>
           <Text color={colors.secondary_60} numberOfLines={1}>
-            Av. Ver. Narciso Yague Guimarães, Mogi...
+            {formatAddress(company?.company as any)}
           </Text>
         </View>
       </View>
@@ -70,11 +72,16 @@ const Company = () => {
       </Text>
 
       <View style={styles.categoryWrapper}>
-        {PRODUCTS.map(item => (
+        {company?.announcements?.map(item => (
           <CardCompanyCategory
             key={item.id}
             category={item}
-            onPress={() => router.push('/(main)/Home/Company/Product')}
+            onPress={() =>
+              router.push({
+                pathname: '/(main)/Home/Company/Product',
+                params: { id: item.id },
+              })
+            }
           />
         ))}
       </View>

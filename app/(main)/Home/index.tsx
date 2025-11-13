@@ -19,17 +19,17 @@ import { useBalance } from '@/services/Home/balance.service';
 import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';
-
-import { COMPANIES } from '@/mock/companies';
+import { useCompanies } from '@/services/Home/companies.service';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
 
+  const [isVisible, setIsVisible] = useState(false);
+
   const { data: locations } = useLocations('destino');
   const { data: ads } = useAdvertising();
   const { data: balance } = useBalance();
-
-  const [isVisible, setIsVisible] = useState(false);
+  const { data: companies } = useCompanies();
 
   useEffect(() => {
     if (status && !status?.granted) {
@@ -95,12 +95,17 @@ const Home = () => {
         </Text>
 
         <View style={styles.companiesWrapper}>
-          {COMPANIES?.map(company => (
+          {companies?.map(company => (
             <Company
               key={company?.id}
-              logo={company?.logoUrl}
-              name={company?.name}
-              onPress={() => router.push('/(main)/Home/Company')}
+              logo={company?.photo?.url}
+              name={company?.tradeName}
+              onPress={() =>
+                router.push({
+                  pathname: '/(main)/Home/Company',
+                  params: { id: company?.id },
+                })
+              }
             />
           ))}
         </View>
