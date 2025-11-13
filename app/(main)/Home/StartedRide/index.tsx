@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import Text from '@/components/Text/Text';
 import { Button } from '@/components/Button/Button';
@@ -16,6 +16,11 @@ import { DriverCard } from '@/components/DriverCard/DriverCard';
 import { differenceInSeconds, format, intervalToDuration } from 'date-fns';
 import { useFocusEffect } from 'expo-router';
 import { useRide } from '@/context/useRide';
+import ModalWaitingCancel from '@/components/screen/home/ModalWaitingCancel';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { CancelRideBS } from '@/components/screen';
+import { api } from '@/services/api';
+import { handleError } from '@/utils/handleError';
 import { ContentWrapper, InfoWrapper } from './styles';
 
 const StartedRide = () => {
@@ -23,12 +28,14 @@ const StartedRide = () => {
 
   const { ride, handleFindRide } = useRide();
 
+  const bsCancelRef = useRef<BottomSheet>(null);
+
   const targetDate = new Date();
   const difference = differenceInSeconds(new Date(), targetDate);
 
   const [started, setStarted] = useState(false);
   const [count, setCount] = useState(difference * 1000);
-  const [isVisibleCancel, setIsVisibleCancel] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (started) {
@@ -63,12 +70,50 @@ const StartedRide = () => {
     }, []),
   );
 
+  const handleCancelRide = async (reason: string) => {
+    try {
+      await api.put('/cancelTrip', {
+        id: ride?.id,
+        reason,
+      });
+
+      bsCancelRef.current?.close();
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
   return (
     <GlobalContainer
       alignItems="flex-start"
       gap={15}
       containerStyle={{ backgroundColor: colors.secondary_100 }}
       withoutPaddingTop
+      component={
+        <>
+          <ModalWaitingCancel
+            isVisible={isVisible}
+            onPress={() => {
+              setIsVisible(false);
+              bsCancelRef.current?.expand();
+            }}
+            onBackPress={() => setIsVisible(false)}
+          />
+          <BottomSheet
+            ref={bsCancelRef}
+            index={-1}
+            snapPoints={[250, 350]}
+            handleComponent={() => <View style={styles.lineHandler} />}
+            backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+            enablePanDownToClose
+          >
+            <CancelRideBS
+              onPress={handleCancelRide}
+              onClose={() => bsCancelRef.current?.close()}
+            />
+          </BottomSheet>
+        </>
+      }
     >
       <View style={[styles.header, { paddingTop: top + 20 }]}>
         <InfoWrapper style={{ alignItems: 'center' }}>
@@ -153,9 +198,7 @@ const StartedRide = () => {
 
         <Divider />
 
-        <Button onPress={() => setIsVisibleCancel(true)}>
-          Cancelar corrida
-        </Button>
+        <Button onPress={() => setIsVisible(true)}>Cancelar corrida</Button>
       </ContentWrapper>
     </GlobalContainer>
   );
@@ -175,6 +218,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  lineHandler: {
+    width: 85,
+    height: 6,
+    alignSelf: 'center',
+    marginVertical: 15,
+    borderRadius: 20,
+    backgroundColor: '#d2d6db',
   },
 });
 

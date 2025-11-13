@@ -24,7 +24,7 @@ const CreditCard = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await api.delete(`/deleteCard?cardId=${id}`);
+      await api.delete(`/deleteCard/${id}`);
       refetchUser();
 
       setTimeout(() => {

@@ -103,7 +103,15 @@ const CancelRideBS = ({ onPress, onClose }: Props) => {
             <Pressable
               key={reason.id}
               onPress={() => setValue('selectedReason', reason.id)}
-              style={styles.button}
+              style={[
+                styles.button,
+                {
+                  backgroundColor:
+                    selectedReason === reason.id
+                      ? colors.primary_20
+                      : colors.neutro_00,
+                },
+              ]}
             >
               <IconComponent name={reason.icon} size={18} />
               <Text size={14} fontWeight={500} style={{ flex: 1 }}>

@@ -18,9 +18,13 @@ import {
   CreditCardSchema,
   CreditCardForm,
 } from '@/validation/CreditCard.validation';
+import { api } from '@/services/api';
+import { normalize } from '@/utils/format';
+import { useAuth } from '@/hooks/useAuth';
 
 const Form = () => {
   const { setModal } = useModal();
+  const { refetchUser } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +35,16 @@ const Form = () => {
   const onSubmit = async (form: CreditCardForm) => {
     setIsLoading(true);
     try {
+      await api.post('/createCards', {
+        holderName: form.holder_name,
+        cardNumber: normalize(form.card_number),
+        expirationMouth: form.validate.split('/')[0],
+        expirationYear: `20${form.validate.split('/')[1]}`,
+        cvv: form.cvv,
+      });
+
+      refetchUser();
+
       setModal({
         name: 'creditCardSuccess',
         onPress: router.back,
