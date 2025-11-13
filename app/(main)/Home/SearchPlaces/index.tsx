@@ -5,7 +5,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Text from '@/components/Text/Text';
-import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import {
   ButtonPaymentMethod,
@@ -33,6 +32,9 @@ import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
+import { IPayment } from '@/interfaces/payment';
+import { ISelectTrip } from '@/interfaces/selectTrip';
+import GoogleMapsInput from '@/components/GoogleMapsInput/GoogleMapsInput';
 import { Header } from './styles';
 
 const SearchPlaces = () => {
@@ -89,6 +91,25 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
+      const { data } = await api.post<ISelectTrip>('/selectTrip', {
+        origin: addresses?.origin,
+        destination: addresses?.destination,
+        subcategoryId: 1,
+        categoryId: 1,
+      });
+
+      console.log(JSON.stringify(data, null, 2));
+
+      const { data: paymentResponse } = await api.post<IPayment>(
+        '/confirmTrip',
+        {
+          paymentMethod: 'pix',
+          portion: '1',
+        },
+      );
+
+      console.log(JSON.stringify(paymentResponse, null, 2));
+
       setModal({
         name: 'paymentSuccess',
         onPress: () => router.push('/(main)/Home/LookingForDriver'),
@@ -107,28 +128,28 @@ const SearchPlaces = () => {
           size={20}
           color={colors.secondary_20}
         />
-        <Input
+
+        <GoogleMapsInput
           key={currentLocation}
           name="origin"
           control={control}
           iconLeft="PinIcon"
           placeholder="Insira o local de partida"
-          containerStyle={styles.input}
           iconColor={colors.primary_100}
-          defaultValue={currentLocation || undefined}
+          defaultValue={currentLocation}
+          containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
         />
 
-        <Input
+        <GoogleMapsInput
           name="destination"
           control={control}
           iconLeft="FlagIcon"
           placeholder="Insira o destino/CEP"
+          defaultValue={finalLocation}
           containerStyle={styles.input}
-          iconColor={colors.primary_100}
           style={{ color: colors.secondary_10 }}
           marginTop={-12}
-          onEndEditing={getGeolocation}
         />
       </Header>
 

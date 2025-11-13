@@ -116,11 +116,8 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     setIsLoading(false);
   };
 
-  const logout = async (isDeleting?: boolean) => {
+  const logout = async () => {
     try {
-      if (!isDeleting) {
-        await api.get('/signout');
-      }
       setUser({} as IUser);
       await deleteItemAsync('accessToken');
       await deleteItemAsync('refreshToken');

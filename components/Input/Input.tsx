@@ -40,7 +40,9 @@ export type InputProps<TFieldValues extends FieldValues> = {
   label?: string;
   width?: number | `${number}%`;
   iconLeft?: IconT;
+  iconRight?: IconT;
   iconColor?: string;
+  onPressIconRight?: () => void;
 } & TextInputProps &
   UseControllerProps<TFieldValues>;
 
@@ -55,7 +57,9 @@ const Input = <TFieldValues extends FieldValues>({
   label,
   width = '100%',
   iconLeft,
+  iconRight,
   iconColor = colors.neutro_100,
+  onPressIconRight,
   ...props
 }: InputProps<TFieldValues>) => {
   const [focused, setFocused] = useState(false);
@@ -94,6 +98,16 @@ const Input = <TFieldValues extends FieldValues>({
       return (
         <IconWrapper>
           <IconComponent name={iconLeft} size={16} color={iconColor} />
+        </IconWrapper>
+      );
+    }
+  };
+
+  const renderIconRight = () => {
+    if (iconRight) {
+      return (
+        <IconWrapper onPress={onPressIconRight} hitSlop={10}>
+          <IconComponent name={iconRight} size={16} color={iconColor} />
         </IconWrapper>
       );
     }
@@ -151,6 +165,8 @@ const Input = <TFieldValues extends FieldValues>({
             {...props}
           />
         )}
+
+        {renderIconRight()}
 
         {password && (
           <ButtonEye onPress={() => setPasswordHidden(!passwordHidden)}>
