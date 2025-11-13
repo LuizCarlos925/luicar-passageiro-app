@@ -8,37 +8,37 @@ type CancelReason = {
 
 export const CANCEL_REASONS: CancelReason[] = [
   {
-    id: '1',
+    id: 'Motorista demorou muito para chegar',
     reason: 'Motorista demorou muito para chegar',
     icon: 'ReasonWatch',
   },
   {
-    id: '2',
+    id: 'Viagem solicitada por engano',
     reason: 'Viagem solicitada por engano',
     icon: 'ReasonClose',
   },
   {
-    id: '3',
+    id: 'Local de embarque errado',
     reason: 'Local de embarque errado',
     icon: 'ReasonSend',
   },
   {
-    id: '4',
+    id: 'Não apareceu no local de embarque',
     reason: 'Não apareceu no local de embarque',
     icon: 'ReasonPin',
   },
   {
-    id: '5',
+    id: 'Problema técnico com app ou conexão',
     reason: 'Problema técnico com app ou conexão',
     icon: 'ReasonSignal',
   },
   {
-    id: '6',
+    id: 'Mudança de planos',
     reason: 'Mudança de planos',
     icon: 'ReasonBack',
   },
   {
-    id: '7',
+    id: 'Outros',
     reason: 'Outros',
     icon: 'ReasonEllipsis',
   },
