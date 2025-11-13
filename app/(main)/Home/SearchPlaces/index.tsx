@@ -26,7 +26,7 @@ import { useLocationForm } from '@/hooks/useLocationForm';
 import { IGeolocation } from '@/interfaces/geolocation';
 
 import { api } from '@/services/api';
-import { useCategoriesPricesCoordinate } from '@/services/Home/vehicles.service';
+import { useCategoriesPrices } from '@/services/Home/vehicles.service';
 
 import { handleError } from '@/utils/handleError';
 
@@ -44,8 +44,6 @@ const SearchPlaces = () => {
 
   const { setModal } = useModal();
 
-  const [addresses, setAddresses] = useState<IGeolocation | null>(null);
-
   const { control, handleSubmit, setValue } = useForm<RideForm>({
     resolver: yupResolver(RideSchema),
   });
@@ -62,38 +60,43 @@ const SearchPlaces = () => {
 
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [originAddress, setOriginAddress] = useState<string>('');
+  const [destinationAddress, setDestinationAddress] = useState<string>('');
 
-  const { data: categories } = useCategoriesPricesCoordinate(addresses);
+  const { data: categories } = useCategoriesPrices(
+    originAddress,
+    destinationAddress,
+  );
 
   useEffect(() => {
     if (finalLocation) {
+      setDestinationAddress(finalLocation);
       setValue('destination', finalLocation);
     }
   }, [finalLocation]);
 
-  const getGeolocation = async () => {
-    try {
-      const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
-        params: {
-          addressOrigin: origin,
-          addressDestination: destination,
-        },
-      });
-      setValue('origin', data.origin.address);
-      setValue('destination', data.destination.address);
-
-      setAddresses(data);
-    } catch (err) {
-      handleError(err);
+  useEffect(() => {
+    if (currentLocation) {
+      setOriginAddress(currentLocation);
     }
-  };
+  }, [currentLocation]);
 
   const onSubmit = async () => {
     setIsLoading(true);
     try {
+      const { data: addressResponse } = await api.get<IGeolocation>(
+        '/getGeocodeAddress',
+        {
+          params: {
+            addressOrigin: origin,
+            addressDestination: destination,
+          },
+        },
+      );
+
       const { data } = await api.post<ISelectTrip>('/selectTrip', {
-        origin: addresses?.origin,
-        destination: addresses?.destination,
+        origin: addressResponse?.origin,
+        destination: addressResponse?.destination,
         subcategoryId: 1,
         categoryId: 1,
       });
@@ -139,6 +142,11 @@ const SearchPlaces = () => {
           defaultValue={currentLocation}
           containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
+          onPlaceSelect={address =>
+            setOriginAddress(
+              address?.structured_formatting?.secondary_text || '',
+            )
+          }
         />
 
         <GoogleMapsInput
@@ -147,9 +155,15 @@ const SearchPlaces = () => {
           iconLeft="FlagIcon"
           placeholder="Insira o destino/CEP"
           defaultValue={finalLocation}
+          iconColor={colors.primary_100}
           containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
           marginTop={-12}
+          onPlaceSelect={address =>
+            setDestinationAddress(
+              address?.structured_formatting?.secondary_text || '',
+            )
+          }
         />
       </Header>
 

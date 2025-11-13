@@ -112,7 +112,6 @@ export const usePlacesAutocomplete = ({
             sessionToken,
           }),
         });
-        console.log(JSON.stringify(response, null, 2));
 
         if (response.status === 403) {
           throw new Error('Sem acesso à API do Google Places');

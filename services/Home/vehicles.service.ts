@@ -5,7 +5,7 @@ import { ICategory } from '@/interfaces/vehicleCategory';
 import { handleError } from '@/utils/handleError';
 import { IGeolocation } from '@/interfaces/geolocation';
 
-export const useCategoriesPrices = (origin: string, destination: string) => {
+export const useCategoriesPrices = (origin?: string, destination?: string) => {
   const getCategoriesPrices = async () => {
     const { data } = await api.get<ICategory[]>('/listCategoriesPriceV2', {
       params: {
@@ -23,6 +23,7 @@ export const useCategoriesPrices = (origin: string, destination: string) => {
   return useQuery({
     queryKey: ['categories-prices', origin, destination],
     queryFn: getCategoriesPrices,
+    enabled: !!origin && !!destination,
   });
 };
 

@@ -18,6 +18,7 @@ import { useHistoryDetails } from '@/services/History/history.service';
 
 import { formatCurrency } from '@/utils/format';
 import { format, parseISO } from 'date-fns';
+import { formatTripAddress } from '@/utils/formatAddress';
 
 const TripDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -66,7 +67,7 @@ const TripDetails = () => {
         </Text>
 
         <Text size={20} fontWeight={600} color={colors.secondary_100}>
-          {formatCurrency(trip?.valuePayment)}
+          {formatCurrency(trip?.totalValue || 0)}
         </Text>
       </View>
 
@@ -101,13 +102,13 @@ const TripDetails = () => {
 
       <Trail
         origin={{
-          address: trip?.locals?.[0]?.addressString || '',
+          address: formatTripAddress(trip?.locals?.[0]),
           time: trip?.arrivalOriginAt
             ? format(parseISO(trip?.arrivalOriginAt), 'HH:mm')
             : '',
         }}
         destination={{
-          address: trip?.locals?.[1]?.addressString || '',
+          address: formatTripAddress(trip?.locals?.[1]),
           time: trip?.destinationArrivalAt
             ? format(parseISO(trip?.destinationArrivalAt), 'HH:mm')
             : '',

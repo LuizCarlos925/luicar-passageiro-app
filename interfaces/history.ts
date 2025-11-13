@@ -41,7 +41,7 @@ export interface ITrip {
   destinationArrivalAt: string | null;
   tripStartedAt: null;
   driver: IDriver;
-  locals: Local[];
+  locals: ILocal[];
   driverTripCount?: string;
   vehicle: RecursiveNormalize<IVehicle>;
   category: ICategory & { type: string };
@@ -98,7 +98,7 @@ export interface Review {
   driver_id?: number;
 }
 
-export interface Local {
+export interface ILocal {
   id: number;
   type: string;
   zipCode: string;

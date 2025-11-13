@@ -1,3 +1,4 @@
+import { ILocal } from '@/interfaces/history';
 import { ILocation } from '@/interfaces/location';
 import { LocationGeocodedAddress } from 'expo-location';
 
@@ -52,6 +53,43 @@ export const formatReverseGeocode = (address: LocationGeocodedAddress) => {
     }
     if (address?.country) {
       addressString = `${addressString}, ${address?.country}`;
+    }
+
+    return addressString;
+  } catch (e) {
+    return '';
+  }
+};
+
+export const formatTripAddress = (address?: ILocal) => {
+  try {
+    if (!address) {
+      return '';
+    }
+    let addressString = '';
+
+    if (address?.address) {
+      addressString = address?.address;
+    }
+
+    if (address?.number) {
+      addressString = `${addressString}, ${address?.number}`;
+    }
+
+    if (address?.neighborhood) {
+      addressString = `${addressString}, ${address?.neighborhood}`;
+    }
+
+    if (address?.city) {
+      addressString = `${addressString}, ${address?.city}`;
+    }
+
+    if (address?.state) {
+      addressString = `${addressString} - ${address?.state}`;
+    }
+
+    if (address?.zipCode) {
+      addressString = `${addressString}, ${address?.zipCode}`;
     }
 
     return addressString;

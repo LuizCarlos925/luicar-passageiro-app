@@ -49,7 +49,7 @@ export const TrailWrapper = styled.View`
 
 export const VerticalLine = styled.View`
   width: 1px;
-  height: 26px;
+  height: 32px;
 
   background-color: ${({ theme }) => theme.colors.secondary_60};
 `;
