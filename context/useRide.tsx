@@ -17,13 +17,8 @@ import { handleError } from '@/utils/handleError';
 
 interface RideProvider {
   ride: IRide;
-  handleRide: (body: Partial<IRide>, isFixed?: boolean) => IRide;
-  showNavButton: boolean;
-  setShowNavButton: React.Dispatch<React.SetStateAction<boolean>>;
   handleFindRide: (shouldNavigate?: boolean) => Promise<void>;
   handleResetRide: () => void;
-  setShouldMapCenter: React.Dispatch<React.SetStateAction<boolean>>;
-  shouldMapCenter: boolean;
 }
 
 const RideContext = createContext({} as RideProvider);
@@ -32,29 +27,12 @@ const RideProvider = ({ children }: PropsWithChildren) => {
   const { isAuthenticated } = useAuth();
 
   const [ride, setRide] = useState({} as IRide);
-  const [showNavButton, setShowNavButton] = useState(false);
-  const [shouldMapCenter, setShouldMapCenter] = useState(false);
-
-  const handleRide = (body: Partial<IRide>, isFixed?: boolean) => {
-    if (isFixed) {
-      setRide(body as IRide);
-      return body as IRide;
-    }
-    const newData = {
-      ...ride,
-      ...body,
-    };
-
-    setRide(newData);
-
-    return newData;
-  };
 
   const handleResetRide = () => {
     setRide({} as IRide);
   };
 
-  const handleFindRide = async (shouldNavigate?: boolean) => {
+  const handleFindRide = async () => {
     try {
       const { data } = await api.get<Paginated<IRide>>('/trips', {
         params: {
@@ -81,38 +59,29 @@ const RideProvider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      handleRide(currentRide);
+      setRide(currentRide);
 
       if (currentRide?.status === 'procurandoMotorista') {
         return router.navigate('/(main)/Home/LookingForDriver');
       }
 
       if (currentRide?.status === 'cancelada') {
-        return router.push('/(main)/Home');
+        return router.dismissTo('/(main)/Home');
       }
 
       if (currentRide?.status === 'motoristaDeslocandoInicio') {
-        if (shouldNavigate) {
-          return router.navigate('/(main)/Home/StartedRide');
-        }
-        return setShowNavButton(true);
+        return router.navigate('/(main)/Home/StartedRide');
       }
 
       if (currentRide?.status === 'indoAoPontoDeEncontro') {
-        if (shouldNavigate) {
-          return router.navigate({
-            pathname: '/(main)/Home/StartedRide',
-            params: { status: 'DriverArrived' },
-          });
-        }
-        return setShowNavButton(true);
+        return router.navigate({
+          pathname: '/(main)/Home/StartedRide',
+          params: { status: 'DriverArrived' },
+        });
       }
 
       if (currentRide?.status === 'andamento') {
-        if (shouldNavigate) {
-          return router.navigate('/(main)/Home/StartedRide');
-        }
-        return setShowNavButton(true);
+        return router.navigate('/(main)/Home/StartedRide');
       }
 
       if (currentRide?.status === 'feita' && !currentRide?.hasReviewed) {
@@ -133,13 +102,8 @@ const RideProvider = ({ children }: PropsWithChildren) => {
     <RideContext.Provider
       value={{
         ride,
-        handleRide,
-        showNavButton,
-        setShowNavButton,
         handleFindRide,
         handleResetRide,
-        setShouldMapCenter,
-        shouldMapCenter,
       }}
     >
       {children}

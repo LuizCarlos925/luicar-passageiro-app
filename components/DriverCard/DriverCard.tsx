@@ -6,8 +6,14 @@ import { StyleSheet, View } from 'react-native';
 import { colors } from '@/global/theme';
 import { Car1 } from '@/assets/images';
 import { Image } from 'expo-image';
+import { Driver, Vehicle } from '@/interfaces/ride';
 
-export const DriverCard = () => {
+type Props = {
+  vehicle?: Vehicle;
+  driver?: Driver;
+};
+
+export const DriverCard = ({ vehicle, driver }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -17,12 +23,12 @@ export const DriverCard = () => {
           color={colors.neutro_00}
           style={{ flex: 1 }}
         >
-          Flávio
+          {driver?.socialName || `${driver?.firstName} ${driver?.lastName}`}
         </Text>
 
         <IconComponent name="CarIcon" size={16} color={colors.neutro_00} />
         <Text size={12} color={colors.neutro_00}>
-          2.490 viagens
+          {driver?.tripCount} viagens
         </Text>
       </View>
 
@@ -36,29 +42,26 @@ export const DriverCard = () => {
       <View style={styles.row}>
         <View style={styles.imageWrapper}>
           <Image source={Car1} style={styles.image} />
-          <AvatarImage
-            uri="https://randomuser.me/api/portraits/men/65.jpg"
-            size={64}
-          />
+          <AvatarImage uri={driver?.image?.url} size={64} />
 
           <View style={styles.ratingWrapper}>
             <IconComponent name="StarIcon" size={12} color={colors.neutro_00} />
 
             <Text size={12} fontWeight={600} color={colors.neutro_00}>
-              4.9
+              {driver?.reviews?.average_reviews.toFixed(1)}
             </Text>
           </View>
         </View>
 
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <Text size={16} fontWeight={600} color={colors.primary_100}>
-            QII3W20
+            {vehicle?.plateNumber}
           </Text>
           <Text fontWeight={600} color={colors.neutro_00}>
-            Volkswagen Gol
+            {vehicle?.vehicle_model?.brand} {vehicle?.vehicle_model?.model}
           </Text>
           <Text size={12} color={colors.neutro_00}>
-            Cor: Vermelho
+            Cor: {vehicle?.color?.name}
           </Text>
         </View>
       </View>

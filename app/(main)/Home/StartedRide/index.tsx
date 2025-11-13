@@ -8,17 +8,20 @@ import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { formatCurrency } from '@/utils/format';
+import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DriverCard } from '@/components/DriverCard/DriverCard';
-import { differenceInSeconds, intervalToDuration } from 'date-fns';
-import { router, useFocusEffect } from 'expo-router';
+import { differenceInSeconds, format, intervalToDuration } from 'date-fns';
+import { useFocusEffect } from 'expo-router';
+import { useRide } from '@/context/useRide';
 import { ContentWrapper, InfoWrapper } from './styles';
 
 const StartedRide = () => {
   const { top } = useSafeAreaInsets();
+
+  const { ride, handleFindRide } = useRide();
 
   const targetDate = new Date();
   const difference = differenceInSeconds(new Date(), targetDate);
@@ -42,8 +45,8 @@ const StartedRide = () => {
   useEffect(() => {
     if (started) {
       const timeout = setTimeout(() => {
+        handleFindRide();
         setStarted(false);
-        router.replace('/(main)/Home/RideFinished');
       }, 15000);
 
       return () => clearTimeout(timeout);
@@ -95,7 +98,7 @@ const StartedRide = () => {
             <Text color={colors.neutro_00}>
               Partida em:{' '}
               <Text fontWeight={700} color={colors.neutro_00}>
-                4 minutos
+                {ride?.routeTime}
               </Text>
             </Text>
           )}
@@ -107,29 +110,35 @@ const StartedRide = () => {
           Informações da viagem
         </Text>
 
-        <DriverCard />
+        <DriverCard vehicle={ride?.vehicle} driver={ride?.driver} />
 
         <GroupText
           title1="Saída"
           title2="Embarque"
-          text1="Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
-          text2="10:30"
+          text1={ride?.locals?.[0]?.addressString || ''}
+          text2={
+            ride?.arrivalOriginAt ? format(ride.arrivalOriginAt, 'HH:mm') : ''
+          }
           iconLeft="PinIcon"
         />
 
         <GroupText
           title1="Destino"
           title2="Desembarque"
-          text1="Av. Brasil, 2000 - Centro, São Paulo - SP"
-          text2="11:30"
+          text1={ride?.locals?.[1]?.addressString || ''}
+          text2={
+            ride?.destinationArrivalAt
+              ? format(ride.destinationArrivalAt, 'HH:mm')
+              : ''
+          }
           iconLeft="FlagIcon"
         />
 
         <GroupText
           title1="Tempo de percurso"
           title2="Km"
-          text1="10 min"
-          text2="5 km"
+          text1={ride?.routeTime || ''}
+          text2={ride?.distance || ''}
         />
 
         <Divider />
@@ -137,8 +146,8 @@ const StartedRide = () => {
         <GroupText
           title1="Valor da corrida"
           title2="Forma de pagamento"
-          text1={formatCurrency(16.94)}
-          text2="Cartão de crédito"
+          text1={formatCurrency(ride?.totalValue || 0)}
+          text2={formatPaymentMethod(ride?.paymentMethod || '')}
           color={colors.neutro_00}
         />
 
