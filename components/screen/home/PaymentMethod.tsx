@@ -14,14 +14,10 @@ const METHODS = {
     name: 'Cartão de crédito',
     icon: 'CreditCardIcon',
   },
-  cash: {
-    name: 'Dinheiro',
-    icon: 'MoneyIcon',
-  },
 } as const;
 
 type Props = {
-  type: 'pix' | 'creditCard' | 'cash';
+  type: 'pix' | 'creditCard';
   isSelected: boolean;
   onPress: () => void;
 };

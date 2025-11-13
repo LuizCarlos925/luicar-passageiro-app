@@ -35,6 +35,7 @@ import ModalProvider from '@/hooks/useModal';
 
 import { handleError } from '@/utils/handleError';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import RideProvider from '@/context/useRide';
 
 export { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 
@@ -80,13 +81,15 @@ const App = () => {
           <KeyboardProvider>
             <ModalProvider>
               <AuthProvider>
-                <BottomSheetModalProvider>
-                  <SafeAreaProvider>
-                    <StatusBar style="auto" />
-                    <Slot />
-                    <Toast config={toastConfig} />
-                  </SafeAreaProvider>
-                </BottomSheetModalProvider>
+                <RideProvider>
+                  <BottomSheetModalProvider>
+                    <SafeAreaProvider>
+                      <StatusBar style="auto" />
+                      <Slot />
+                      <Toast config={toastConfig} />
+                    </SafeAreaProvider>
+                  </BottomSheetModalProvider>
+                </RideProvider>
               </AuthProvider>
             </ModalProvider>
           </KeyboardProvider>

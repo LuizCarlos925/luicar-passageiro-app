@@ -78,3 +78,10 @@ export const formatInputPixKey = (text: string) => {
   }
   return text;
 };
+
+export const formatPaymentMethod = (method: string) => {
+  if (method === 'pix') {
+    return 'Pix';
+  }
+  return 'Cartão de crédito';
+};

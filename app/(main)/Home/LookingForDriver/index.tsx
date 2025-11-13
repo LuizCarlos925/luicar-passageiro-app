@@ -3,6 +3,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { ActivityIndicator, BackHandler, StyleSheet, View } from 'react-native';
+import { format } from 'date-fns';
 
 import { WaitingLottie } from '@/assets/animations';
 
@@ -21,10 +22,11 @@ import { useModal } from '@/hooks/useModal';
 
 import { api } from '@/services/api';
 
-import { formatCurrency } from '@/utils/format';
+import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
 
 import { useRide } from '@/context/useRide';
+
 import {
   Column,
   ContentWrapper,
@@ -58,7 +60,7 @@ const LookingForDriver = () => {
   const handleCancelRide = async (reason: string) => {
     try {
       await api.put('/cancelTrip', {
-        id: ride?.paymentResponse?.id,
+        id: ride?.id,
         reason,
       });
 
@@ -159,7 +161,7 @@ const LookingForDriver = () => {
                   Valor da corrida
                 </Text>
                 <Text size={24} fontWeight={600} color={colors.neutro_00}>
-                  {formatCurrency(ride?.paymentResponse?.valuePayment || 0)}
+                  {formatCurrency(ride?.totalValue || 0)}
                 </Text>
               </Column>
               <Column style={{ alignItems: 'flex-end' }}>
@@ -167,7 +169,8 @@ const LookingForDriver = () => {
                   Forma de pagamento
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
-                  {ride?.paymentMethod} **** 1234
+                  {formatPaymentMethod(ride?.paymentMethod)}{' '}
+                  {ride?.paymentMethod !== 'pix' && '**** 1234'}
                 </Text>
               </Column>
             </Row>
@@ -193,10 +196,11 @@ const LookingForDriver = () => {
                   color={colors.neutro_00}
                   style={{ maxWidth: '70%' }}
                 >
-                  Av. Brasil, São Paulo
+                  {ride?.locals?.[0]?.address}
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
-                  10:30
+                  {ride?.arrivalOriginAt &&
+                    format(ride.arrivalOriginAt, 'HH:mm')}
                 </Text>
               </Row>
             </Column>
@@ -220,10 +224,11 @@ const LookingForDriver = () => {
                   color={colors.neutro_00}
                   style={{ maxWidth: '70%' }}
                 >
-                  Av. Brasil, São Paulo
+                  {ride?.locals?.[1]?.address}
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
-                  11:30
+                  {ride?.destinationArrivalAt &&
+                    format(ride.destinationArrivalAt, 'HH:mm')}
                 </Text>
               </Row>
             </Column>
@@ -244,10 +249,10 @@ const LookingForDriver = () => {
                   color={colors.neutro_00}
                   style={{ maxWidth: '70%' }}
                 >
-                  10 min
+                  {ride?.routeTime}
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
-                  5 km
+                  {ride?.distance}
                 </Text>
               </Row>
             </Column>

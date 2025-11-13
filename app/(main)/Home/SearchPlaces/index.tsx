@@ -10,12 +10,12 @@ import {
   ButtonPaymentMethod,
   ButtonWoman,
   CardVehicle,
-  MethodCash,
   MethodCreditCard,
   MethodPix,
 } from '@/components/screen';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
+import GoogleMapsInput from '@/components/GoogleMapsInput/GoogleMapsInput';
 
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
@@ -23,6 +23,7 @@ import { width } from '@/global/constants';
 import { useModal } from '@/hooks/useModal';
 import { useLocationForm } from '@/hooks/useLocationForm';
 
+import { IPayment } from '@/interfaces/payment';
 import { IGeolocation } from '@/interfaces/geolocation';
 
 import { api } from '@/services/api';
@@ -32,9 +33,8 @@ import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
-import { IPayment } from '@/interfaces/payment';
-import { ISelectTrip } from '@/interfaces/selectTrip';
-import GoogleMapsInput from '@/components/GoogleMapsInput/GoogleMapsInput';
+import { ITripSelect } from '@/interfaces/tripSelect';
+import { useRide } from '@/context/useRide';
 import { Header } from './styles';
 
 const SearchPlaces = () => {
@@ -44,8 +44,13 @@ const SearchPlaces = () => {
 
   const { setModal } = useModal();
 
+  const { handleFindRide } = useRide();
+
   const { control, handleSubmit, setValue } = useForm<RideForm>({
     resolver: yupResolver(RideSchema),
+    defaultValues: {
+      vehicleId: '1',
+    },
   });
 
   const { origin, destination } = useWatch({
@@ -94,24 +99,22 @@ const SearchPlaces = () => {
         },
       );
 
-      const { data } = await api.post<ISelectTrip>('/selectTrip', {
+      await api.post<ITripSelect>('/selectTrip', {
         origin: addressResponse?.origin,
         destination: addressResponse?.destination,
         subcategoryId: 1,
         categoryId: 1,
       });
 
-      console.log(JSON.stringify(data, null, 2));
-
       const { data: paymentResponse } = await api.post<IPayment>(
         '/confirmTrip',
         {
-          paymentMethod: 'pix',
+          paymentMethod: 2, // 1 - credit card, 2 - pix
           portion: '1',
         },
       );
 
-      console.log(JSON.stringify(paymentResponse, null, 2));
+      handleFindRide();
 
       setModal({
         name: 'paymentSuccess',
@@ -143,9 +146,7 @@ const SearchPlaces = () => {
           containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
           onPlaceSelect={address =>
-            setOriginAddress(
-              address?.structured_formatting?.secondary_text || '',
-            )
+            setOriginAddress(address?.description || '')
           }
         />
 
@@ -160,9 +161,7 @@ const SearchPlaces = () => {
           style={{ color: colors.secondary_10 }}
           marginTop={-12}
           onPlaceSelect={address =>
-            setDestinationAddress(
-              address?.structured_formatting?.secondary_text || '',
-            )
+            setDestinationAddress(address?.description || '')
           }
         />
       </Header>
@@ -208,16 +207,10 @@ const SearchPlaces = () => {
             isSelected={method === 'pix'}
             onPress={() => setMethod('pix')}
           />
-          <ButtonPaymentMethod
-            type="cash"
-            isSelected={method === 'cash'}
-            onPress={() => setMethod('cash')}
-          />
         </View>
 
         {method === 'creditCard' && <MethodCreditCard />}
         {method === 'pix' && <MethodPix pixCode="asda" />}
-        {method === 'cash' && <MethodCash />}
 
         <Button
           onPress={handleSubmit(onSubmit)}

@@ -9,30 +9,11 @@ import { router } from 'expo-router';
 
 import { useAuth } from '@/hooks/useAuth';
 
-import { IDestination } from '@/interfaces/geolocation';
-import { ISubcategory } from '@/interfaces/vehicleCategory';
-import { IVerifyPayment } from '@/interfaces/selectTrip';
+import { IRide } from '@/interfaces/ride';
 
 import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
-import { RecursiveNormalize } from '@/utils/normalizeStrapi';
-
-export type IRide = {
-  origin: IDestination;
-  destination: IDestination;
-  tripType?: 'send' | 'receive';
-  isExclusive?: boolean;
-  description?: string;
-  packageSize?: string;
-  subcategory: ISubcategory & { category: string };
-  paymentMethod: string;
-  paymentResponse: RecursiveNormalize<IVerifyPayment>;
-  startTime: string;
-  pointsDriverOrigin: number[][];
-  pointsOriginDestination: number[][];
-  shouldMapCenter?: boolean;
-};
 
 interface RideProvider {
   ride: IRide;
@@ -75,9 +56,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
 
   const handleFindRide = async (shouldNavigate?: boolean) => {
     try {
-      const { data } = await api.get<
-        Paginated<RecursiveNormalize<IVerifyPayment>>
-      >('/trips', {
+      const { data } = await api.get<Paginated<IRide>>('/trips', {
         params: {
           populate: [
             'subcategory',
@@ -91,6 +70,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
             'driver.rating',
           ],
           getReviewDrivers: true,
+          normalizeStrapi: true,
           'sort[createdAt]': 'desc',
         },
       });
@@ -101,53 +81,9 @@ const RideProvider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      handleRide({
-        origin: {
-          address: currentRide?.locals?.[0]?.addressString,
-          latitude: Number(currentRide?.locals?.[0]?.lat),
-          longitude: Number(currentRide?.locals?.[0]?.long),
-          formatted: {
-            address: currentRide?.locals?.[0]?.address,
-            city: currentRide?.locals?.[0]?.city,
-            neighborhood: currentRide?.locals?.[0]?.neighborhood,
-            number: currentRide?.locals?.[0]?.number,
-            state: currentRide?.locals?.[0]?.state,
-            zipCode: currentRide?.locals?.[0]?.zipCode,
-          },
-        },
-        destination: {
-          address: currentRide?.locals?.[1]?.addressString,
-          latitude: Number(currentRide?.locals?.[1]?.lat),
-          longitude: Number(currentRide?.locals?.[1]?.long),
-          formatted: {
-            address: currentRide?.locals?.[1]?.address,
-            city: currentRide?.locals?.[1]?.city,
-            neighborhood: currentRide?.locals?.[1]?.neighborhood,
-            number: currentRide?.locals?.[1]?.number,
-            state: currentRide?.locals?.[1]?.state,
-            zipCode: currentRide?.locals?.[1]?.zipCode,
-          },
-        },
-        paymentMethod: currentRide?.paymentMethod,
-        subcategory: {
-          category: currentRide?.category?.name,
-          value: currentRide?.valuePayment,
-          ...currentRide?.subcategory,
-        },
-        paymentResponse: currentRide,
-        startTime: currentRide?.arrivalOriginAt,
-        pointsDriverOrigin:
-          currentRide?.recalculateDriverOrigin ||
-          currentRide.pointsDriverOrigin,
-        pointsOriginDestination:
-          currentRide.recalculateRoutePoints ||
-          currentRide.pointsOriginDestination,
-      });
+      handleRide(currentRide);
 
-      if (
-        currentRide?.status === 'procurandoMotorista' &&
-        currentRide?.tripType !== 'agendada'
-      ) {
+      if (currentRide?.status === 'procurandoMotorista') {
         return router.navigate('/(main)/Home/LookingForDriver');
       }
 
@@ -192,16 +128,6 @@ const RideProvider = ({ children }: PropsWithChildren) => {
       handleFindRide();
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (ride?.paymentResponse?.status === 'agendada') {
-      const interval = setInterval(() => {
-        handleFindRide();
-      }, 10000);
-
-      return () => clearInterval(interval);
-    }
-  }, [ride]);
 
   return (
     <RideContext.Provider
