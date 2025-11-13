@@ -55,7 +55,7 @@ export const useHistoryDetails = (tripId: string) => {
           'vehicle.vehicle_model',
           'driver',
           'driver.image',
-          'driver.rating',
+          'driver.reviews',
         ]?.join(','),
         'sort[createdAt]': 'desc',
       },

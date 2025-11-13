@@ -11,20 +11,25 @@ import Input from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { IconComponent } from '@/components/Icon/Icon';
 import { TipOptions } from '@/components/TipOptions/TipOptions';
+import ModalPayment from '@/components/screen/home/ModalPayment';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
 import { GlobalContainer } from '@/components/Container/Container';
 import { SelectRating } from '@/components/SelectRating/SelectRating';
 
+import { useRide } from '@/context/useRide';
+
 import { colors } from '@/global/theme';
+
+import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
-import ModalPayment from '@/components/screen/home/ModalPayment';
-import { api } from '@/services/api';
 
 const RideFinished = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
+
+  const { ride } = useRide();
 
   const [isVisible, setIsVisible] = useState(false);
   const [valueSelected, setValueSelected] = useState<number | undefined>();
@@ -39,7 +44,7 @@ const RideFinished = () => {
         rating: form?.rating,
         title: form?.title,
         description: form?.comment,
-        tripId: ride?.paymentResponse?.id,
+        tripId: ride?.id,
       });
 
       router.dismissTo('/(main)/Home');
@@ -88,21 +93,18 @@ const RideFinished = () => {
         Corrida finalizada
       </Text>
 
-      <AvatarImage
-        uri="https://randomuser.me/api/portraits/men/65.jpg"
-        size={80}
-      />
+      <AvatarImage uri={ride?.driver?.image?.url} size={80} />
       <View style={styles.ratingWrapper}>
         <IconComponent name="StarIcon" size={12} color={colors.neutro_00} />
 
         <Text size={12} fontWeight={600} color={colors.neutro_00}>
-          4.9
+          {ride?.driver?.reviews?.average_reviews?.toFixed(1)}
         </Text>
       </View>
 
       <View style={styles.textWrapper}>
         <Text size={24} fontWeight={700} color={colors.secondary_100}>
-          Avalie Flávio
+          Avalie {ride?.driver?.socialName || ride?.driver?.name}
         </Text>
         <Text size={16}>Sua opinião é importante para nós</Text>
       </View>
@@ -125,7 +127,12 @@ const RideFinished = () => {
         />
 
         <Pressable
-          onPress={() => router.push('/(main)/Home/Report')}
+          onPress={() =>
+            router.push({
+              pathname: '/(main)/Home/Report',
+              params: { id: ride?.id },
+            })
+          }
           style={styles.buttonReport}
         >
           <Text size={14} color={colors.error_60}>

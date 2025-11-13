@@ -26,7 +26,7 @@ export interface ITrip {
   inProgress: boolean;
   subcategoryValue: number;
   distance: string;
-  paymentMethod: null | string;
+  paymentMethod: string;
   externalId: null;
   tokenCard: null;
   paymentCode: null;

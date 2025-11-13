@@ -16,7 +16,7 @@ import { colors } from '@/global/theme';
 
 import { useHistoryDetails } from '@/services/History/history.service';
 
-import { formatCurrency } from '@/utils/format';
+import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { format, parseISO } from 'date-fns';
 import { formatTripAddress } from '@/utils/formatAddress';
 
@@ -77,7 +77,7 @@ const TripDetails = () => {
             Forma de pagamento
           </Text>
           <Text size={12} color={colors.secondary_60}>
-            {trip?.paymentMethod}
+            {formatPaymentMethod(trip?.paymentMethod)}
           </Text>
         </View>
 

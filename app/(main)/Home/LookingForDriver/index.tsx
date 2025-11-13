@@ -196,7 +196,7 @@ const LookingForDriver = () => {
                   color={colors.neutro_00}
                   style={{ maxWidth: '70%' }}
                 >
-                  {ride?.locals?.[0]?.address}
+                  {ride?.locals?.[0]?.addressString}
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
                   {ride?.arrivalOriginAt &&
@@ -224,7 +224,7 @@ const LookingForDriver = () => {
                   color={colors.neutro_00}
                   style={{ maxWidth: '70%' }}
                 >
-                  {ride?.locals?.[1]?.address}
+                  {ride?.locals?.[1]?.addressString}
                 </Text>
                 <Text size={16} color={colors.neutro_00}>
                   {ride?.destinationArrivalAt &&

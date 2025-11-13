@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useForm, useWatch } from 'react-hook-form';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Text from '@/components/Text/Text';
@@ -17,6 +17,8 @@ import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
 import GoogleMapsInput from '@/components/GoogleMapsInput/GoogleMapsInput';
 
+import { useRide } from '@/context/useRide';
+
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
@@ -24,6 +26,7 @@ import { useModal } from '@/hooks/useModal';
 import { useLocationForm } from '@/hooks/useLocationForm';
 
 import { IPayment } from '@/interfaces/payment';
+import { ITripSelect } from '@/interfaces/tripSelect';
 import { IGeolocation } from '@/interfaces/geolocation';
 
 import { api } from '@/services/api';
@@ -33,8 +36,6 @@ import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
-import { ITripSelect } from '@/interfaces/tripSelect';
-import { useRide } from '@/context/useRide';
 import { Header } from './styles';
 
 const SearchPlaces = () => {
@@ -114,11 +115,9 @@ const SearchPlaces = () => {
         },
       );
 
-      handleFindRide();
-
       setModal({
         name: 'paymentSuccess',
-        onPress: () => router.push('/(main)/Home/LookingForDriver'),
+        onPress: handleFindRide,
       });
     } catch (err) {
       handleError(err);
