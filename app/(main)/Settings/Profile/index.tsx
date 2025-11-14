@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -29,14 +29,6 @@ import { handleError } from '@/utils/handleError';
 import { AddressForm, ProfileForm } from '@/validation/Profile.validation';
 
 import { IUser } from '@/interfaces/user';
-
-import {
-  Column,
-  ContentWrapper,
-  HeaderWrapper,
-  ProfileButton,
-  Row,
-} from './styles';
 
 const Profile = () => {
   const { user, refetchUser } = useAuth();
@@ -114,7 +106,7 @@ const Profile = () => {
       statusBarTextColor="light"
       withoutPaddingTop
     >
-      <HeaderWrapper>
+      <View style={styles.headerWrapper}>
         <SettingsHeaderIcon width={width} style={{ marginTop: -width * 0.2 }} />
 
         <BackButton
@@ -122,10 +114,8 @@ const Profile = () => {
           style={{ position: 'absolute', zIndex: 2, top: 40, left: 16 }}
         />
 
-        <Row
-          style={{ position: 'absolute', bottom: -50, paddingHorizontal: 16 }}
-        >
-          <ProfileButton onPress={handleChangeAvatar}>
+        <View style={styles.avatarRow}>
+          <Pressable onPress={handleChangeAvatar}>
             <AvatarImage uri={userAvatar} size={116} style={styles.avatar} />
 
             <IconComponent
@@ -135,10 +125,10 @@ const Profile = () => {
               onPress={userAvatar ? handleDeleteAvatar : handleChangeAvatar}
               style={styles.avatarBtn}
             />
-          </ProfileButton>
+          </Pressable>
 
-          <Column>
-            <Row>
+          <View style={styles.column}>
+            <View style={styles.row}>
               <Text
                 size={16}
                 fontWeight={600}
@@ -153,22 +143,26 @@ const Profile = () => {
               <Text size={16} fontWeight={600}>
                 {rating?.averageRating || 0}
               </Text>
-            </Row>
-          </Column>
-        </Row>
-      </HeaderWrapper>
+            </View>
+          </View>
+        </View>
+      </View>
 
-      <ContentWrapper>
+      <View style={styles.contentWrapper}>
         <SwitchProfile selected={section} setSelected={setSection} />
 
         {section === 'profile' && <BodyProfile user={user} />}
         {section === 'address' && <BodyAddress user={user} />}
-      </ContentWrapper>
+      </View>
     </GlobalContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  headerWrapper: {
+    width: '100%',
+    marginBottom: 60,
+  },
   avatar: {
     borderWidth: 2,
     borderColor: theme.colors.neutro_00,
@@ -185,6 +179,31 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.neutro_00,
     backgroundColor: theme.colors.primary_100,
+  },
+  avatarRow: {
+    position: 'absolute',
+    bottom: -50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  column: {
+    flex: 1,
+    justifyContent: 'space-between',
+    marginTop: 52,
+    gap: 12,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  contentWrapper: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 20,
+    gap: 16,
   },
 });
 

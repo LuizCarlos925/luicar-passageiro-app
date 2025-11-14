@@ -21,8 +21,6 @@ import { handleError } from '@/utils/handleError';
 
 import { PasswordForm, PasswordSchema } from '@/validation/Profile.validation';
 
-import { InputWrapper, PasswordRulesWrapper } from './styles';
-
 const ChangePassword = () => {
   const { logout } = useAuth();
 
@@ -62,7 +60,7 @@ const ChangePassword = () => {
         Alterar senha
       </Text>
 
-      <InputWrapper>
+      <View style={styles.inputWrapper}>
         <Input
           name="oldPassword"
           control={control}
@@ -81,7 +79,7 @@ const ChangePassword = () => {
           password
         />
 
-        <PasswordRulesWrapper>
+        <View style={styles.passwordRulesWrapper}>
           <Text fontWeight={500} color={theme.colors.gray_1e}>
             Requisitos para a senha:
           </Text>
@@ -100,7 +98,7 @@ const ChangePassword = () => {
             {'   '}
             {`\u2022`} Letra minúscula.
           </Text>
-        </PasswordRulesWrapper>
+        </View>
 
         <Input
           name="passwordConfirm"
@@ -111,7 +109,7 @@ const ChangePassword = () => {
           containerStyle={{ borderColor: `${theme.colors.gray_9e}80` }}
           password
         />
-      </InputWrapper>
+      </View>
 
       <View style={styles.buttonsWrapper}>
         <Button
@@ -143,6 +141,22 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: 30,
     gap: 8,
+  },
+  inputWrapper: {
+    width: '100%',
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 5,
+    gap: 5,
+    borderRadius: 12,
+    backgroundColor: colors.neutro_00,
+  },
+  passwordRulesWrapper: {
+    width: '100%',
+    padding: 12,
+    gap: 5,
+    borderRadius: 15,
+    backgroundColor: colors.primary_20,
   },
 });
 

@@ -22,6 +22,7 @@ import { useRide } from '@/context/useRide';
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 
+import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 import { useLocationForm } from '@/hooks/useLocationForm';
 
@@ -36,9 +37,6 @@ import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
-import { useAuth } from '@/hooks/useAuth';
-import { Header } from './styles';
-
 const SearchPlaces = () => {
   const { destination: finalLocation } = useLocalSearchParams<{
     destination: string;
@@ -51,13 +49,14 @@ const SearchPlaces = () => {
   const { handleFindRide } = useRide();
 
   const { control, handleSubmit, setValue } = useForm<RideForm>({
-    resolver: yupResolver(RideSchema),
+    resolver: yupResolver(RideSchema as any),
     defaultValues: {
       vehicleId: '1',
+      isWoman: false,
     },
   });
 
-  const { origin, destination } = useWatch({
+  const { origin, destination, isWoman } = useWatch({
     control,
   });
 
@@ -109,6 +108,7 @@ const SearchPlaces = () => {
         destination: data?.destination,
         subcategoryId: 1,
         categoryId: 1,
+        onlyWoman: isWoman,
       });
 
       await api.post<IPayment>('/confirmTrip', {
@@ -129,7 +129,7 @@ const SearchPlaces = () => {
 
   return (
     <GlobalContainer alignItems="flex-start" gap={15} withoutPaddingTop>
-      <Header>
+      <View style={styles.header}>
         <BackButton
           title="Para onde vamos hoje?"
           size={20}
@@ -165,7 +165,7 @@ const SearchPlaces = () => {
             setDestinationAddress(address?.description || '')
           }
         />
-      </Header>
+      </View>
 
       <View style={styles.content}>
         <Text size={20} fontWeight={600} color={colors.secondary_80}>
@@ -216,7 +216,7 @@ const SearchPlaces = () => {
         <Button
           onPress={handleSubmit(onSubmit)}
           isLoading={isLoading}
-          style={styles.button}
+          style={{ ...styles.button, opacity: method ? 1 : 0.7 }}
           disabled={!method}
         >
           Solicitar motorista
@@ -227,6 +227,17 @@ const SearchPlaces = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    width: '100%',
+    minHeight: 225,
+    alignItems: 'flex-start',
+    padding: 20,
+    paddingBottom: 16,
+    gap: 16,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: colors.secondary_100,
+  },
   input: {
     borderRadius: 50,
     backgroundColor: colors.secondary_80,

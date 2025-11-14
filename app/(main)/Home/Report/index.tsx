@@ -27,7 +27,7 @@ const Report = () => {
   const { setModal } = useModal();
 
   const { control, handleSubmit } = useForm<ReportForm>({
-    resolver: yupResolver(ReportSchema as any),
+    resolver: yupResolver(ReportSchema),
   });
 
   const onSubmit = async (form: ReportForm) => {

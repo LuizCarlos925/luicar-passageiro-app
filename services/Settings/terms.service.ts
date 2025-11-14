@@ -6,7 +6,7 @@ import { ITerms } from '@/interfaces/terms';
 
 export const useTerms = (isTerms: boolean) => {
   const getTerms = async () => {
-    const { data } = await api.get<Meta<ITerms>>(`/terms/${isTerms ? 2 : 4}`, {
+    const { data } = await api.get<Meta<ITerms>>(`/terms/${isTerms ? 3 : 4}`, {
       params: {
         normalizeStrapi: true,
       },

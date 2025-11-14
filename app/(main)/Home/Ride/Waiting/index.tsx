@@ -22,8 +22,6 @@ import { api } from '@/services/api';
 import { handleError } from '@/utils/handleError';
 import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 
-import { ContentWrapper, InfoWrapper } from './styles';
-
 const Status = {
   motoristaDeslocandoInicio: {
     title: 'A caminho do embarque',
@@ -35,7 +33,7 @@ const Status = {
   },
 };
 
-const StartedRide = () => {
+const Waiting = () => {
   const { top } = useSafeAreaInsets();
 
   const { ride, handleFindRide } = useRide();
@@ -104,7 +102,7 @@ const StartedRide = () => {
       }
     >
       <View style={[styles.header, { paddingTop: top + 20 }]}>
-        <InfoWrapper style={{ alignItems: 'center' }}>
+        <View style={styles.infoWrapper}>
           <View style={styles.row}>
             <ActivityIndicator size={22} color={colors.neutro_00} />
 
@@ -123,10 +121,10 @@ const StartedRide = () => {
           </Text>
 
           <Counter date={ride?.arrivalOriginAt} type="regressivo" />
-        </InfoWrapper>
+        </View>
       </View>
 
-      <ContentWrapper>
+      <View style={styles.contentWrapper}>
         <Text size={16} color={colors.neutro_00}>
           Informações da viagem
         </Text>
@@ -175,7 +173,7 @@ const StartedRide = () => {
         <Divider />
 
         <Button onPress={() => setIsVisible(true)}>Cancelar corrida</Button>
-      </ContentWrapper>
+      </View>
     </GlobalContainer>
   );
 };
@@ -203,6 +201,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#d2d6db',
   },
+  contentWrapper: {
+    width: '100%',
+    paddingHorizontal: 16,
+    gap: 15,
+  },
+  infoWrapper: {
+    alignItems: 'center',
+    gap: 5,
+  },
 });
 
-export default StartedRide;
+export default Waiting;

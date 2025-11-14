@@ -8,12 +8,11 @@ import { format } from 'date-fns';
 import { WaitingLottie } from '@/assets/animations';
 
 import Text from '@/components/Text/Text';
-import { CancelRideBS } from '@/components/screen';
+import { CancelRideBS, ModalWaitingCancel } from '@/components/screen';
 import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
 import { GlobalContainer } from '@/components/Container/Container';
-import ModalWaitingCancel from '@/components/screen/home/ModalWaitingCancel';
 
 import { colors } from '@/global/theme';
 import { height, width } from '@/global/constants';
@@ -26,15 +25,6 @@ import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
 
 import { useRide } from '@/context/useRide';
-
-import {
-  Column,
-  ContentWrapper,
-  HideLogo,
-  LineHandler,
-  RideInfoWrapper,
-  Row,
-} from './styles';
 
 const LookingForDriver = () => {
   const { setModal } = useModal();
@@ -134,7 +124,7 @@ const LookingForDriver = () => {
           loop
         />
 
-        <HideLogo />
+        <View style={styles.hideLogo} />
       </View>
 
       <BottomSheet
@@ -142,10 +132,14 @@ const LookingForDriver = () => {
         index={0}
         enablePanDownToClose={false}
         snapPoints={[120, 600]}
-        handleComponent={() => <LineHandler />}
+        handleComponent={() => <View style={styles.lineHandler} />}
         backgroundStyle={{ backgroundColor: colors.secondary_100 }}
       >
-        <ContentWrapper as={BottomSheetScrollView}>
+        <BottomSheetScrollView
+          style={styles.contentWrapper}
+          contentContainerStyle={styles.contentContainerStyle}
+          showsVerticalScrollIndicator={false}
+        >
           <Text size={20} fontWeight={700} color={colors.neutro_00}>
             Informações da corrida
           </Text>
@@ -155,17 +149,17 @@ const LookingForDriver = () => {
             <Text color={colors.primary_60}>Aguardando um motorista</Text>
           </View>
 
-          <RideInfoWrapper>
-            <Row>
-              <Column>
+          <View style={styles.rideInfoWrapper}>
+            <View style={styles.row}>
+              <View style={styles.column}>
                 <Text size={16} color={colors.neutro_00}>
                   Valor da corrida
                 </Text>
                 <Text size={24} fontWeight={600} color={colors.neutro_00}>
                   {formatCurrency(ride?.totalValue || 0)}
                 </Text>
-              </Column>
-              <Column style={{ alignItems: 'flex-end' }}>
+              </View>
+              <View style={[styles.column, { alignItems: 'flex-end' }]}>
                 <Text size={16} color={colors.neutro_00}>
                   Forma de pagamento
                 </Text>
@@ -173,25 +167,25 @@ const LookingForDriver = () => {
                   {formatPaymentMethod(ride?.paymentMethod)}{' '}
                   {ride?.paymentMethod !== 'pix' && '**** 1234'}
                 </Text>
-              </Column>
-            </Row>
+              </View>
+            </View>
 
             <Divider />
 
-            <Column>
-              <Row>
-                <Row style={{ width: undefined }}>
+            <View>
+              <View style={styles.row2}>
+                <View style={{ width: undefined }}>
                   <IconComponent name="PinIcon" />
                   <Text size={16} fontWeight={600} color={colors.primary_20}>
                     Saída
                   </Text>
-                </Row>
+                </View>
                 <Text size={16} fontWeight={600} color={colors.primary_20}>
                   Embarque
                 </Text>
-              </Row>
+              </View>
 
-              <Row>
+              <View style={styles.row2}>
                 <Text
                   size={16}
                   color={colors.neutro_00}
@@ -203,61 +197,60 @@ const LookingForDriver = () => {
                   {ride?.arrivalOriginAt &&
                     format(ride.arrivalOriginAt, 'HH:mm')}
                 </Text>
-              </Row>
-            </Column>
+              </View>
+            </View>
 
-            <Column>
-              <Row>
-                <Row style={{ width: undefined }}>
-                  <IconComponent name="FlagIcon" />
-                  <Text size={16} fontWeight={600} color={colors.primary_20}>
-                    Destino
-                  </Text>
-                </Row>
+            <View style={styles.column} />
+            <View style={styles.row2}>
+              <View style={styles.row}>
+                <IconComponent name="FlagIcon" />
                 <Text size={16} fontWeight={600} color={colors.primary_20}>
-                  Desembarque
+                  Destino
                 </Text>
-              </Row>
+              </View>
+              <Text size={16} fontWeight={600} color={colors.primary_20}>
+                Desembarque
+              </Text>
+            </View>
 
-              <Row>
-                <Text
-                  size={16}
-                  color={colors.neutro_00}
-                  style={{ maxWidth: '70%' }}
-                >
-                  {ride?.locals?.[1]?.addressString}
-                </Text>
-                <Text size={16} color={colors.neutro_00}>
-                  {ride?.destinationArrivalAt &&
-                    format(ride.destinationArrivalAt, 'HH:mm')}
-                </Text>
-              </Row>
-            </Column>
+            <View style={styles.row2}>
+              <Text
+                size={16}
+                color={colors.neutro_00}
+                style={{ maxWidth: '70%' }}
+              >
+                {ride?.locals?.[1]?.addressString}
+              </Text>
+              <Text size={16} color={colors.neutro_00}>
+                {ride?.destinationArrivalAt &&
+                  format(ride.destinationArrivalAt, 'HH:mm')}
+              </Text>
+            </View>
+          </View>
 
-            <Column>
-              <Row>
-                <Text size={16} fontWeight={600} color={colors.primary_20}>
-                  Tempo de percurso
-                </Text>
-                <Text size={16} fontWeight={600} color={colors.primary_20}>
-                  Km
-                </Text>
-              </Row>
+          <View style={styles.column}>
+            <View style={styles.row2}>
+              <Text size={16} fontWeight={600} color={colors.primary_20}>
+                Tempo de percurso
+              </Text>
+              <Text size={16} fontWeight={600} color={colors.primary_20}>
+                Km
+              </Text>
+            </View>
 
-              <Row>
-                <Text
-                  size={16}
-                  color={colors.neutro_00}
-                  style={{ maxWidth: '70%' }}
-                >
-                  {ride?.routeTime}
-                </Text>
-                <Text size={16} color={colors.neutro_00}>
-                  {ride?.distance}
-                </Text>
-              </Row>
-            </Column>
-          </RideInfoWrapper>
+            <View style={styles.row2}>
+              <Text
+                size={16}
+                color={colors.neutro_00}
+                style={{ maxWidth: '70%' }}
+              >
+                {ride?.routeTime}
+              </Text>
+              <Text size={16} color={colors.neutro_00}>
+                {ride?.distance}
+              </Text>
+            </View>
+          </View>
 
           <Button
             onPress={() => {
@@ -268,7 +261,7 @@ const LookingForDriver = () => {
           >
             Cancelar corrida
           </Button>
-        </ContentWrapper>
+        </BottomSheetScrollView>
       </BottomSheet>
     </GlobalContainer>
   );
@@ -288,6 +281,38 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 20,
     backgroundColor: '#d2d6db',
+  },
+  hideLogo: {
+    position: 'absolute',
+    bottom: 10,
+    right: 0,
+    width: '30%',
+    height: 60,
+    backgroundColor: colors.neutro_10,
+  },
+  contentWrapper: {
+    flex: 1,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
+    alignItems: 'center',
+    padding: 15,
+    paddingBottom: 25,
+    gap: 8,
+  },
+  rideInfoWrapper: {
+    width: '100%',
+    padding: 10,
+    gap: 20,
+  },
+  row2: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    gap: 5,
+  },
+  column: {
+    gap: 5,
   },
 });
 

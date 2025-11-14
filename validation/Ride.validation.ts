@@ -6,4 +6,5 @@ export const RideSchema = Yup.object({
   origin: Yup.string().required('Origem é obrigatória'),
   destination: Yup.string().required('Destino é obrigatório'),
   vehicleId: Yup.string().required('Categoria é obrigatória'),
+  isWoman: Yup.boolean(),
 });

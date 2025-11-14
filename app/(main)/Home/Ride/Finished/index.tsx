@@ -26,7 +26,7 @@ import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
 
-const RideFinished = () => {
+const Finished = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
 
   const { ride } = useRide();
@@ -208,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RideFinished;
+export default Finished;
