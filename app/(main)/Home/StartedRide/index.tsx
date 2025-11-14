@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,6 +24,17 @@ import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 
 import { ContentWrapper, InfoWrapper } from './styles';
 
+const Status = {
+  motoristaDeslocandoInicio: {
+    title: 'A caminho do embarque',
+    subtitle: 'Seu motorista está a caminho do embarque',
+  },
+  indoAoPontoDeEncontro: {
+    title: 'Seu motorista chegou',
+    subtitle: 'Encontre seu motorista no ponto de encontro',
+  },
+};
+
 const StartedRide = () => {
   const { top } = useSafeAreaInsets();
 
@@ -32,15 +44,17 @@ const StartedRide = () => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  // useEffect(() => {
-  //   if (started) {
-  //     const timeout = setTimeout(() => {
-  //       handleFindRide();
-  //     }, 15000);
+  const status = ride?.status;
 
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [started]);
+  useFocusEffect(
+    useCallback(() => {
+      const interval = setInterval(() => {
+        handleFindRide(false);
+      }, 15000);
+
+      return () => clearInterval(interval);
+    }, []),
+  );
 
   const handleCancelRide = async (reason: string) => {
     try {
@@ -50,6 +64,8 @@ const StartedRide = () => {
       });
 
       bsCancelRef.current?.close();
+
+      handleFindRide();
     } catch (err) {
       handleError(err);
     }
@@ -93,7 +109,7 @@ const StartedRide = () => {
             <ActivityIndicator size={22} color={colors.neutro_00} />
 
             <Text size={16} color={colors.neutro_00}>
-              A caminho do embarque
+              {Status?.[status as keyof typeof Status]?.title}
             </Text>
           </View>
 
@@ -103,7 +119,7 @@ const StartedRide = () => {
             color={colors.neutro_00}
             style={{ textAlign: 'center' }}
           >
-            Seu motorista está a caminho do embarque
+            {Status?.[status as keyof typeof Status]?.subtitle}
           </Text>
 
           <Counter date={ride?.arrivalOriginAt} type="regressivo" />

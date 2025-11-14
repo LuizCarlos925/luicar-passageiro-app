@@ -36,12 +36,15 @@ import { handleError } from '@/utils/handleError';
 
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
+import { useAuth } from '@/hooks/useAuth';
 import { Header } from './styles';
 
 const SearchPlaces = () => {
   const { destination: finalLocation } = useLocalSearchParams<{
     destination: string;
   }>();
+
+  const { user } = useAuth();
 
   const { setModal } = useModal();
 
@@ -74,6 +77,10 @@ const SearchPlaces = () => {
     destinationAddress,
   );
 
+  const card =
+    user?.passenger?.cards?.find(item => item?.isMain) ||
+    user?.passenger?.cards?.[0];
+
   useEffect(() => {
     if (finalLocation) {
       setDestinationAddress(finalLocation);
@@ -90,31 +97,25 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      const { data: addressResponse } = await api.get<IGeolocation>(
-        '/getGeocodeAddress',
-        {
-          params: {
-            addressOrigin: origin,
-            addressDestination: destination,
-          },
+      const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
+        params: {
+          addressOrigin: origin,
+          addressDestination: destination,
         },
-      );
+      });
 
       await api.post<ITripSelect>('/selectTrip', {
-        origin: addressResponse?.origin,
-        destination: addressResponse?.destination,
+        origin: data?.origin,
+        destination: data?.destination,
         subcategoryId: 1,
         categoryId: 1,
       });
 
-      const { data: paymentResponse } = await api.post<IPayment>(
-        '/confirmTrip',
-        {
-          paymentMethod: 2, // 1 - credit card, 2 - pix
-          portion: '1',
-        },
-      );
-      console.log(JSON.stringify(paymentResponse, null, 2));
+      await api.post<IPayment>('/confirmTrip', {
+        paymentMethod: method === 'creditCard' ? 1 : 2,
+        portion: '1',
+        card: method === 'creditCard' ? { id: card?.id } : undefined,
+      });
 
       setModal({
         name: 'paymentSuccess',
@@ -209,7 +210,7 @@ const SearchPlaces = () => {
           />
         </View>
 
-        {method === 'creditCard' && <MethodCreditCard />}
+        {method === 'creditCard' && <MethodCreditCard card={card} />}
         {method === 'pix' && <MethodPix pixCode="asda" />}
 
         <Button

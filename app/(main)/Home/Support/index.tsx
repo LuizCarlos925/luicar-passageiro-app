@@ -1,74 +1,88 @@
-import React, { useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import Text from '@/components/Text/Text';
-
-import { Button } from '@/components/Button/Button';
+import { IconComponent } from '@/components/Icon/Icon';
 import BackButton from '@/components/BackButton/BackButton';
 import { GlobalContainer } from '@/components/Container/Container';
-// import { ModalReport } from '@/components/ModalReport/ModalReport';
 
-import { theme } from '@/global/theme';
-
-import { Divider } from '@/components/Divider/Divider';
-import { router, useLocalSearchParams } from 'expo-router';
-// import { ChatIcon } from '@/assets';
-import { FAQButton, TextWrapper } from './styles';
+import { colors } from '@/global/theme';
 
 const Support = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [isVisible, setIsVisible] = useState(false);
-
   return (
-    <GlobalContainer alignItems="flex-start" paddingHorizontal={23} gap={30}>
+    <GlobalContainer alignItems="flex-start" paddingHorizontal={16} gap={24}>
       <BackButton />
 
-      <TextWrapper>
-        <Text size={22} fontWeight={600} color={theme.colors.primary_60}>
-          Ajuda
+      <View style={styles.textWrapper}>
+        <Text size={24} fontWeight={700} color={colors.secondary_100}>
+          Precisa de ajuda?
         </Text>
-        <Text size={16} color={theme.colors.primary_100}>
-          Algum problema? Contate-nos imediatamente
-        </Text>
-      </TextWrapper>
+        <Text size={16}>Algum problema? Contate-nos imediatamente</Text>
+      </View>
 
-      <FAQButton onPress={() => router.push('/(main)/Settings/Faq')}>
-        {/* <ChatIcon /> */}
-        <Text fontWeight={500} color={theme.colors.primary_100}>
-          FAQ
-        </Text>
-      </FAQButton>
+      <View style={styles.buttonWrapper}>
+        <Pressable
+          onPress={() => router.push('/(main)/Settings/Faq')}
+          style={styles.faq}
+        >
+          <Text size={16} fontWeight={500} color={colors.secondary_100}>
+            FAQ
+          </Text>
 
-      <Divider
-        style={{
-          flexGrow: undefined,
-          width: '100%',
-          height: 1,
-        }}
-      />
+          <IconComponent name="QuestIcon" />
+        </Pressable>
 
-      <Button
-        onPress={() =>
-          router.push({
-            pathname: '/(main)/Home/Report',
-            params: { id },
-          })
-        }
-        style={{ justifyContent: 'flex-start', paddingHorizontal: 20, gap: 10 }}
-        fontSize={15}
-        iconLeft="InfoAlertIcon"
-        backgroundColor={theme.colors.red_d1}
-      >
-        Denunciar motorista
-      </Button>
-
-      {/* <ModalReport
-        isVisible={isVisible}
-        onPress={() => setIsVisible(false)}
-        onBackPress={() => setIsVisible(false)}
-      /> */}
+        <Pressable
+          onPress={() =>
+            router.push({ pathname: '/(main)/Home/Report', params: { id } })
+          }
+          style={styles.buttonReport}
+        >
+          <Text size={16} fontWeight={500} color={colors.error_60}>
+            Denunciar motorista
+          </Text>
+          <IconComponent name="InfoAlertIcon" />
+        </Pressable>
+      </View>
     </GlobalContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  textWrapper: {
+    width: '100%',
+    gap: 8,
+  },
+  buttonWrapper: {
+    width: '100%',
+    marginTop: 24,
+    gap: 16,
+  },
+  faq: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 58,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.secondary_20,
+    borderRadius: 8,
+  },
+  buttonReport: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 58,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.error_60,
+    borderRadius: 8,
+    backgroundColor: colors.error_40,
+  },
+});
 
 export default Support;

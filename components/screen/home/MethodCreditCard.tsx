@@ -6,15 +6,14 @@ import { IconComponent } from '@/components/Icon/Icon';
 
 import { colors } from '@/global/theme';
 
-import { useAuth } from '@/hooks/useAuth';
-
 import { getCardFlagList } from '@/utils/creditCardFlag';
+import { ICard } from '@/interfaces/user';
 
-const MethodCreditCard = () => {
-  const { user } = useAuth();
+type Props = {
+  card: ICard;
+};
 
-  const card = user?.passenger?.cards?.find(item => item?.isMain);
-
+const MethodCreditCard = ({ card }: Props) => {
   if (!card) {
     return (
       <Pressable

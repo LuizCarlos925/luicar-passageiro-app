@@ -2,14 +2,15 @@ import Text from '@/components/Text/Text';
 import { colors } from '@/global/theme';
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
 
 type Props = {
   date: string; // Date ISO
   type: 'progressivo' | 'regressivo';
+  fontSize?: number;
+  fontWeight?: 700 | 600 | 500 | 400 | 300;
 };
 
-const Counter = ({ date, type }: Props) => {
+const Counter = ({ date, type, fontSize = 24, fontWeight = 700 }: Props) => {
   const [count, setCount] = useState(0);
   const [currentType, setCurrentType] = useState(type);
 
@@ -68,11 +69,9 @@ const Counter = ({ date, type }: Props) => {
   };
 
   return (
-    <View>
-      <Text size={24} fontWeight={700} color={colors.neutro_00}>
-        {formatTime()}
-      </Text>
-    </View>
+    <Text size={fontSize} fontWeight={fontWeight} color={colors.neutro_00}>
+      {formatTime()}
+    </Text>
   );
 };
 

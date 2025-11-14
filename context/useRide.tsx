@@ -32,7 +32,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
     setRide({} as IRide);
   };
 
-  const handleFindRide = async () => {
+  const handleFindRide = async (shouldNavigate = true) => {
     try {
       const { data } = await api.get<Paginated<IRide>>('/trips', {
         params: {
@@ -61,30 +61,29 @@ const RideProvider = ({ children }: PropsWithChildren) => {
 
       setRide(currentRide);
 
-      if (currentRide?.status === 'procurandoMotorista') {
+      const status = currentRide?.status;
+
+      if (status === 'procurandoMotorista') {
         return router.navigate('/(main)/Home/LookingForDriver');
       }
 
-      if (currentRide?.status === 'cancelada') {
+      if (status === 'cancelada') {
         return router.dismissTo('/(main)/Home');
       }
 
-      if (currentRide?.status === 'motoristaDeslocandoInicio') {
+      if (
+        (status === 'motoristaDeslocandoInicio' ||
+          status === 'indoAoPontoDeEncontro') &&
+        shouldNavigate
+      ) {
         return router.navigate('/(main)/Home/StartedRide');
       }
 
-      if (currentRide?.status === 'indoAoPontoDeEncontro') {
-        return router.navigate({
-          pathname: '/(main)/Home/StartedRide',
-          params: { status: 'DriverArrived' },
-        });
+      if (status === 'andamento') {
+        return router.navigate('/(main)/Home/Ride/InProgress');
       }
 
-      if (currentRide?.status === 'andamento') {
-        return router.navigate('/(main)/Home/StartedRide');
-      }
-
-      if (currentRide?.status === 'feita' && !currentRide?.hasReviewed) {
+      if (status === 'feita' && !currentRide?.hasReviewed) {
         return router.push('/(main)/Home/RideFinished');
       }
     } catch (err) {

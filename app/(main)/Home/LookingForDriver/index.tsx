@@ -65,6 +65,7 @@ const LookingForDriver = () => {
       });
 
       bsCancelRef.current?.close();
+      handleFindRide();
     } catch (err) {
       handleError(err);
     }
