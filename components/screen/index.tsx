@@ -3,12 +3,14 @@ export { default as ReportBS } from './history/ReportBS';
 export { default as Trail } from './history/Trail';
 
 export { default as CancelRideBS } from './home/CancelRideBS';
+export { default as Counter } from './home/Counter';
 export { default as Header } from './home/Header';
 export { default as ButtonPaymentMethod } from './home/PaymentMethod';
 export { default as ButtonWoman } from './home/ButtonWoman';
 export { default as CardVehicle } from './home/CardVehicle';
 export { default as CardCompanyCategory } from './home/CardCompanyCategory';
 export { default as ModalLocation } from './home/ModalLocation';
+export { default as ModalWaitingCancel } from './home/ModalWaitingCancel';
 export { default as SeeMoreBS } from './home/SeeMoreBS';
 export { default as TipBS } from './home/TipBS';
 export { default as MethodCash } from './home/MethodCash';

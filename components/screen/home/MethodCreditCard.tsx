@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 
 import Text from '@/components/Text/Text';
@@ -16,7 +16,14 @@ const MethodCreditCard = () => {
   const card = user?.passenger?.cards?.find(item => item?.isMain);
 
   if (!card) {
-    return null;
+    return (
+      <Pressable
+        onPress={() => router.push('/(main)/Settings/CreditCard')}
+        style={styles.addCreditCard}
+      >
+        <Text color={colors.primary_100}>Adicionar cartão de crédito</Text>
+      </Pressable>
+    );
   }
 
   return (
@@ -51,6 +58,15 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+  },
+  addCreditCard: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.primary_100,
   },
 });
 

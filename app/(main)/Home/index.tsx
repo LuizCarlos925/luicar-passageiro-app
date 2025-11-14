@@ -14,12 +14,13 @@ import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { useLocations } from '@/services/Home/address.service';
+import { getImageUrl } from '@/services/api';
 import { useBalance } from '@/services/Home/balance.service';
+import { useLocations } from '@/services/Home/address.service';
+import { useCompanies } from '@/services/Home/companies.service';
 import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';
-import { useCompanies } from '@/services/Home/companies.service';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
@@ -132,7 +133,7 @@ type CompanyProps = {
 const Company = ({ logo, name, onPress }: CompanyProps) => {
   return (
     <Pressable onPress={onPress} style={styles.companyBtn}>
-      <Image style={styles.image} source={{ uri: logo }} />
+      <Image style={styles.image} source={{ uri: getImageUrl(logo) }} />
       <Text size={12} fontWeight={600}>
         {name}
       </Text>

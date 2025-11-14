@@ -23,9 +23,9 @@ export interface IRide {
   deliveryType: Type;
   acceptedAt: null;
   routePolyline: null | string;
-  arrivalOriginAt: null;
+  arrivalOriginAt: string;
   chatId: null;
-  destinationArrivalAt: Date | null;
+  destinationArrivalAt: string;
   tripStartedAt: null;
   pointsOriginDestination: Array<number[]> | null;
   pointsDriverOrigin: null;

@@ -114,6 +114,7 @@ const SearchPlaces = () => {
           portion: '1',
         },
       );
+      console.log(JSON.stringify(paymentResponse, null, 2));
 
       setModal({
         name: 'paymentSuccess',
