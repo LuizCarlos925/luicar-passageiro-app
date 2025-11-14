@@ -14,7 +14,7 @@ import { theme } from '@/global/theme';
 import { CheckWrapper, Container } from './styles';
 
 type Props<TFieldValues extends FieldValues> = {
-  label?: string | JSX.Element;
+  label?: string;
   style?: ViewStyle;
   labelStyle?: TextStyle;
   size?: number;
