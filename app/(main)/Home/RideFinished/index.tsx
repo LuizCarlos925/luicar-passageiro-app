@@ -76,6 +76,7 @@ const RideFinished = () => {
             enablePanDownToClose
           >
             <TipBS
+              rideId={ride?.id}
               value={valueSelected}
               onClose={() => bottomSheetRef.current?.close()}
               onSubmit={() => setIsVisible(true)}

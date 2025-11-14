@@ -12,24 +12,31 @@ import { IconComponent } from '@/components/Icon/Icon';
 import { shadow } from '@/global/shadow';
 import { colors } from '@/global/theme';
 import { useState } from 'react';
-import { getCardFlag } from '@/utils/creditCardFlag';
+import { getCardFlagList } from '@/utils/creditCardFlag';
 import { handleError } from '@/utils/handleError';
 import { useRouter } from 'expo-router';
 import { formatCurrency } from '@/utils/format';
+import { api } from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
 import PaymentMethod from './PaymentMethod';
 
 type Props = {
+  rideId?: number;
   value?: number;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-const TipBS = ({ onClose, value, onSubmit }: Props) => {
+const TipBS = ({ rideId, onClose, value, onSubmit }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const router = useRouter();
 
+  const { user } = useAuth();
+
   const [method, setMethod] = useState<'creditCard' | 'pix'>('creditCard');
+
+  const card = user?.passenger?.cards?.[0];
 
   const handleCopy = async () => {
     try {
@@ -41,6 +48,18 @@ const TipBS = ({ onClose, value, onSubmit }: Props) => {
 
   const handlePayment = async () => {
     try {
+      const { data } = await api.post('/sendTripAdditional', {
+        tripId: rideId,
+        paymentMethod: method === 'pix' ? '2' : '1',
+        card: method === 'creditCard' ? { id: card?.id } : undefined,
+        value,
+        portion: '1',
+      });
+
+      const pixCode = data.response.pixCopiaECola;
+
+      await Clipboard.setStringAsync(pixCode);
+
       onClose();
       onSubmit();
     } catch (err) {
@@ -103,15 +122,12 @@ const TipBS = ({ onClose, value, onSubmit }: Props) => {
 
       {method === 'creditCard' && (
         <View style={styles.creditCard}>
-          {getCardFlag('5437 7388 1413 5551', colors.neutro_00, {
-            width: 10,
-            height: 10,
-          })}
+          {getCardFlagList(card.brand)}
 
           <Text color={colors.secondary_100} style={styles.text}>
-            Nome do cartão{' '}
+            {card.name}{' '}
             <Text fontWeight={700} color={colors.secondary_100}>
-              **** 1962
+              **** {card.lastDigits}
             </Text>
           </Text>
 

@@ -48,16 +48,24 @@ const TripDetails = () => {
         Detalhes da corrida
       </Text>
 
-      <CardDriver
-        driver={trip?.driver}
-        tripsQuantity={Number(trip?.driverTripCount || 0)}
-      />
-      <View style={styles.tag}>
-        <IconComponent name="DiamondIcon" size={12} color={colors.neutro_00} />
-        <Text size={12} fontWeight={600}>
-          DIAMANTE
-        </Text>
-      </View>
+      {trip?.driver && (
+        <>
+          <CardDriver
+            driver={trip?.driver}
+            tripsQuantity={Number(trip?.driverTripCount || 0)}
+          />
+          <View style={styles.tag}>
+            <IconComponent
+              name="DiamondIcon"
+              size={12}
+              color={colors.neutro_00}
+            />
+            <Text size={12} fontWeight={600}>
+              DIAMANTE
+            </Text>
+          </View>
+        </>
+      )}
 
       <View style={styles.line} />
 
@@ -116,54 +124,60 @@ const TripDetails = () => {
         duration={trip?.routeTime?.replace('mins', 'min') || ''}
       />
 
-      <Text size={16} fontWeight={600} color={colors.secondary_100}>
-        Informações do veículo
-      </Text>
-
-      <Image source={Car1} style={styles.image} />
-
-      <View style={[styles.row, { justifyContent: 'space-between' }]}>
-        <View style={styles.wrapper}>
-          <Text fontWeight={500} color={colors.secondary_60}>
-            Placa
+      {trip?.vehicle?.id && (
+        <>
+          <Text size={16} fontWeight={600} color={colors.secondary_100}>
+            Informações do veículo
           </Text>
 
-          <Text size={16} fontWeight={600} color={colors.primary_100}>
-            {trip?.vehicle?.plateNumber}
-          </Text>
-        </View>
+          <Image source={Car1} style={styles.image} />
 
-        <View style={styles.wrapper}>
-          <Text fontWeight={500} color={colors.secondary_60}>
-            Marca/Modelo
-          </Text>
+          <View style={[styles.row, { justifyContent: 'space-between' }]}>
+            <View style={styles.wrapper}>
+              <Text fontWeight={500} color={colors.secondary_60}>
+                Placa
+              </Text>
 
-          <Text fontWeight={600}>{trip?.vehicle?.vehicle_model?.model}</Text>
-        </View>
+              <Text size={16} fontWeight={600} color={colors.primary_100}>
+                {trip?.vehicle?.plateNumber}
+              </Text>
+            </View>
 
-        <View style={styles.wrapper}>
-          <Text fontWeight={500} color={colors.secondary_60}>
-            Cor
-          </Text>
+            <View style={styles.wrapper}>
+              <Text fontWeight={500} color={colors.secondary_60}>
+                Marca/Modelo
+              </Text>
 
-          <Text fontWeight={600}>{trip?.vehicle?.color?.name}</Text>
-        </View>
-      </View>
+              <Text fontWeight={600}>
+                {trip?.vehicle?.vehicle_model?.model}
+              </Text>
+            </View>
 
-      <Pressable
-        onPress={() =>
-          router.push({
-            pathname: '/(main)/Home/Report',
-            params: { id: trip?.id },
-          })
-        }
-        style={styles.buttonReport}
-      >
-        <Text size={14} color={colors.error_60}>
-          Denunciar motorista
-        </Text>
-        <IconComponent name="InfoAlertIcon" />
-      </Pressable>
+            <View style={styles.wrapper}>
+              <Text fontWeight={500} color={colors.secondary_60}>
+                Cor
+              </Text>
+
+              <Text fontWeight={600}>{trip?.vehicle?.color?.name}</Text>
+            </View>
+          </View>
+
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(main)/Home/Report',
+                params: { id: trip?.id },
+              })
+            }
+            style={styles.buttonReport}
+          >
+            <Text size={14} color={colors.error_60}>
+              Denunciar motorista
+            </Text>
+            <IconComponent name="InfoAlertIcon" />
+          </Pressable>
+        </>
+      )}
     </GlobalContainer>
   );
 };

@@ -36,23 +36,29 @@ interface Props {
 export const CardHistoryRating = ({ trip, onPress, onPressRate }: Props) => {
   return (
     <Container onPress={onPress}>
-      <View style={styles.dateWrapper}>
-        <Text size={12} color={colors.secondary_60}>
-          Corrida realizada em
+      {trip?.driver?.id ? (
+        <>
+          <View style={styles.dateWrapper}>
+            <Text size={12} color={colors.secondary_60}>
+              Corrida realizada em
+            </Text>
+            <Text size={12} fontWeight={500} color={colors.secondary_80}>
+              {trip?.createdAt && format(trip.createdAt, 'dd/MM/yyyy')}
+            </Text>
+          </View>
+
+          <Divider />
+          <CardDriver
+            driver={trip?.driver}
+            tripsQuantity={Number(trip?.driverTripCount || 0)}
+            onPress={onPressRate}
+          />
+        </>
+      ) : (
+        <Text fontWeight={500} color={colors.error_60}>
+          Cancelada
         </Text>
-        <Text size={12} fontWeight={500} color={colors.secondary_80}>
-          {trip?.createdAt && format(trip.createdAt, 'dd/MM/yyyy')}
-        </Text>
-      </View>
-
-      <Divider />
-
-      <CardDriver
-        driver={trip?.driver}
-        tripsQuantity={Number(trip?.driverTripCount || 0)}
-        onPress={onPressRate}
-      />
-
+      )}
       <Divider />
 
       <Row>
@@ -87,7 +93,9 @@ export const CardHistoryRating = ({ trip, onPress, onPressRate }: Props) => {
 
         <TextWrapper style={{ flex: 1 }}>
           <Text fontWeight={600}>{trip?.vehicle?.plateNumber}</Text>
-          <Text size={12}>Cor: {trip?.vehicle?.color?.name}</Text>
+          {!!trip?.vehicle?.color?.name && (
+            <Text size={12}>Cor: {trip.vehicle.color.name}</Text>
+          )}
         </TextWrapper>
 
         <Text size={16} fontWeight={600} color={theme.colors.secondary_100}>
