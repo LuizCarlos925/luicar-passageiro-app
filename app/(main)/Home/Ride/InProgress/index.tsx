@@ -26,7 +26,7 @@ const InProgress = () => {
   useFocusEffect(
     useCallback(() => {
       const interval = setInterval(() => {
-        handleFindRide(false);
+        handleFindRide();
       }, 15000);
 
       return () => clearInterval(interval);
