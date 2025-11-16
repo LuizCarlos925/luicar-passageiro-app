@@ -120,14 +120,14 @@ const TipBS = ({ rideId, onClose, value, onSubmit }: Props) => {
         />
       </View>
 
-      {method === 'creditCard' && (
+      {method === 'creditCard' && card?.id && (
         <View style={styles.creditCard}>
-          {getCardFlagList(card.brand)}
+          {getCardFlagList(card?.brand)}
 
           <Text color={colors.secondary_100} style={styles.text}>
-            {card.name}{' '}
+            {card?.name}{' '}
             <Text fontWeight={700} color={colors.secondary_100}>
-              **** {card.lastDigits}
+              **** {card?.lastDigits}
             </Text>
           </Text>
 
