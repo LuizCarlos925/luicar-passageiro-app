@@ -66,6 +66,7 @@ const SearchPlaces = () => {
     shouldDirty: false,
   });
 
+  const [pixCode, setPixCode] = useState('');
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [originAddress, setOriginAddress] = useState<string>('');
@@ -96,6 +97,54 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
+      if (method === 'pix') {
+        const { data: trip } = await api.get('/trips', {
+          params: {
+            'filters[status][$in][0]': 'procurandoMotorista',
+            'filters[status][$in][1]': 'motoristaDeslocandoInicio',
+            'filters[status][$in][2]': 'indoAoPontoDeEncontro',
+            'sort[createdAt]': 'desc',
+          },
+        });
+
+        if (!trip?.data?.[0]?.id) {
+          throw new Error('Verifique o pagamento.');
+        }
+      } else {
+        const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
+          params: {
+            addressOrigin: origin,
+            addressDestination: destination,
+          },
+        });
+
+        await api.post<ITripSelect>('/selectTrip', {
+          origin: data?.origin,
+          destination: data?.destination,
+          subcategoryId: 1,
+          categoryId: 1,
+          onlyWoman: isWoman,
+        });
+
+        await api.post<IPayment>('/confirmTrip', {
+          paymentMethod: 1,
+          portion: '1',
+          card: { id: card?.id },
+        });
+      }
+
+      setModal({
+        name: 'paymentSuccess',
+        onPress: handleFindRide,
+      });
+    } catch (err) {
+      handleError(err);
+    }
+    setIsLoading(false);
+  };
+
+  const generatePix = async () => {
+    try {
       const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
         params: {
           addressOrigin: origin,
@@ -111,20 +160,18 @@ const SearchPlaces = () => {
         onlyWoman: isWoman,
       });
 
-      await api.post<IPayment>('/confirmTrip', {
-        paymentMethod: method === 'creditCard' ? 1 : 2,
-        portion: '1',
-        card: method === 'creditCard' ? { id: card?.id } : undefined,
-      });
+      const { data: paymentResponse } = await api.post<IPayment>(
+        '/confirmTrip',
+        {
+          paymentMethod: 2,
+          portion: '1',
+        },
+      );
 
-      setModal({
-        name: 'paymentSuccess',
-        onPress: handleFindRide,
-      });
+      setPixCode(paymentResponse?.paymentCode);
     } catch (err) {
       handleError(err);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -206,12 +253,17 @@ const SearchPlaces = () => {
           <ButtonPaymentMethod
             type="pix"
             isSelected={method === 'pix'}
-            onPress={() => setMethod('pix')}
+            onPress={() => {
+              if (!pixCode) {
+                generatePix();
+              }
+              setMethod('pix');
+            }}
           />
         </View>
 
         {method === 'creditCard' && <MethodCreditCard card={card} />}
-        {method === 'pix' && <MethodPix pixCode="asda" />}
+        {method === 'pix' && pixCode && <MethodPix pixCode={pixCode} />}
 
         <Button
           onPress={handleSubmit(onSubmit)}
