@@ -39,6 +39,7 @@ const Settings = () => {
       <Icon.SettingsHeaderIcon
         width={width}
         style={{ position: 'absolute', top: -12, zIndex: -1 }}
+        preserveAspectRatio="xMidYMid slice"
       />
 
       <View style={styles.card}>

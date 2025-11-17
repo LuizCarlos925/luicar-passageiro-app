@@ -107,7 +107,11 @@ const Profile = () => {
       withoutPaddingTop
     >
       <View style={styles.headerWrapper}>
-        <SettingsHeaderIcon width={width} style={{ marginTop: -width * 0.2 }} />
+        <SettingsHeaderIcon
+          width={width}
+          style={{ marginTop: -width * 0.2 }}
+          preserveAspectRatio="xMidYMid slice"
+        />
 
         <BackButton
           color={theme.colors.neutro_00}

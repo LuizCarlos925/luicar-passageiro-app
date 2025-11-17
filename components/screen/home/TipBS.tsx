@@ -56,7 +56,7 @@ const TipBS = ({ rideId, onClose, value, onSubmit }: Props) => {
         portion: '1',
       });
 
-      const pixCode = data.response.pixCopiaECola;
+      const pixCode = data.response.pixCopiaECola || 'dsadsads';
 
       await Clipboard.setStringAsync(pixCode);
 
