@@ -9,6 +9,7 @@ export const useFAQs = () => {
     const { data } = await api.get<Paginated<IFaq>>('/faqs', {
       params: {
         'filters[active]': true,
+        'filters[type]': 'passenger',
         normalizeStrapi: true,
       },
     });
