@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
 import Text from '@/components/Text/Text';
@@ -17,7 +17,12 @@ const MethodCreditCard = ({ card }: Props) => {
   if (!card) {
     return (
       <Pressable
-        onPress={() => router.push('/(main)/Settings/CreditCard')}
+        onPress={() =>
+          router.push({
+            pathname: '/(main)/Settings/CreditCard',
+            params: { select: 'true' },
+          })
+        }
         style={styles.addCreditCard}
       >
         <Text color={colors.primary_100}>Adicionar cartão de crédito</Text>
@@ -26,7 +31,15 @@ const MethodCreditCard = ({ card }: Props) => {
   }
 
   return (
-    <View style={styles.creditCard}>
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: '/(main)/Settings/CreditCard',
+          params: { select: 'true' },
+        })
+      }
+      style={styles.creditCard}
+    >
       {getCardFlagList(card.brand)}
       <Text color={colors.secondary_100} style={styles.text}>
         {card.name}{' '}
@@ -35,11 +48,8 @@ const MethodCreditCard = ({ card }: Props) => {
         </Text>
       </Text>
 
-      <IconComponent
-        name="SwitchIcon"
-        onPress={() => router.push('/(main)/Settings/CreditCard')}
-      />
-    </View>
+      <IconComponent name="SwitchIcon" />
+    </Pressable>
   );
 };
 

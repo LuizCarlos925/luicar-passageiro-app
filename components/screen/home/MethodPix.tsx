@@ -4,7 +4,7 @@ import * as Clipboard from 'expo-clipboard';
 
 import { Button } from '@/components/Button/Button';
 
-import { handleError } from '@/utils/handleError';
+import { handleError, handleSuccess } from '@/utils/handleError';
 
 type Props = {
   pixCode: string;
@@ -14,6 +14,7 @@ const MethodPix = ({ pixCode }: Props) => {
   const handleCopy = async () => {
     try {
       await Clipboard.setStringAsync(pixCode);
+      handleSuccess('Código copiado com sucesso');
     } catch (err) {
       handleError('Não foi possível copiar o código');
     }

@@ -13,7 +13,7 @@ import { shadow } from '@/global/shadow';
 import { colors } from '@/global/theme';
 import { useState } from 'react';
 import { getCardFlagList } from '@/utils/creditCardFlag';
-import { handleError } from '@/utils/handleError';
+import { handleError, handleSuccess } from '@/utils/handleError';
 import { useRouter } from 'expo-router';
 import { formatCurrency } from '@/utils/format';
 import { api } from '@/services/api';
@@ -41,6 +41,7 @@ const TipBS = ({ rideId, onClose, value, onSubmit }: Props) => {
   const handleCopy = async () => {
     try {
       await Clipboard.setStringAsync('dasda');
+      handleSuccess('Código copiado com sucesso');
     } catch (err) {
       handleError('Não foi possível copiar o código');
     }

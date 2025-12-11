@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     width: '100%',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   button: {

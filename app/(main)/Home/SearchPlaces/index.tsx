@@ -263,8 +263,10 @@ const SearchPlaces = () => {
           />
         </View>
 
-        {method === 'creditCard' && <MethodCreditCard card={card} />}
-        {method === 'pix' && pixCode && <MethodPix pixCode={pixCode} />}
+        <View style={styles.paymentWrapper}>
+          {method === 'creditCard' && <MethodCreditCard card={card} />}
+          {method === 'pix' && pixCode && <MethodPix pixCode={pixCode} />}
+        </View>
 
         <Button
           onPress={handleSubmit(onSubmit)}
@@ -312,8 +314,13 @@ const styles = StyleSheet.create({
   textWrapper: {
     width: '100%',
   },
+  paymentWrapper: {
+    width: '100%',
+    marginBottom: 20,
+  },
   button: {
     marginTop: 'auto',
+    marginBottom: 60,
   },
   divider: {
     width,

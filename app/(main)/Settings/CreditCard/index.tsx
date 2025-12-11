@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Entypo } from '@expo/vector-icons';
 
 import Text from '@/components/Text/Text';
@@ -16,11 +16,21 @@ import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
+import { Button } from '@/components/Button/Button';
 
 const CreditCard = () => {
+  const { select } = useLocalSearchParams<{ select: string }>();
   const { user, refetchUser } = useAuth();
 
   const { setModal } = useModal();
+
+  const defaultCard =
+    user?.passenger?.cards?.find(card => card?.isMain) ||
+    user?.passenger?.cards?.[0];
+
+  const [selected, setIsSelected] = useState(defaultCard?.id?.toString() || '');
+
+  const isSelectMode = select === 'true';
 
   const handleDelete = async (id: number) => {
     try {
@@ -41,10 +51,17 @@ const CreditCard = () => {
       <Text size={24} fontWeight={700} color={colors.secondary_100}>
         Meus cartões
       </Text>
+
       {user?.passenger?.cards?.map(item => (
         <CardMyCreditCard
           key={item.id}
           card={item}
+          isSelect={item.id?.toString() === selected}
+          onPress={() => {
+            if (isSelectMode) {
+              setIsSelected(item.id?.toString() || '');
+            }
+          }}
           onPressDelete={() =>
             setModal({
               name: 'deleteCreditCard',
@@ -53,6 +70,7 @@ const CreditCard = () => {
           }
         />
       ))}
+
       <Pressable
         onPress={() => router.push('/(main)/Settings/CreditCard/Form')}
         hitSlop={8}
@@ -61,6 +79,12 @@ const CreditCard = () => {
         <Entypo name="plus" size={16} color={colors.primary_100} />
         <Text color={colors.primary_100}>Adicionar cartão</Text>
       </Pressable>
+
+      {isSelectMode && (
+        <Button onPress={() => null} style={styles.button}>
+          Selecionar cartão
+        </Button>
+      )}
     </GlobalContainer>
   );
 };
@@ -73,6 +97,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  button: {
+    marginTop: 'auto',
+    marginBottom: 12,
   },
 });
 

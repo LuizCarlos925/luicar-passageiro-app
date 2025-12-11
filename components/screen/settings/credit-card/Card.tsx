@@ -8,15 +8,18 @@ import { colors } from '@/global/theme';
 import { ICard } from '@/interfaces/user';
 
 import { getCardFlagList } from '@/utils/creditCardFlag';
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   card: ICard;
+  isSelect?: boolean;
+  onPress: () => void;
   onPressDelete: () => void;
 };
 
-const Card = ({ card, onPressDelete }: Props) => {
+const Card = ({ card, isSelect, onPress, onPressDelete }: Props) => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       {getCardFlagList(card?.brand)}
 
       <Text color={colors.secondary_100} style={styles.text}>
@@ -26,10 +29,14 @@ const Card = ({ card, onPressDelete }: Props) => {
         </Text>
       </Text>
 
+      {isSelect && (
+        <AntDesign name="check-circle" size={24} color={colors.primary_100} />
+      )}
+
       <IconComponent
         name="Trash2Icon"
         onPress={onPressDelete}
-        color={colors.secondary_60}
+        color={colors.error_60}
       />
     </Pressable>
   );
