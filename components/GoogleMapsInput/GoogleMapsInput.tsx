@@ -54,6 +54,7 @@ const GoogleMapsInput: React.FC<GoogleMapsInputProps> = ({
     field.onChange(place.description);
     setLastInput(place.description);
     setInput('');
+    setIsOpened(false);
     onPlaceSelect?.(place);
   };
 
