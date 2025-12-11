@@ -12,12 +12,19 @@ import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   card: ICard;
+  isSelectMode?: boolean;
   isSelect?: boolean;
   onPress: () => void;
   onPressDelete: () => void;
 };
 
-const Card = ({ card, isSelect, onPress, onPressDelete }: Props) => {
+const Card = ({
+  card,
+  isSelect,
+  isSelectMode,
+  onPress,
+  onPressDelete,
+}: Props) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
       {getCardFlagList(card?.brand)}
@@ -29,15 +36,17 @@ const Card = ({ card, isSelect, onPress, onPressDelete }: Props) => {
         </Text>
       </Text>
 
-      {isSelect && (
+      {isSelect && isSelectMode && (
         <AntDesign name="check-circle" size={24} color={colors.primary_100} />
       )}
 
-      <IconComponent
-        name="Trash2Icon"
-        onPress={onPressDelete}
-        color={colors.error_60}
-      />
+      {!isSelectMode && (
+        <IconComponent
+          name="Trash2Icon"
+          onPress={onPressDelete}
+          color={colors.error_60}
+        />
+      )}
     </Pressable>
   );
 };

@@ -56,6 +56,7 @@ const CreditCard = () => {
         <CardMyCreditCard
           key={item.id}
           card={item}
+          isSelectMode={isSelectMode}
           isSelect={item.id?.toString() === selected}
           onPress={() => {
             if (isSelectMode) {

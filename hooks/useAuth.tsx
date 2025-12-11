@@ -21,6 +21,7 @@ import {
   SignUpProfileForm,
 } from '@/validation/Login.validation';
 import { handleVerifyTerms } from '@/services/Home/verifyTerms.service';
+import { useModal } from './useModal';
 
 export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
 
@@ -53,6 +54,8 @@ const populateUser = [
 const AuthContext = createContext({} as IUserProvider);
 
 const AuthProvider = ({ children }: ChildrenProps) => {
+  const { setModal } = useModal();
+
   const [user, setUser] = useState<IUser>({} as IUser);
   const [signUpData, setSignUpData] = useState<ISignUpData>({} as ISignUpData);
   const [isLoading, setIsLoading] = useState(true);
@@ -109,7 +112,11 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         setIsAcceptedTerms(isAccepted);
       }
     } catch (err: any) {
-      handleError(err);
+      if (err.response?.data?.error?.message?.includes('Senha ou e-mail')) {
+        setModal({ name: 'loginError' });
+      } else {
+        handleError(err);
+      }
       deleteItemAsync('accessToken');
       deleteItemAsync('refreshToken');
     }

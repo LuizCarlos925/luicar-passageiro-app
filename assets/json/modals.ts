@@ -30,6 +30,13 @@ export const modalsOptions = {
     textButton1: 'Cancelar',
     textButton2: 'Continuar',
   },
+  loginError: {
+    type: 'Error',
+    title: 'Login inválido!',
+    description: 'Verifique os dados preenchidos e tente novamente.',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
   changePasswordAlert: {
     type: 'Alert',
     title: 'Alterar senha?',
