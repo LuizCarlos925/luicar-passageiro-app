@@ -173,7 +173,7 @@ const Input = <TFieldValues extends FieldValues>({
             {passwordHidden ? (
               <EyeClosedIcon color={colors.primary_100} />
             ) : (
-              <EyeOpenIcon color={colors.secondary_60} />
+              <EyeOpenIcon color={colors.primary_100} />
             )}
           </ButtonEye>
         )}
