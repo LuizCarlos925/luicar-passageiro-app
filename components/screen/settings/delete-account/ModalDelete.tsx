@@ -10,17 +10,24 @@ import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 import Input from '@/components/Input/Input';
 import { useForm } from 'react-hook-form';
+import {
+  DeleteAccountForm,
+  DeleteAccountSchema,
+} from '@/validation/DeleteAccount.validation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const { height: deviceHeight } = Dimensions.get('screen');
 
 export interface Props {
   isVisible: boolean;
-  onPress: () => void;
+  onPress: (form: DeleteAccountForm) => void;
   onBackPress: () => void;
 }
 
 const ModalDelete = ({ isVisible, onPress, onBackPress }: Props) => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm<DeleteAccountForm>({
+    resolver: yupResolver(DeleteAccountSchema),
+  });
 
   if (!isVisible) {
     return null;
@@ -72,7 +79,7 @@ const ModalDelete = ({ isVisible, onPress, onBackPress }: Props) => {
             Cancelar
           </Button>
           <Button
-            onPress={onPress}
+            onPress={handleSubmit(onPress)}
             style={{ width: '48%' }}
             backgroundColor={colors.alert_60}
           >

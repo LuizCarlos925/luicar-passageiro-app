@@ -19,6 +19,7 @@ import { useModal } from '@/hooks/useModal';
 import { api } from '@/services/api';
 
 import { handleError } from '@/utils/handleError';
+import { DeleteAccountForm } from '@/validation/DeleteAccount.validation';
 
 const DeleteAccount = () => {
   const router = useRouter();
@@ -28,11 +29,11 @@ const DeleteAccount = () => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (form: DeleteAccountForm) => {
     try {
       setIsVisible(false);
 
-      await api.delete('/deleteUser');
+      await api.delete(`/deleteUser?password=${form.password}`);
 
       setModal({
         name: 'deleteAccountSuccess',
