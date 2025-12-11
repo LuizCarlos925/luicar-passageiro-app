@@ -26,7 +26,7 @@ export const AddressSchema = Yup.object({
   zipCode: Yup.string().required('CEP obrigatório'),
   street: Yup.string().required('Logradouro obrigatório'),
   number: Yup.string().required('Número obrigatório'),
-  city: Yup.string(),
+  city: Yup.string().required('Cidade obrigatória'),
   district: Yup.string().required('Bairro obrigatório'),
   state: Yup.string().required('Estado obrigatório'),
   complement: Yup.string(),

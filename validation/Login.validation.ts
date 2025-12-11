@@ -56,7 +56,7 @@ export const SignUpProfileSchema = Yup.object({
   zipCode: Yup.string().required('CEP obrigatório').min(9, 'CEP inválido'),
   street: Yup.string().required('Logradouro obrigatório'),
   number: Yup.string().required('Número obrigatório'),
-  city: Yup.string(),
+  city: Yup.string().required('Cidade obrigatória'),
   district: Yup.string().required('Bairro obrigatório'),
   state: Yup.string().required('Estado obrigatório'),
   complement: Yup.string(),
