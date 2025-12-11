@@ -58,7 +58,7 @@ export const DriverCard = ({ vehicle, driver }: Props) => {
             {vehicle?.plateNumber}
           </Text>
           <Text fontWeight={600} color={colors.neutro_00}>
-            {vehicle?.vehicle_model?.brand} {vehicle?.vehicle_model?.model}
+            {vehicle?.brand} {vehicle?.model}
           </Text>
           <Text size={12} color={colors.neutro_00}>
             Cor: {vehicle?.color?.name}

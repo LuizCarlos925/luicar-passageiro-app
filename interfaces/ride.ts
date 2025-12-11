@@ -269,6 +269,8 @@ export interface Vehicle {
   publishedAt?: Date;
   vehicle_model?: Category;
   color?: Color;
+  brand?: string;
+  model?: string;
 }
 
 export interface Color {

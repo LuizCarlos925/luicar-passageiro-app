@@ -28,7 +28,7 @@ export const handleError = (
   }
 };
 
-const handleCustomErrors = (error: AxiosError) => {
+const handleCustomErrors = (error: any) => {
   const err =
     error.response?.data?.error?.message || error.response?.data?.message;
 
@@ -36,15 +36,32 @@ const handleCustomErrors = (error: AxiosError) => {
     return 'Houve um imprevisto, tente novamente mais tarde';
   }
 
-  if (
-    err?.includes('Passwords do not match') ||
-    err?.includes('The provided current password')
-  ) {
-    return 'Senha atual inválida';
+  if (err?.includes('Invalid credentials')) {
+    return 'Sua sessão expirou, faça login novamente!';
   }
-
+  if (err?.includes('Invalid format, expected a timestamp')) {
+    return 'Insira uma data válida';
+  }
+  if (err?.includes('Invalid time format')) {
+    return 'Horário inválido';
+  }
+  if (err?.includes('Passwords do not match')) {
+    return 'Senhas não correspondem';
+  }
+  if (err?.includes('Your new password must be')) {
+    return 'Sua nova senha deve ser diferente da atual';
+  }
+  if (err?.includes('The provided current password')) {
+    return 'Senha atual é inválida';
+  }
+  if (err?.includes('The request is invalid')) {
+    return 'Dados inválidos';
+  }
   if (err?.includes('Invalid identifier or password')) {
     return 'E-mail e/ou senha inválidos.';
+  }
+  if (err?.includes('The bank account holder document must be equal')) {
+    return 'O CPF do titular da conta bancária deve ser igual ao CPF do motorista';
   }
 
   return err;

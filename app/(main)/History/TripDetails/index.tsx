@@ -148,9 +148,7 @@ const TripDetails = () => {
                 Marca/Modelo
               </Text>
 
-              <Text fontWeight={600}>
-                {trip?.vehicle?.vehicle_model?.model}
-              </Text>
+              <Text fontWeight={600}>{trip?.vehicle?.model}</Text>
             </View>
 
             <View style={styles.wrapper}>
