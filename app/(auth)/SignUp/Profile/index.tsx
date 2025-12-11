@@ -37,7 +37,7 @@ const Profile = () => {
   useFocusEffect(
     useCallback(() => {
       reset(signUpData);
-    }, []),
+    }, [signUpData]),
   );
 
   const handleZipBlurDevolution = async () => {

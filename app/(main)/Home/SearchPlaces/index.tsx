@@ -222,7 +222,7 @@ const SearchPlaces = () => {
           Escolha como prosseguir
         </Text>
 
-        {user?.passenger?.gender === 'Feminino' && (
+        {user?.passenger?.gender === 'feminino' && (
           <ButtonWoman name="isWoman" control={control} />
         )}
 

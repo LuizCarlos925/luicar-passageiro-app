@@ -266,8 +266,8 @@ const BodyProfile = ({ user }: Props) => {
           control={control}
           label="Gênero"
           options={[
-            { label: 'Feminino', value: 'Feminino' },
-            { label: 'Masculino', value: 'Masculino' },
+            { label: 'Feminino', value: 'feminino' },
+            { label: 'Masculino', value: 'masculino' },
           ]}
           placeholder="Selecione o gênero"
           zIndex={1000}
