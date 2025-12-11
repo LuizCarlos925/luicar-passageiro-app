@@ -7,6 +7,7 @@ import { colors } from '@/global/theme';
 import { Car1 } from '@/assets/images';
 import { Image } from 'expo-image';
 import { Driver, Vehicle } from '@/interfaces/ride';
+import { useRating } from '@/services/Settings/rating.service';
 import { Ranking } from '../ui';
 
 type Props = {
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export const DriverCard = ({ vehicle, driver }: Props) => {
+  const { data: rating } = useRating(driver?.id, 'driver');
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -44,7 +47,7 @@ export const DriverCard = ({ vehicle, driver }: Props) => {
             <IconComponent name="StarIcon" size={12} color={colors.neutro_00} />
 
             <Text size={12} fontWeight={600} color={colors.neutro_00}>
-              {driver?.reviews?.average_reviews.toFixed(1)}
+              {rating?.averageRating || 0}
             </Text>
           </View>
         </View>

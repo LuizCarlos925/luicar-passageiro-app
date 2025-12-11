@@ -20,7 +20,7 @@ import { colors, theme } from '@/global/theme';
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
-import { useRatingPassenger } from '@/services/Settings/rating.service';
+import { useRating } from '@/services/Settings/rating.service';
 import { handleError } from '@/utils/handleError';
 
 const Settings = () => {
@@ -29,7 +29,7 @@ const Settings = () => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const { data: rating } = useRatingPassenger(user?.passenger?.id);
+  const { data: rating } = useRating(user?.passenger?.id, 'passenger');
 
   const handleSupportPress = () => {
     handleError('Em desenvolvimento');

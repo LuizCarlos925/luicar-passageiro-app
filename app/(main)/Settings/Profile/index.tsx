@@ -22,7 +22,7 @@ import { useModal } from '@/hooks/useModal';
 
 import { api } from '@/services/api';
 import { deleteImage, uploadImage } from '@/services/images.service';
-import { useRatingPassenger } from '@/services/Settings/rating.service';
+import { useRating } from '@/services/Settings/rating.service';
 
 import { handleError } from '@/utils/handleError';
 
@@ -40,7 +40,7 @@ const Profile = () => {
 
   const [section, setSection] = useState('profile');
 
-  const { data: rating } = useRatingPassenger(user?.passenger?.id);
+  const { data: rating } = useRating(user?.passenger?.id, 'passenger');
 
   const handleSaveAvatar = async (uri: string) => {
     try {

@@ -25,11 +25,13 @@ import { api } from '@/services/api';
 import { handleError } from '@/utils/handleError';
 
 import { EvaluateForm, EvaluateSchema } from '@/validation/Evaluate.validation';
+import { useRating } from '@/services/Settings/rating.service';
 
 const Finished = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
 
   const { ride } = useRide();
+  const { data: rating } = useRating(ride?.driver?.id, 'driver');
 
   const [isVisible, setIsVisible] = useState(false);
   const [valueSelected, setValueSelected] = useState<number | undefined>();
@@ -99,7 +101,7 @@ const Finished = () => {
         <IconComponent name="StarIcon" size={12} color={colors.neutro_00} />
 
         <Text size={12} fontWeight={600} color={colors.neutro_00}>
-          {ride?.driver?.reviews?.average_reviews?.toFixed(1)}
+          {rating?.averageRating || 0}
         </Text>
       </View>
 
