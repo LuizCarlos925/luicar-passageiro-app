@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   ViewStyle,
   Pressable,
+  Keyboard,
 } from 'react-native';
 import { useController, useWatch } from 'react-hook-form';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -56,6 +57,7 @@ const GoogleMapsInput: React.FC<GoogleMapsInputProps> = ({
     setInput('');
     setIsOpened(false);
     onPlaceSelect?.(place);
+    Keyboard.dismiss();
   };
 
   useImperativeHandle(inputRef, () => ({
@@ -103,6 +105,7 @@ const GoogleMapsInput: React.FC<GoogleMapsInputProps> = ({
             marginTop: 4,
             elevation: 3,
           }}
+          keyboardShouldPersistTaps="handled"
         >
           {places.map(place => (
             <Pressable
