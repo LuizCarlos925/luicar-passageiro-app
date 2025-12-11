@@ -222,7 +222,9 @@ const SearchPlaces = () => {
           Escolha como prosseguir
         </Text>
 
-        <ButtonWoman name="isWoman" control={control} />
+        {user?.passenger?.gender === 'Feminino' && (
+          <ButtonWoman name="isWoman" control={control} />
+        )}
 
         {categories?.map(cat => (
           <View key={cat.id}>
