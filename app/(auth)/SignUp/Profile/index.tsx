@@ -160,7 +160,7 @@ const Profile = () => {
             label="Número"
             placeholder="Digite o número"
             type="only-numbers"
-            width="48%"
+            width="56%"
           />
           <Input
             name="state"
@@ -168,7 +168,7 @@ const Profile = () => {
             label="UF"
             placeholder="UF"
             autoCapitalize="characters"
-            width="48%"
+            width="40%"
             maxLength={2}
           />
         </View>
