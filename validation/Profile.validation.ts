@@ -77,7 +77,6 @@ export const PasswordSchema = Yup.object({
       /^(?=.*[a-z])/,
       'Senha fraca. Insira pelo menos 1 (uma) letra minúscula',
     )
-    .matches(/^(?=.*[0-9])/, 'Senha fraca. Insira pelo menos 1 (um) número')
     .matches(
       /^(?=.*[\W])/,
       'Senha fraca. Insira pelo menos 1 (um) caractere especial',
