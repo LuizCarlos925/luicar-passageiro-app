@@ -45,6 +45,17 @@ const CreditCard = () => {
     }
   };
 
+  const handleSelectCard = async () => {
+    try {
+      await api.patch(`/setIsMainCard/${selected}`);
+      refetchUser();
+
+      router.back();
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
   return (
     <GlobalContainer alignItems="flex-start" paddingHorizontal={20} gap={16}>
       <BackButton style={styles.backBtn} />
@@ -82,7 +93,7 @@ const CreditCard = () => {
       </Pressable>
 
       {isSelectMode && (
-        <Button onPress={() => null} style={styles.button}>
+        <Button onPress={handleSelectCard} style={styles.button}>
           Selecionar cartão
         </Button>
       )}
