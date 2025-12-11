@@ -229,7 +229,7 @@ const BodyProfile = ({ user }: Props) => {
   const { control, handleSubmit } = useForm<ProfileForm>({
     defaultValues: {
       name: user?.passenger?.name,
-      social_name: user?.passenger?.socialName,
+      social_name: user?.passenger?.socialName || '',
       cpf: user?.passenger?.cpf,
       phone: user?.passenger?.phone,
     },
@@ -241,6 +241,7 @@ const BodyProfile = ({ user }: Props) => {
       await api.put('/updatePassenger', {
         personalData: {
           phone: form.phone,
+          socialName: form.social_name,
         },
       });
 
@@ -266,7 +267,6 @@ const BodyProfile = ({ user }: Props) => {
         label="Nome social (opcional)"
         placeholder="Digite seu nome social"
         autoCapitalize="words"
-        editable={false}
       />
       <Input
         name="cpf"

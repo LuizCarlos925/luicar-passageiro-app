@@ -21,6 +21,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import { useRatingPassenger } from '@/services/Settings/rating.service';
+import { handleError } from '@/utils/handleError';
 
 const Settings = () => {
   const { user, logout } = useAuth();
@@ -31,6 +32,7 @@ const Settings = () => {
   const { data: rating } = useRatingPassenger(user?.passenger?.id);
 
   const handleSupportPress = () => {
+    handleError('Em desenvolvimento');
     setIsVisible(false);
   };
 
