@@ -353,6 +353,13 @@ const BodyAddress = ({ user }: Props) => {
         autoCapitalize="words"
         editable={false}
       />
+      <Input
+        name="city"
+        control={control}
+        label="Cidade"
+        placeholder="Digite sua cidade"
+        autoCapitalize="words"
+      />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Input
           name="number"

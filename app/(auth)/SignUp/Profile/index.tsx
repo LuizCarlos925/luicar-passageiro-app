@@ -153,6 +153,13 @@ const Profile = () => {
           placeholder="Digite seu bairro"
           autoCapitalize="words"
         />
+        <Input
+          name="city"
+          control={control}
+          label="Cidade"
+          placeholder="Digite sua cidade"
+          autoCapitalize="words"
+        />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Input
             name="number"
