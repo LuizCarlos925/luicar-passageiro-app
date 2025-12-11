@@ -29,6 +29,7 @@ import { handleError } from '@/utils/handleError';
 import { AddressForm, ProfileForm } from '@/validation/Profile.validation';
 
 import { IUser } from '@/interfaces/user';
+import Dropdown from '@/components/Dropdown';
 
 const Profile = () => {
   const { user, refetchUser } = useAuth();
@@ -164,55 +165,6 @@ const Profile = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  headerWrapper: {
-    width: '100%',
-    marginBottom: 60,
-  },
-  avatar: {
-    borderWidth: 2,
-    borderColor: theme.colors.neutro_00,
-  },
-  avatarBtn: {
-    position: 'absolute',
-    bottom: 4,
-    right: 4,
-    width: 32,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: theme.colors.neutro_00,
-    backgroundColor: theme.colors.primary_100,
-  },
-  avatarRow: {
-    position: 'absolute',
-    bottom: -50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  column: {
-    flex: 1,
-    justifyContent: 'space-between',
-    marginTop: 52,
-    gap: 12,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  contentWrapper: {
-    flex: 1,
-    width: '100%',
-    paddingHorizontal: 20,
-    gap: 16,
-  },
-});
-
 export default Profile;
 
 type Props = {
@@ -232,6 +184,7 @@ const BodyProfile = ({ user }: Props) => {
       social_name: user?.passenger?.socialName || '',
       cpf: user?.passenger?.cpf,
       phone: user?.passenger?.phone,
+      gender: user?.passenger?.gender,
     },
   });
 
@@ -242,6 +195,7 @@ const BodyProfile = ({ user }: Props) => {
         personalData: {
           phone: form.phone,
           socialName: form.social_name,
+          gender: form.gender,
         },
       });
 
@@ -305,6 +259,46 @@ const BodyProfile = ({ user }: Props) => {
           onPress={() => setIsEditing(prev => !prev)}
         />
       </View>
+
+      {isEditing ? (
+        <Dropdown
+          name="gender"
+          control={control}
+          label="Gênero"
+          options={[
+            { label: 'Feminino', value: 'Feminino' },
+            { label: 'Masculino', value: 'Masculino' },
+          ]}
+          placeholder="Selecione o gênero"
+          zIndex={1000}
+        />
+      ) : (
+        <View
+          key="non-editable"
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Input
+            name="gender"
+            control={control}
+            label="Gênero"
+            placeholder="Informe seu gênero"
+            editable={false}
+            width="90%"
+          />
+
+          <IconComponent
+            name="EditIcon"
+            size={18}
+            color={colors.secondary_60}
+            style={{ marginTop: 16 }}
+            onPress={() => setIsEditing(true)}
+          />
+        </View>
+      )}
 
       <Button onPress={handleSubmit(onSubmit)} style={{ marginVertical: 30 }}>
         Salvar alterações
@@ -391,3 +385,52 @@ const BodyAddress = ({ user }: Props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  headerWrapper: {
+    width: '100%',
+    marginBottom: 60,
+  },
+  avatar: {
+    borderWidth: 2,
+    borderColor: theme.colors.neutro_00,
+  },
+  avatarBtn: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: theme.colors.neutro_00,
+    backgroundColor: theme.colors.primary_100,
+  },
+  avatarRow: {
+    position: 'absolute',
+    bottom: -50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  column: {
+    flex: 1,
+    justifyContent: 'space-between',
+    marginTop: 52,
+    gap: 12,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  contentWrapper: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 20,
+    gap: 16,
+  },
+});

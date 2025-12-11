@@ -17,6 +17,7 @@ export const ProfileSchema = Yup.object({
   rg: Yup.string().required('RG obrigatório'),
   email: Yup.string().email('E-mail Inválido').required('E-mail obrigatório'),
   phone: Yup.string().required('Telefone obrigatório'),
+  gender: Yup.string().nullable(),
 });
 
 export type AddressForm = Yup.InferType<typeof AddressSchema>;

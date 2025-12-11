@@ -89,6 +89,7 @@ export interface IDriver {
   name: null;
   review: Review;
   image: Image;
+  gamification: 'prata' | 'ouro' | 'diamante';
 }
 
 export interface Review {

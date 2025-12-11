@@ -7,6 +7,7 @@ import { colors } from '@/global/theme';
 import { Car1 } from '@/assets/images';
 import { Image } from 'expo-image';
 import { Driver, Vehicle } from '@/interfaces/ride';
+import { Ranking } from '../ui';
 
 type Props = {
   vehicle?: Vehicle;
@@ -32,12 +33,7 @@ export const DriverCard = ({ vehicle, driver }: Props) => {
         </Text>
       </View>
 
-      <View style={styles.tag}>
-        <IconComponent name="DiamondIcon" size={12} color={colors.neutro_00} />
-        <Text size={12} fontWeight={600} color={colors.neutro_00}>
-          DIAMANTE
-        </Text>
-      </View>
+      <Ranking ranking={driver?.gamification || 'prata'} />
 
       <View style={styles.row}>
         <View style={styles.imageWrapper}>
@@ -85,17 +81,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 10,
-  },
-  tag: {
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    gap: 4,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.secondary_60,
-    backgroundColor: colors.secondary_80,
   },
   imageWrapper: {
     width: 140,

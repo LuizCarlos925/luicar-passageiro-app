@@ -19,6 +19,7 @@ import { useHistoryDetails } from '@/services/History/history.service';
 import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { format, parseISO } from 'date-fns';
 import { formatTripAddress } from '@/utils/formatAddress';
+import { Ranking } from '@/components/ui';
 
 const TripDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -54,16 +55,7 @@ const TripDetails = () => {
             driver={trip?.driver}
             tripsQuantity={Number(trip?.driverTripCount || 0)}
           />
-          <View style={styles.tag}>
-            <IconComponent
-              name="DiamondIcon"
-              size={12}
-              color={colors.neutro_00}
-            />
-            <Text size={12} fontWeight={600}>
-              DIAMANTE
-            </Text>
-          </View>
+          <Ranking ranking={trip?.driver?.gamification || 'prata'} />
         </>
       )}
 
@@ -188,15 +180,6 @@ const styles = StyleSheet.create({
     height: 1,
     width: '100%',
     backgroundColor: colors.secondary_20,
-  },
-  tag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    gap: 4,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.secondary_20,
   },
   wrapper: {
     flexShrink: 1,
