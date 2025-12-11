@@ -61,6 +61,8 @@ const Profile = () => {
       await deleteImage(user?.passenger?.image?.id || 0);
 
       refetchUser();
+
+      setModal({ name: 'deleteAvatar' });
     } catch (err) {
       handleError(err);
     }

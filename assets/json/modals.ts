@@ -112,6 +112,13 @@ export const modalsOptions = {
     textButton1: 'Continuar',
     textButton2: undefined,
   },
+  deleteAvatar: {
+    type: 'Success',
+    title: 'Sucesso!',
+    description: 'Sua foto foi excluída com sucesso!',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
   paymentWithCash: {
     type: 'Alert',
     title: 'Atenção!',
