@@ -4,21 +4,17 @@ import { api } from '@/services/api';
 
 import { ITerms } from '@/interfaces/terms';
 
-export const useTerms = (isTerms: boolean) => {
+export const useTerms = () => {
   const getTerms = async () => {
-    const { data } = await api.get<Meta<ITerms>>(`/terms/${isTerms ? 3 : 4}`, {
-      params: {
-        normalizeStrapi: true,
-      },
-    });
+    const { data } = await api.get<ITerms[]>('/v1/terms?type=passageiro');
 
     if (data) {
-      return data?.data;
+      return data;
     }
   };
 
   return useQuery({
-    queryKey: ['terms', isTerms],
+    queryKey: ['terms'],
     queryFn: getTerms,
   });
 };

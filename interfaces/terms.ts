@@ -5,4 +5,6 @@ export interface ITerms {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
+  version: string;
+  termType: string;
 }

@@ -145,6 +145,9 @@ const SearchPlaces = () => {
 
   const generatePix = async () => {
     try {
+      if (!origin || !destination) {
+        throw new Error('Endereço de origem e destino são obrigatórios.');
+      }
       const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
         params: {
           addressOrigin: origin,
@@ -254,9 +257,7 @@ const SearchPlaces = () => {
             type="pix"
             isSelected={method === 'pix'}
             onPress={() => {
-              if (!pixCode) {
-                generatePix();
-              }
+              generatePix();
               setMethod('pix');
             }}
           />

@@ -24,10 +24,10 @@ const Terms = () => {
 
   const { setModal } = useModal();
 
-  const { data: terms, isFetching } = useTerms(true);
-  const { data: politics, isFetching: isFetchingPolitics } = useTerms(false);
+  const { data: termsData, isFetching } = useTerms();
 
-  const isLoading = isFetching || isFetchingPolitics;
+  const terms = termsData?.find(term => term.name === 'Termos de Uso');
+  const politics = termsData?.find(term => term.name !== 'Termos de Uso');
 
   const onSubmit = async () => {
     try {
@@ -80,7 +80,7 @@ const Terms = () => {
       </Text>
 
       <ScrollContainer>
-        {isLoading ? (
+        {isFetching ? (
           <ActivityIndicator size={40} color={colors.primary_100} />
         ) : (
           <Text size={16} color={colors.secondary_60}>

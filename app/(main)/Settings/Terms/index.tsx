@@ -8,13 +8,12 @@ import ScrollContainer from '@/components/ScrollContainer/ScrollContainer';
 
 import { colors } from '@/global/theme';
 import { useTerms } from '@/services/Settings/terms.service';
-import { format } from 'date-fns';
 
 const Terms = () => {
-  const { data: terms, isFetching } = useTerms(true);
-  const { data: politics, isFetching: isFetchingPolitics } = useTerms(false);
+  const { data: termsData, isFetching } = useTerms();
 
-  const isLoading = isFetching || isFetchingPolitics;
+  const terms = termsData?.find(term => term.name === 'Termos de Uso');
+  const politics = termsData?.find(term => term.name !== 'Termos de Uso');
 
   return (
     <GlobalContainer
@@ -32,14 +31,7 @@ const Terms = () => {
       </Text>
 
       <ScrollContainer>
-        <Text size={16} color={colors.secondary_60}>
-          Termos de uso do aplicativo Luicar{'\n'}
-          Data da última atualização:{' '}
-          {terms?.updatedAt && format(terms.updatedAt, 'dd/MM/yyyy')}
-          {'\n\n'}
-        </Text>
-
-        {isLoading ? (
+        {isFetching ? (
           <ActivityIndicator size={40} color={colors.primary_100} />
         ) : (
           <Text size={16} color={colors.secondary_60}>
