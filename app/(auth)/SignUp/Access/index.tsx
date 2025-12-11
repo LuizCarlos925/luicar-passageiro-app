@@ -91,7 +91,7 @@ const Access = () => {
       </View>
 
       <Button onPress={handleSubmit(onSubmit)} style={{ marginTop: 'auto' }}>
-        Continuar
+        Próximo
       </Button>
       <Button onPress={router.back} style={{ marginBottom: 40 }} outline>
         Retornar

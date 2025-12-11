@@ -140,11 +140,11 @@ const Profile = () => {
           type="zip-code"
         />
         <Input
-          name="state"
+          name="street"
           control={control}
-          label="Estado"
-          placeholder="Digite seu estado"
-          autoCapitalize="characters"
+          label="Rua"
+          placeholder="Digite a rua"
+          autoCapitalize="words"
         />
         <Input
           name="district"
@@ -153,27 +153,32 @@ const Profile = () => {
           placeholder="Digite seu bairro"
           autoCapitalize="words"
         />
-        <Input
-          name="street"
-          control={control}
-          label="Logradouro"
-          placeholder="Digite seu logradouro"
-          autoCapitalize="words"
-        />
-        <Input
-          name="number"
-          control={control}
-          label="Número"
-          placeholder="Digite o número"
-          type="only-numbers"
-        />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Input
+            name="number"
+            control={control}
+            label="Número"
+            placeholder="Digite o número"
+            type="only-numbers"
+            width="48%"
+          />
+          <Input
+            name="state"
+            control={control}
+            label="UF"
+            placeholder="UF"
+            autoCapitalize="characters"
+            width="48%"
+            maxLength={2}
+          />
+        </View>
 
         <Input
           name="complement"
           control={control}
-          label="Digite o complemento"
-          placeholder="Complemento (opcional)"
-          autoCapitalize="characters"
+          label="Complemento (opcional)"
+          placeholder="Digite o complemento"
+          autoCapitalize="words"
         />
       </View>
 
