@@ -23,7 +23,11 @@ const Welcome = () => {
       >
         Cadastre-se
       </Button>
-      <Button onPress={() => router.push('/(auth)/Login')} outline>
+      <Button
+        onPress={() => router.push('/(auth)/Login')}
+        textStyle={{ color: '#FEFEFE' }}
+        outline
+      >
         Entrar
       </Button>
     </View>
