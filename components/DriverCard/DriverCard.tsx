@@ -33,7 +33,7 @@ export const DriverCard = ({ vehicle, driver }: Props) => {
         </Text>
       </View>
 
-      <Ranking ranking={driver?.gamification || 'prata'} />
+      <Ranking ranking={driver?.gamification || 'prata'} isDarkMode />
 
       <View style={styles.row}>
         <View style={styles.imageWrapper}>

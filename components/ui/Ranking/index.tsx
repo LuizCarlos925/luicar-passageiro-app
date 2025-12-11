@@ -22,15 +22,21 @@ type RankingType = keyof typeof RAKINGS;
 
 type Props = {
   ranking: RankingType;
+  isDarkMode?: boolean;
 };
 
-const Ranking = ({ ranking }: Props) => {
+const Ranking = ({ ranking, isDarkMode }: Props) => {
   return (
-    <View style={styles.tag}>
+    <View style={isDarkMode ? styles.tagDark : styles.tag}>
       {RAKINGS?.[ranking]?.icon && (
         <IconComponent name={RAKINGS?.[ranking]?.icon} size={12} />
       )}
-      <Text size={12} fontWeight={600}>
+
+      <Text
+        size={12}
+        fontWeight={600}
+        color={isDarkMode ? colors.secondary_20 : colors.secondary_80}
+      >
         {RAKINGS?.[ranking]?.label}
       </Text>
     </View>
@@ -46,6 +52,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.secondary_20,
+  },
+  tagDark: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    gap: 4,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.secondary_60,
+    backgroundColor: colors.secondary_80,
   },
 });
 
