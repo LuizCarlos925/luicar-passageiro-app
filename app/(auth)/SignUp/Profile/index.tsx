@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { router, useFocusEffect } from 'expo-router';
@@ -55,10 +55,6 @@ const Profile = () => {
       }
     }
   };
-
-  useEffect(() => {
-    handleZipBlurDevolution();
-  }, [zipCode]);
 
   const onSubmit = async (form: SignUpProfileForm) => {
     try {
@@ -138,6 +134,7 @@ const Profile = () => {
           label="CEP"
           placeholder="Digite seu CEP"
           type="zip-code"
+          onEndEditing={handleZipBlurDevolution}
         />
         <Input
           name="street"
