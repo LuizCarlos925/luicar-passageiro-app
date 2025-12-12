@@ -20,7 +20,6 @@ import {
   SignUpAccessForm,
   SignUpProfileForm,
 } from '@/validation/Login.validation';
-import { handleVerifyTerms } from '@/services/Home/verifyTerms.service';
 import { useModal } from './useModal';
 
 export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
@@ -103,11 +102,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
 
       await refetchUser();
 
-      const isAccepted = await handleVerifyTerms();
-
-      if (isAccepted) {
-        router.replace('/(main)/Home');
-      }
+      router.replace('/(main)/Home');
     } catch (err: any) {
       if (err.response?.data?.error?.message?.includes('Senha ou e-mail')) {
         setModal({ name: 'loginError' });

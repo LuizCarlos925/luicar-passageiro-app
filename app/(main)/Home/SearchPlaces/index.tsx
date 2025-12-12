@@ -108,7 +108,7 @@ const SearchPlaces = () => {
         });
 
         if (!trip?.data?.[0]?.id) {
-          throw new Error('Verifique o pagamento.');
+          return;
         }
       } else {
         const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
