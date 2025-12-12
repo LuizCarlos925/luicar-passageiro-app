@@ -21,11 +21,8 @@ import { useCompanies } from '@/services/Home/companies.service';
 import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';
-import { setStatusBarStyle } from 'expo-status-bar';
 
 const Home = () => {
-  setStatusBarStyle('light');
-
   const [status, requestPermission] = Location.useForegroundPermissions();
 
   const [isVisible, setIsVisible] = useState(false);

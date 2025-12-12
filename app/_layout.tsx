@@ -84,7 +84,7 @@ const App = () => {
                 <RideProvider>
                   <BottomSheetModalProvider>
                     <SafeAreaProvider>
-                      <StatusBar style="auto" />
+                      <StatusBar style="auto" backgroundColor="#1C1C1C" />
                       <Slot />
                       <Toast config={toastConfig} />
                     </SafeAreaProvider>

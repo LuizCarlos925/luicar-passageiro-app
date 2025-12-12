@@ -22,11 +22,8 @@ import { useModal } from '@/hooks/useModal';
 
 import { useRating } from '@/services/Settings/rating.service';
 import { handleError } from '@/utils/handleError';
-import { setStatusBarStyle } from 'expo-status-bar';
 
 const Settings = () => {
-  setStatusBarStyle('light');
-
   const { user, logout } = useAuth();
   const { setModal } = useModal();
 

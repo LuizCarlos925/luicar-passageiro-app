@@ -18,11 +18,8 @@ import { ITrip } from '@/interfaces/history';
 import { useHistory } from '@/services/History/history.service';
 
 import { formatDateNominal } from '@/utils/format';
-import { setStatusBarStyle } from 'expo-status-bar';
 
 const History = () => {
-  setStatusBarStyle('dark');
-
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [isReport, setIsReport] = useState(false);
