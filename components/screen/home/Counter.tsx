@@ -1,10 +1,11 @@
 import Text from '@/components/Text/Text';
 import { colors } from '@/global/theme';
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 
 type Props = {
-  date: string; // Date ISO
+  date: string;
   type: 'progressivo' | 'regressivo';
   fontSize?: number;
   fontWeight?: 700 | 600 | 500 | 400 | 300;
@@ -12,44 +13,52 @@ type Props = {
 
 const Counter = ({ date, type, fontSize = 24, fontWeight = 700 }: Props) => {
   const [count, setCount] = useState(0);
-  const [currentType, setCurrentType] = useState(type);
+  const appState = useRef(AppState.currentState);
 
-  const calculateInitialCount = (isoDate: string, counterType: string) => {
-    const targetDate = new Date(isoDate);
+  const calculateCurrentCount = () => {
+    const targetDate = new Date(date);
     const now = new Date();
     const difference = differenceInSeconds(targetDate, now);
 
-    if (counterType === 'regressivo') {
-      return Math.max(0, difference);
+    if (difference > 0) {
+      return difference;
     }
     return Math.abs(difference);
   };
 
   useEffect(() => {
-    const initialCount = calculateInitialCount(date, type);
+    const initialCount = calculateCurrentCount();
     setCount(initialCount);
-    setCurrentType(type);
   }, [date, type]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(prevCount => {
-        if (currentType === 'regressivo') {
-          if (prevCount <= 1) {
-            setCurrentType('progressivo');
-            const targetDate = new Date(date);
-            const now = new Date();
-            const elapsed = differenceInSeconds(now, targetDate);
-            return Math.max(0, elapsed);
-          }
-          return prevCount - 1;
+    const subscription = AppState.addEventListener(
+      'change',
+      (nextAppState: AppStateStatus) => {
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          const newCount = calculateCurrentCount();
+          setCount(newCount);
         }
-        return prevCount + 1;
-      });
+        appState.current = nextAppState;
+      },
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [date]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newCount = calculateCurrentCount();
+      setCount(newCount);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentType, date]);
+  }, [date]);
 
   const timer = intervalToDuration({ start: 0, end: count * 1000 });
 
