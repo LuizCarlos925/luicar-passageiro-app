@@ -59,7 +59,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const [user, setUser] = useState<IUser>({} as IUser);
   const [signUpData, setSignUpData] = useState<ISignUpData>({} as ISignUpData);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAcceptedTerms, setIsAcceptedTerms] = useState(true);
   const [isUnderConstruction, setIsUnderConstruction] = useState(false);
   const [isBlocked, setIsBlocked] = useState('');
 
@@ -108,8 +107,6 @@ const AuthProvider = ({ children }: ChildrenProps) => {
 
       if (isAccepted) {
         router.replace('/(main)/Home');
-      } else {
-        setIsAcceptedTerms(isAccepted);
       }
     } catch (err: any) {
       if (err.response?.data?.error?.message?.includes('Senha ou e-mail')) {

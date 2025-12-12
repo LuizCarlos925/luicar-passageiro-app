@@ -1,30 +1,33 @@
 import axios, { AxiosError } from 'axios';
-import Toast from 'react-native-toast-message';
+
+let showGlobalError: ((title: string, description: string) => void) | null =
+  null;
+
+export const setGlobalErrorHandler = (
+  handler: (title: string, description: string) => void,
+) => {
+  showGlobalError = handler;
+};
 
 export const handleError = (
   err: AxiosError | string | Error | unknown,
+  customTitle?: string,
 ): void => {
+  // eslint-disable-next-line no-console
   console.log(JSON.stringify(err, null, 2));
+  let message = 'Houve um imprevisto, tente novamente mais tarde';
+  const title = customTitle || 'Erro';
+
   if (axios.isAxiosError(err)) {
-    const message = handleCustomErrors(err);
-    return Toast.show({
-      type: 'error',
-      text1: message,
-    });
+    message = handleCustomErrors(err);
+  } else if (err instanceof Error) {
+    message = err.message;
+  } else if (typeof err === 'string') {
+    message = err;
   }
-  if (err instanceof Error) {
-    console.log(err.message);
-    return Toast.show({
-      type: 'error',
-      text1: err.message,
-    });
-  }
-  if (typeof err === 'string') {
-    console.log(err);
-    return Toast.show({
-      type: 'error',
-      text1: err,
-    });
+
+  if (showGlobalError) {
+    showGlobalError(title, message);
   }
 };
 
@@ -67,9 +70,9 @@ const handleCustomErrors = (error: any) => {
   return err;
 };
 
-export const handleSuccess = (message: string): void => {
-  Toast.show({
-    type: 'success',
-    text1: message,
-  });
-};
+// export const handleSuccess = (message: string): void => {
+//   Toast.show({
+//     type: 'success',
+//     text1: message,
+//   });
+// };
