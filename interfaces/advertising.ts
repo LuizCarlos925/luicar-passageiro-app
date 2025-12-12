@@ -1,22 +1,35 @@
 export interface IAdvertising {
+  announcements: Announcement[];
+}
+
+export interface Announcement {
   id: number;
-  description: string;
-  link: string;
+  startDate: Date;
+  endDate: Date;
+  active: boolean;
+  announcementStatus: string;
+  name: null | string;
+  description: null | string;
+  link: null | string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
-  status: string;
-  image: Image;
+  driver: boolean;
+  passenger: boolean;
+  masterActive: null;
+  highlight: boolean;
+  banner: Banner | null;
+  portfolio_product: PortfolioProduct | null;
 }
 
-export interface Image {
+export interface Banner {
   id: number;
   name: string;
   alternativeText: null;
   caption: null;
   width: number;
   height: number;
-  formats: Formats | null;
+  formats: BannerFormats;
   hash: string;
   ext: EXT;
   mime: MIME;
@@ -25,6 +38,7 @@ export interface Image {
   previewUrl: null;
   provider: string;
   provider_metadata: null;
+  folderPath: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,14 +48,11 @@ export enum EXT {
   PNG = '.png',
 }
 
-export interface Formats {
-  large?: Large;
-  small: Large;
-  medium?: Large;
-  thumbnail: Large;
+export interface BannerFormats {
+  thumbnail: Thumbnail;
 }
 
-export interface Large {
+export interface Thumbnail {
   ext: EXT;
   url: string;
   hash: string;
@@ -57,4 +68,53 @@ export interface Large {
 export enum MIME {
   ImageJPEG = 'image/jpeg',
   ImagePNG = 'image/png',
+}
+
+export interface PortfolioProduct {
+  id: number;
+  name: string;
+  description: string;
+  driver: boolean;
+  passenger: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
+  portfolio_product_category: PortfolioProductCategory;
+  photos: Photo[];
+}
+
+export interface Photo {
+  id: number;
+  name: string;
+  alternativeText: null;
+  caption: null;
+  width: number;
+  height: number;
+  formats: PhotoFormats;
+  hash: string;
+  ext: EXT;
+  mime: MIME;
+  size: number;
+  url: string;
+  previewUrl: null;
+  provider: string;
+  provider_metadata: null;
+  folderPath: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PhotoFormats {
+  thumbnail: Thumbnail;
+  small?: Thumbnail;
+  medium?: Thumbnail;
+  large?: Thumbnail;
+}
+
+export interface PortfolioProductCategory {
+  id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
 }

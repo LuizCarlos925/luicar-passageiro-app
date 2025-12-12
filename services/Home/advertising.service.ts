@@ -6,17 +6,12 @@ import { api } from '@/services/api';
 
 export const useAdvertising = () => {
   const getAdvertising = async () => {
-    const { data } = await api.get<Paginated<IAdvertising>>('/advertisements', {
-      params: {
-        populate: 'image',
-        'filters[status]': 'aprovado',
-        normalizeStrapi: true,
-      },
-    });
+    const { data } = await api.get<IAdvertising>('/v1/company/banners');
 
     if (data) {
-      return data?.data;
+      return data?.announcements;
     }
+    return [];
   };
 
   return useQuery({

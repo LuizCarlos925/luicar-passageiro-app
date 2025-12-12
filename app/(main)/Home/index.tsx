@@ -84,8 +84,11 @@ const Home = () => {
             images={
               ads?.map(item => ({
                 id: item?.id,
-                image: item?.image?.url,
-                link: item?.link,
+                image:
+                  item?.banner?.url ||
+                  item?.portfolio_product?.photos?.[0]?.url ||
+                  '',
+                link: item?.link || undefined,
               })) || []
             }
           />

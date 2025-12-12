@@ -8,7 +8,7 @@ import { ImageWrapper } from './styles';
 export interface IImages {
   id: number;
   image: string;
-  link: string;
+  link?: string;
 }
 
 interface CarouselProps {
@@ -56,7 +56,13 @@ const Carousel = ({ images }: CarouselProps) => {
   }, [currentIndex, images.length]);
 
   const renderBanners: ListRenderItem<IImages> = ({ item }) => (
-    <ImageWrapper onPress={() => Linking.openURL(item.link)}>
+    <ImageWrapper
+      onPress={() => {
+        if (item.link) {
+          Linking.openURL(item.link);
+        }
+      }}
+    >
       <Image
         style={{ width: '100%', height: '100%' }}
         source={{ uri: getImageUrl(item.image) }}
