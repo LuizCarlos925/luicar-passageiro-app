@@ -1,15 +1,19 @@
 import { useEffect } from 'react';
-import { setGlobalErrorHandler } from '@/utils/handleError';
+import { setGlobalErrorHandler, setGlobalSuccessHandler } from '@/utils/handleError';
 import { useGlobalModal } from '@/hooks/useGlobalModal';
 
 export const ErrorHandlerProvider = () => {
-  const { showError } = useGlobalModal();
+  const { showError, showSuccess } = useGlobalModal();
 
   useEffect(() => {
     setGlobalErrorHandler((title: string, description: string) => {
       showError({ title, description, textButton1: 'Fechar' });
     });
-  }, [showError]);
+
+    setGlobalSuccessHandler((title: string, description: string) => {
+      showSuccess({ title, description, textButton1: 'Fechar' });
+    });
+  }, [showError, showSuccess]);
 
   return null;
 };

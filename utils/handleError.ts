@@ -3,10 +3,19 @@ import axios, { AxiosError } from 'axios';
 let showGlobalError: ((title: string, description: string) => void) | null =
   null;
 
+let showGlobalSuccess: ((title: string, description: string) => void) | null =
+  null;
+
 export const setGlobalErrorHandler = (
   handler: (title: string, description: string) => void,
 ) => {
   showGlobalError = handler;
+};
+
+export const setGlobalSuccessHandler = (
+  handler: (title: string, description: string) => void,
+) => {
+  showGlobalSuccess = handler;
 };
 
 export const handleError = (
@@ -70,9 +79,10 @@ const handleCustomErrors = (error: any) => {
   return err;
 };
 
-// export const handleSuccess = (message: string): void => {
-//   Toast.show({
-//     type: 'success',
-//     text1: message,
-//   });
-// };
+export const handleSuccess = (message: string, customTitle?: string): void => {
+  const title = customTitle || 'Sucesso';
+
+  if (showGlobalSuccess) {
+    showGlobalSuccess(title, message);
+  }
+};
