@@ -2,13 +2,15 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
-import {
-  ActivityIndicator,
-  Animated,
-  BackHandler,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { ActivityIndicator, BackHandler, StyleSheet, View } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  useAnimatedReaction,
+  runOnJS,
+} from 'react-native-reanimated';
 import { format } from 'date-fns';
 
 import { WaitingLottie } from '@/assets/animations';
@@ -49,10 +51,26 @@ const LookingForDriver = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
+  const messageCounter = useSharedValue(0);
 
   const [isVisible, setIsVisible] = React.useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: fadeAnim.value,
+    };
+  });
+
+  useAnimatedReaction(
+    () => messageCounter.value,
+    (currentValue, previousValue) => {
+      if (currentValue !== previousValue) {
+        runOnJS(setCurrentMessageIndex)(currentValue % MESSAGES.length);
+      }
+    },
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -91,24 +109,16 @@ const LookingForDriver = () => {
   }, [setModal]);
 
   useEffect(() => {
-    const cycleMessages = () => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start(() => {
-        setCurrentMessageIndex(prev => (prev + 1) % MESSAGES.length);
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }).start();
-      });
-    };
-
-    const interval = setInterval(cycleMessages, 4000);
-    return () => clearInterval(interval);
-  }, [fadeAnim]);
+    fadeAnim.value = withRepeat(
+      withTiming(0, { duration: 1500 }, finished => {
+        if (finished) {
+          messageCounter.value += 1;
+        }
+      }),
+      -1,
+      true,
+    );
+  }, []);
 
   return (
     <GlobalContainer
@@ -141,7 +151,7 @@ const LookingForDriver = () => {
       }
     >
       <View style={styles.textWrapper}>
-        <Animated.View style={{ opacity: fadeAnim }}>
+        <Animated.View style={animatedStyle}>
           {currentMessageIndex === 1 ? (
             <>
               <Text
@@ -382,7 +392,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 12,
-    backgroundColor: '#fad4a3',
   },
 });
 
