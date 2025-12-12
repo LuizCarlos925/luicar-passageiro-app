@@ -48,13 +48,17 @@ const ModalWaitingCancel = ({ isVisible, onPress, onBackPress }: Props) => {
         </Text>
 
         <Text size={16} color="neutral_60" style={styles.text}>
+          Tem certeza que deseja cancelar?
+        </Text>
+
+        {/* <Text size={16} color="neutral_60" style={styles.text}>
           Uma taxa de{' '}
           <Text fontWeight={700} color={colors.primary_100}>
             R$ 5,00
           </Text>{' '}
           reais será aplicada caso cancele a corrida.{'\n\n'}Tem certeza que
           deseja cancelar?
-        </Text>
+        </Text> */}
 
         <Button onPress={onPress}>Cancelar corrida</Button>
         <Button onPress={onBackPress} outline>

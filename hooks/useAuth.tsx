@@ -102,6 +102,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
 
       await refetchUser();
 
+      router.dismissAll();
       router.replace('/(main)/Home');
     } catch (err: any) {
       if (err.response?.data?.error?.message?.includes('Senha ou e-mail')) {
