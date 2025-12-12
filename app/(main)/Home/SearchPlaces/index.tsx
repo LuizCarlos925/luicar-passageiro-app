@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useForm, useWatch } from 'react-hook-form';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Text from '@/components/Text/Text';
@@ -38,8 +38,10 @@ import { handleError } from '@/utils/handleError';
 import { RideForm, RideSchema } from '@/validation/Ride.validation';
 
 const SearchPlaces = () => {
-  const { destination: finalLocation } = useLocalSearchParams<{
+  const params = useLocalSearchParams<{
+    origin: string;
     destination: string;
+    isWoman: string;
   }>();
 
   const { user } = useAuth();
@@ -82,11 +84,20 @@ const SearchPlaces = () => {
     user?.passenger?.cards?.[0];
 
   useEffect(() => {
-    if (finalLocation) {
-      setDestinationAddress(finalLocation);
-      setValue('destination', finalLocation);
+    if (params.destination) {
+      setDestinationAddress(params.destination);
+      setValue('destination', params.destination);
     }
-  }, [finalLocation]);
+    if (params.origin) {
+      setOriginAddress(params.origin);
+      setValue('origin', params.origin);
+      setMethod('creditCard');
+    }
+    if (params.isWoman) {
+      const isWomanParam = params.isWoman === 'true';
+      setValue('isWoman', isWomanParam);
+    }
+  }, [params.destination, params.origin, params.isWoman]);
 
   useEffect(() => {
     if (currentLocation) {
@@ -193,7 +204,7 @@ const SearchPlaces = () => {
           iconLeft="PinIcon"
           placeholder="Insira o local de partida"
           iconColor={colors.primary_100}
-          defaultValue={currentLocation}
+          defaultValue={params.origin || currentLocation}
           containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
           onPlaceSelect={address =>
@@ -206,7 +217,7 @@ const SearchPlaces = () => {
           control={control}
           iconLeft="FlagIcon"
           placeholder="Insira o destino/CEP"
-          defaultValue={finalLocation}
+          defaultValue={params.destination || ''}
           iconColor={colors.primary_100}
           containerStyle={styles.input}
           style={{ color: colors.secondary_10 }}
@@ -266,7 +277,22 @@ const SearchPlaces = () => {
         </View>
 
         <View style={styles.paymentWrapper}>
-          {method === 'creditCard' && <MethodCreditCard card={card} />}
+          {method === 'creditCard' && (
+            <MethodCreditCard
+              card={card}
+              onPress={() => {
+                router.push({
+                  pathname: '/(main)/Settings/CreditCard',
+                  params: {
+                    select: 'true',
+                    origin: originAddress,
+                    destination: destinationAddress,
+                    isWoman: String(isWoman),
+                  },
+                });
+              }}
+            />
+          )}
           {method === 'pix' && pixCode && <MethodPix pixCode={pixCode} />}
         </View>
 

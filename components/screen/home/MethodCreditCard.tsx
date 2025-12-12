@@ -1,6 +1,4 @@
 import { Pressable, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
-
 import Text from '@/components/Text/Text';
 import { IconComponent } from '@/components/Icon/Icon';
 
@@ -11,35 +9,20 @@ import { ICard } from '@/interfaces/user';
 
 type Props = {
   card: ICard;
+  onPress: () => void;
 };
 
-const MethodCreditCard = ({ card }: Props) => {
+const MethodCreditCard = ({ card, onPress }: Props) => {
   if (!card) {
     return (
-      <Pressable
-        onPress={() =>
-          router.push({
-            pathname: '/(main)/Settings/CreditCard',
-            params: { select: 'true' },
-          })
-        }
-        style={styles.addCreditCard}
-      >
+      <Pressable onPress={onPress} style={styles.addCreditCard}>
         <Text color={colors.primary_100}>Adicionar cartão de crédito</Text>
       </Pressable>
     );
   }
 
   return (
-    <Pressable
-      onPress={() =>
-        router.push({
-          pathname: '/(main)/Settings/CreditCard',
-          params: { select: 'true' },
-        })
-      }
-      style={styles.creditCard}
-    >
+    <Pressable onPress={onPress} style={styles.creditCard}>
       {getCardFlagList(card.brand)}
       <Text color={colors.secondary_100} style={styles.text}>
         {card.name}{' '}

@@ -19,7 +19,12 @@ import { handleError } from '@/utils/handleError';
 import { Button } from '@/components/Button/Button';
 
 const CreditCard = () => {
-  const { select } = useLocalSearchParams<{ select: string }>();
+  const { select, origin, destination, isWoman } = useLocalSearchParams<{
+    select: string;
+    origin: string;
+    destination: string;
+    isWoman: string;
+  }>();
   const { user, refetchUser } = useAuth();
 
   const { setModal } = useModal();
@@ -50,7 +55,14 @@ const CreditCard = () => {
       await api.patch(`/setIsMainCard/${selected}`);
       refetchUser();
 
-      router.back();
+      router.dismissTo({
+        pathname: '/(main)/Home/SearchPlaces',
+        params: {
+          origin,
+          destination,
+          isWoman,
+        },
+      });
     } catch (err) {
       handleError(err);
     }
