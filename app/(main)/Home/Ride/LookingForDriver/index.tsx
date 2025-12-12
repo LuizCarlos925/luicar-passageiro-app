@@ -25,11 +25,14 @@ import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
 
 import { useRide } from '@/context/useRide';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LookingForDriver = () => {
   const { setModal } = useModal();
 
   const { ride, handleFindRide } = useRide();
+
+  const { top, bottom, left, right } = useSafeAreaInsets();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
@@ -112,14 +115,14 @@ const LookingForDriver = () => {
       >
         Preparando tudo para a sua viagem!
       </Text>
-      <View>
+      <View style={{ position: 'absolute', top: -top }}>
         <LottieView
           autoPlay
           ref={animation}
           source={WaitingLottie as { uri: string }}
           style={{
-            width,
-            height: height * 0.5,
+            width: width + left + right,
+            height: height + top + bottom,
           }}
           loop
         />
