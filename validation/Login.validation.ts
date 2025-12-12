@@ -52,13 +52,19 @@ export const SignUpProfileSchema = Yup.object({
     .test('test-invalid-cpf', 'Insira um CPF válido', document =>
       document ? validateCPF(normalize(document)) : false,
     ),
-  phone: Yup.string().required('Telefone obrigatório'),
+  phone: Yup.string()
+    .required('Telefone obrigatório')
+    .min(14, 'Telefone inválido')
+    .max(15, 'Telefone inválido'),
   zipCode: Yup.string().required('CEP obrigatório').min(9, 'CEP inválido'),
   street: Yup.string().required('Logradouro obrigatório'),
   number: Yup.string().required('Número obrigatório'),
   city: Yup.string().required('Cidade obrigatória'),
   district: Yup.string().required('Bairro obrigatório'),
-  state: Yup.string().required('Estado obrigatório'),
+  state: Yup.string()
+    .required('UF obrigatório')
+    .min(2, 'UF inválido')
+    .max(2, 'UF inválido'),
   complement: Yup.string(),
 });
 
