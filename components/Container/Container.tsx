@@ -1,7 +1,6 @@
 import React, { JSX, PropsWithChildren, useEffect } from 'react';
-import { Keyboard, Platform, StyleSheet, View, ViewStyle } from 'react-native';
+import { Keyboard, StyleSheet, View, ViewStyle } from 'react-native';
 import { useSegments } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -44,7 +43,6 @@ export const GlobalContainer = ({
   withoutPaddingTop,
   scrollable = true,
   showTabBar,
-  statusBarTextColor = 'dark',
   hasInput,
   isRefreshing,
   onRefresh,
@@ -133,8 +131,6 @@ export const GlobalContainer = ({
         containerStyle,
       ]}
     >
-      {Platform.OS === 'android' && <StatusBar style={statusBarTextColor} />}
-
       {header && <Header {...header} />}
 
       {handleContainer()}
