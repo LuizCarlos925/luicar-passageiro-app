@@ -2,7 +2,13 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
-import { ActivityIndicator, BackHandler, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  BackHandler,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { format } from 'date-fns';
 
 import { WaitingLottie } from '@/assets/animations';
@@ -27,6 +33,12 @@ import { handleError } from '@/utils/handleError';
 import { useRide } from '@/context/useRide';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const MESSAGES = [
+  'Preparando tudo para sua viagem!',
+  'Um momento',
+  'Tudo pronto para começar sua corrida',
+];
+
 const LookingForDriver = () => {
   const { setModal } = useModal();
 
@@ -37,8 +49,10 @@ const LookingForDriver = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const [isVisible, setIsVisible] = React.useState(false);
+  const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -76,6 +90,26 @@ const LookingForDriver = () => {
     return () => backHandler.remove();
   }, [setModal]);
 
+  useEffect(() => {
+    const cycleMessages = () => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        setCurrentMessageIndex(prev => (prev + 1) % MESSAGES.length);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      });
+    };
+
+    const interval = setInterval(cycleMessages, 4000);
+    return () => clearInterval(interval);
+  }, [fadeAnim]);
+
   return (
     <GlobalContainer
       paddingHorizontal={20}
@@ -106,15 +140,37 @@ const LookingForDriver = () => {
         </>
       }
     >
-      <Text
-        size={24}
-        fontWeight={700}
-        color={colors.secondary_100}
-        marginTop={30}
-        style={{ textAlign: 'center' }}
-      >
-        Preparando tudo para a sua viagem!
-      </Text>
+      <View style={styles.textWrapper}>
+        <Animated.View style={{ opacity: fadeAnim }}>
+          {currentMessageIndex === 1 ? (
+            <>
+              <Text
+                size={24}
+                fontWeight={700}
+                color={colors.secondary_100}
+                marginTop={24}
+                style={{ textAlign: 'center' }}
+              >
+                {MESSAGES[currentMessageIndex]}
+              </Text>
+              <Text size={18} fontWeight={500} style={{ textAlign: 'center' }}>
+                Estamos garantindo o melhor motorista para você
+              </Text>
+            </>
+          ) : (
+            <Text
+              size={24}
+              fontWeight={700}
+              color={colors.secondary_100}
+              marginTop={24}
+              style={{ textAlign: 'center' }}
+            >
+              {MESSAGES[currentMessageIndex]}
+            </Text>
+          )}
+        </Animated.View>
+      </View>
+
       <View style={{ position: 'absolute', top: -top }}>
         <LottieView
           autoPlay
@@ -316,6 +372,17 @@ const styles = StyleSheet.create({
   },
   column: {
     gap: 5,
+  },
+  textWrapper: {
+    width: '100%',
+    zIndex: 1,
+    position: 'absolute',
+    top: 0,
+    height: height * 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    backgroundColor: '#fad4a3',
   },
 });
 
