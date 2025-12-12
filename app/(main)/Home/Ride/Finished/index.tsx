@@ -57,6 +57,10 @@ const Finished = () => {
 
   const handleSkip = async () => {
     try {
+      await api.put(`/trips/${ride?.id}`, {
+        hasReviewed: false,
+      });
+
       router.dismissTo('/(main)/Home');
     } catch (err: any) {
       handleError(err);
