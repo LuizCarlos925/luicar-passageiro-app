@@ -82,7 +82,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     try {
       const { data } = await api.post<ILoginResponse>('/auth/local', {
         ...formLogin,
-        role: 'authenticated',
+        role: 'Authenticated',
       });
 
       if (data?.message === 'Sua conta está bloqueada') {
