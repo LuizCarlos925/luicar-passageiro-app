@@ -122,35 +122,7 @@ const LookingForDriver = () => {
 
   return (
     <>
-      <GlobalContainer
-        paddingHorizontal={20}
-        gap={30}
-        component={
-          <>
-            <ModalWaitingCancel
-              isVisible={isVisible}
-              onPress={() => {
-                setIsVisible(false);
-                bsCancelRef.current?.expand();
-              }}
-              onBackPress={() => setIsVisible(false)}
-            />
-            <BottomSheet
-              ref={bsCancelRef}
-              index={-1}
-              snapPoints={[250, 350]}
-              handleComponent={() => <View style={styles.lineHandler} />}
-              backgroundStyle={{ backgroundColor: colors.neutro_00 }}
-              enablePanDownToClose
-            >
-              <CancelRideBS
-                onPress={handleCancelRide}
-                onClose={() => bsCancelRef.current?.close()}
-              />
-            </BottomSheet>
-          </>
-        }
-      >
+      <GlobalContainer paddingHorizontal={20} gap={30}>
         <View style={styles.textWrapper}>
           <Animated.View style={animatedStyle}>
             {currentMessageIndex === 1 ? (
@@ -337,6 +309,28 @@ const LookingForDriver = () => {
             Cancelar corrida
           </Button>
         </BottomSheetScrollView>
+      </BottomSheet>
+
+      <ModalWaitingCancel
+        isVisible={isVisible}
+        onPress={() => {
+          setIsVisible(false);
+          bsCancelRef.current?.expand();
+        }}
+        onBackPress={() => setIsVisible(false)}
+      />
+      <BottomSheet
+        ref={bsCancelRef}
+        index={-1}
+        snapPoints={[250, 350]}
+        handleComponent={() => <View style={styles.lineHandler} />}
+        backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+        enablePanDownToClose
+      >
+        <CancelRideBS
+          onPress={handleCancelRide}
+          onClose={() => bsCancelRef.current?.close()}
+        />
       </BottomSheet>
     </>
   );
