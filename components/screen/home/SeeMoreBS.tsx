@@ -2,14 +2,17 @@ import { IconComponent } from '@/components/Icon/Icon';
 import Text from '@/components/Text/Text';
 import { shadow } from '@/global/shadow';
 import { colors } from '@/global/theme';
+import { ICompanyByID } from '@/interfaces/companyById';
+import { formatAddress } from '@/utils/formatAddress';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { StyleSheet, View } from 'react-native';
 
 type Props = {
+  company?: ICompanyByID;
   onPress: () => void;
 };
 
-const SeeMoreBS = ({ onPress }: Props) => {
+const SeeMoreBS = ({ company, onPress }: Props) => {
   return (
     <BottomSheetView style={styles.container}>
       <View style={styles.row}>
@@ -26,11 +29,7 @@ const SeeMoreBS = ({ onPress }: Props) => {
       </View>
 
       <Text color={colors.secondary_60}>
-        Descrição lorem ipsum dolor sit amet consectetur. Sed arcu urna justo
-        sit sapien. Elementum pulvinar elit scelerisque duis sed malesuada
-        consequat. Aenean porta lectus consequat id. Augue vel non condimentum
-        nunc tempor. Donec tortor mi mauris tincidunt enim feugiat ornare.
-        Elementum feugiat sed arcu turpis lacus. Mi sem facilisis gravida.
+        {company?.company?.description || 'Descrição não disponível.'}
       </Text>
 
       <View style={styles.locationWrapper}>
@@ -41,14 +40,13 @@ const SeeMoreBS = ({ onPress }: Props) => {
         />
 
         <View style={styles.textWrapper}>
-          <Text color={colors.secondary_60}>53000-000</Text>
+          <Text color={colors.secondary_60}>{company?.company?.zipCode}</Text>
 
           <Text size={16} color={colors.secondary_100}>
-            Parque Centenário
+            {company?.company?.neighborhood}
           </Text>
           <Text color={colors.secondary_60}>
-            Av. Ver. Narciso Yague Guimarães, Mogi das Cruzes, número 50. Centro
-            Cívico - SP. Complemento lorem ipsum
+            {formatAddress(company?.company)}
           </Text>
         </View>
       </View>

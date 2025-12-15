@@ -94,7 +94,10 @@ const Company = () => {
         backgroundStyle={{ backgroundColor: colors.neutro_00 }}
         enablePanDownToClose
       >
-        <SeeMoreBS onPress={() => bottomSheetRef.current?.close()} />
+        <SeeMoreBS
+          company={company}
+          onPress={() => bottomSheetRef.current?.close()}
+        />
       </BottomSheet>
     </GlobalContainer>
   );
