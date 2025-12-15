@@ -184,7 +184,10 @@ const LookingForDriver = () => {
       >
         <BottomSheetScrollView
           style={styles.contentWrapper}
-          contentContainerStyle={styles.contentContainerStyle}
+          contentContainerStyle={[
+            styles.contentContainerStyle,
+            { paddingBottom: bottom + 25 },
+          ]}
           showsVerticalScrollIndicator={false}
         >
           <Text size={20} fontWeight={700} color={colors.neutro_00}>
