@@ -121,39 +121,58 @@ const LookingForDriver = () => {
   }, []);
 
   return (
-    <GlobalContainer
-      paddingHorizontal={20}
-      gap={30}
-      component={
-        <>
-          <ModalWaitingCancel
-            isVisible={isVisible}
-            onPress={() => {
-              setIsVisible(false);
-              bsCancelRef.current?.expand();
-            }}
-            onBackPress={() => setIsVisible(false)}
-          />
-          <BottomSheet
-            ref={bsCancelRef}
-            index={-1}
-            snapPoints={[250, 350]}
-            handleComponent={() => <View style={styles.lineHandler} />}
-            backgroundStyle={{ backgroundColor: colors.neutro_00 }}
-            enablePanDownToClose
-          >
-            <CancelRideBS
-              onPress={handleCancelRide}
-              onClose={() => bsCancelRef.current?.close()}
+    <>
+      <GlobalContainer
+        paddingHorizontal={20}
+        gap={30}
+        component={
+          <>
+            <ModalWaitingCancel
+              isVisible={isVisible}
+              onPress={() => {
+                setIsVisible(false);
+                bsCancelRef.current?.expand();
+              }}
+              onBackPress={() => setIsVisible(false)}
             />
-          </BottomSheet>
-        </>
-      }
-    >
-      <View style={styles.textWrapper}>
-        <Animated.View style={animatedStyle}>
-          {currentMessageIndex === 1 ? (
-            <>
+            <BottomSheet
+              ref={bsCancelRef}
+              index={-1}
+              snapPoints={[250, 350]}
+              handleComponent={() => <View style={styles.lineHandler} />}
+              backgroundStyle={{ backgroundColor: colors.neutro_00 }}
+              enablePanDownToClose
+            >
+              <CancelRideBS
+                onPress={handleCancelRide}
+                onClose={() => bsCancelRef.current?.close()}
+              />
+            </BottomSheet>
+          </>
+        }
+      >
+        <View style={styles.textWrapper}>
+          <Animated.View style={animatedStyle}>
+            {currentMessageIndex === 1 ? (
+              <>
+                <Text
+                  size={24}
+                  fontWeight={700}
+                  color={colors.secondary_100}
+                  marginTop={24}
+                  style={{ textAlign: 'center' }}
+                >
+                  {MESSAGES[currentMessageIndex]}
+                </Text>
+                <Text
+                  size={18}
+                  fontWeight={500}
+                  style={{ textAlign: 'center' }}
+                >
+                  Estamos garantindo o melhor motorista para você
+                </Text>
+              </>
+            ) : (
               <Text
                 size={24}
                 fontWeight={700}
@@ -163,38 +182,25 @@ const LookingForDriver = () => {
               >
                 {MESSAGES[currentMessageIndex]}
               </Text>
-              <Text size={18} fontWeight={500} style={{ textAlign: 'center' }}>
-                Estamos garantindo o melhor motorista para você
-              </Text>
-            </>
-          ) : (
-            <Text
-              size={24}
-              fontWeight={700}
-              color={colors.secondary_100}
-              marginTop={24}
-              style={{ textAlign: 'center' }}
-            >
-              {MESSAGES[currentMessageIndex]}
-            </Text>
-          )}
-        </Animated.View>
-      </View>
+            )}
+          </Animated.View>
+        </View>
 
-      <View style={{ position: 'absolute', top: -top }}>
-        <LottieView
-          autoPlay
-          ref={animation}
-          source={WaitingLottie as { uri: string }}
-          style={{
-            width: width + left + right,
-            height: height + top + bottom,
-          }}
-          loop
-        />
+        <View style={{ position: 'absolute', top: -top }}>
+          <LottieView
+            autoPlay
+            ref={animation}
+            source={WaitingLottie as { uri: string }}
+            style={{
+              width: width + left + right,
+              height: height + top + bottom,
+            }}
+            loop
+          />
 
-        <View style={styles.hideLogo} />
-      </View>
+          <View style={styles.hideLogo} />
+        </View>
+      </GlobalContainer>
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -332,7 +338,7 @@ const LookingForDriver = () => {
           </Button>
         </BottomSheetScrollView>
       </BottomSheet>
-    </GlobalContainer>
+    </>
   );
 };
 
