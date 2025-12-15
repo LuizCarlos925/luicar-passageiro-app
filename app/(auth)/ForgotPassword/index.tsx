@@ -37,7 +37,7 @@ const ForgotPassword = () => {
     try {
       await api.post('/forgotPassword', {
         email: form.email?.toLocaleLowerCase(),
-        role: 'authenticated',
+        role: 'Authenticated',
       });
 
       setModal({
