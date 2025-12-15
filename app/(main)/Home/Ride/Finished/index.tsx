@@ -58,7 +58,7 @@ const Finished = () => {
   const handleSkip = async () => {
     try {
       await api.put(`/trips/${ride?.id}`, {
-        hasReviewed: false,
+        hasReviewed: true,
       });
 
       router.dismissTo('/(main)/Home');
