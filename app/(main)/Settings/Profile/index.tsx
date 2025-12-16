@@ -116,10 +116,7 @@ const Profile = () => {
           preserveAspectRatio="xMidYMid slice"
         />
 
-        <BackButton
-          color={theme.colors.neutro_00}
-          style={{ position: 'absolute', zIndex: 2, top: 40, left: 16 }}
-        />
+        <BackButton color={theme.colors.neutro_00} style={styles.backBtn} />
 
         <View style={styles.avatarRow}>
           <Pressable onPress={handleChangeAvatar}>
@@ -390,6 +387,13 @@ const styles = StyleSheet.create({
   headerWrapper: {
     width: '100%',
     marginBottom: 60,
+  },
+  backBtn: {
+    position: 'absolute',
+    top: 40,
+    left: 16,
+    zIndex: 2,
+    width: 40,
   },
   avatar: {
     borderWidth: 2,
