@@ -223,8 +223,8 @@ const BodyProfile = ({ user }: Props) => {
       <Input
         name="email"
         control={control}
-        label="Email"
-        placeholder="Digite seu email"
+        label="E-mail"
+        placeholder="Digite seu e-mail"
         autoCapitalize="none"
         editable={false}
       />
