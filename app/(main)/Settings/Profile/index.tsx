@@ -179,6 +179,7 @@ const BodyProfile = ({ user }: Props) => {
     defaultValues: {
       name: user?.passenger?.name,
       social_name: user?.passenger?.socialName || '',
+      email: user?.email,
       cpf: user?.passenger?.cpf,
       phone: user?.passenger?.phone,
       gender: user?.passenger?.gender,
@@ -218,6 +219,14 @@ const BodyProfile = ({ user }: Props) => {
         label="Nome social (opcional)"
         placeholder="Digite seu nome social"
         autoCapitalize="words"
+      />
+      <Input
+        name="email"
+        control={control}
+        label="Email"
+        placeholder="Digite seu email"
+        autoCapitalize="none"
+        editable={false}
       />
       <Input
         name="cpf"
