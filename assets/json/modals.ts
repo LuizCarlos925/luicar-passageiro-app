@@ -113,9 +113,8 @@ export const modalsOptions = {
   },
   cancelRideWithTax: {
     type: 'Success',
-    title: 'Corrida cancelada com sucesso!',
-    description:
-      'Corrida cancelada com sucesso! A taxa de cancelamento foi aplicada e deverá ser paga na próxima viagem.',
+    title: 'Sucesso!',
+    description: 'Corrida cancelada com sucesso!',
     textButton1: 'Continuar',
     textButton2: undefined,
   },
