@@ -20,6 +20,7 @@ import {
   SignUpAccessForm,
   SignUpProfileForm,
 } from '@/validation/Login.validation';
+import { ModalBlocked } from '@/components/ModalBlocked/ModalBlocked';
 import { useModal } from './useModal';
 
 export type ISignUpData = SignUpProfileForm & SignUpAccessForm;
@@ -208,6 +209,14 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         setIsUnderConstruction,
       }}
     >
+      <ModalBlocked
+        isVisible={!!isBlocked}
+        onPress={() => {
+          setIsBlocked('');
+          logout();
+        }}
+        reason={isBlocked}
+      />
       {children}
     </AuthContext.Provider>
   );
