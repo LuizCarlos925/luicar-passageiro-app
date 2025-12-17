@@ -41,11 +41,11 @@ export const ModalBlocked = ({ isVisible, onPress, reason }: Props) => {
         <Text
           size={20}
           fontWeight={600}
-          color={colors.error_60}
+          color={colors.secondary_100}
           style={styles.text}
         >
           Atenção!{'\n'}
-          <Text size={18} fontWeight={600} color={colors.error_60}>
+          <Text size={18} fontWeight={600} color={colors.secondary_100}>
             Você foi banido da plataforma
           </Text>
         </Text>
