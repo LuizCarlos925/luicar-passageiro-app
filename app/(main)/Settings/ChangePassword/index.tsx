@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { router } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -20,6 +20,7 @@ import { api } from '@/services/api';
 import { handleError } from '@/utils/handleError';
 
 import { PasswordForm, PasswordSchema } from '@/validation/Profile.validation';
+import { PasswordValidation } from '@/components/ui';
 
 const ChangePassword = () => {
   const { logout } = useAuth();
@@ -31,6 +32,7 @@ const ChangePassword = () => {
   const { control, handleSubmit } = useForm<PasswordForm>({
     resolver: yupResolver(PasswordSchema),
   });
+  const { password } = useWatch({ control });
 
   const onSubmit = async (form: PasswordForm) => {
     setIsLoading(true);
@@ -79,26 +81,7 @@ const ChangePassword = () => {
           password
         />
 
-        <View style={styles.passwordRulesWrapper}>
-          <Text fontWeight={500} color={theme.colors.gray_1e}>
-            Requisitos para a senha:
-          </Text>
-
-          <Text color={theme.colors.gray_1e}>
-            {'   '}
-            {`\u2022`} Mínimo 8 caracteres;
-          </Text>
-
-          <Text color={theme.colors.gray_1e}>
-            {'   '}
-            {`\u2022`} Letra maiúscula;
-          </Text>
-
-          <Text color={theme.colors.gray_1e}>
-            {'   '}
-            {`\u2022`} Letra minúscula.
-          </Text>
-        </View>
+        <PasswordValidation password={password} />
 
         <Input
           name="passwordConfirm"

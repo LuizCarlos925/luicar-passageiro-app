@@ -29,8 +29,8 @@ const Login = () => {
     resolver: yupResolver(LoginSchema as any),
     defaultValues: __DEV__
       ? {
-          identifier: 'testemestres@gmail.com',
-          password: 'Teste12@',
+          identifier: 'renango@gmail.com',
+          password: 'Aa12345.',
           rememberMe: true,
         }
       : {

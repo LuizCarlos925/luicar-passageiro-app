@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { router, useFocusEffect } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,6 +21,7 @@ import {
   SignUpAccessForm,
   SignUpAccessSchema,
 } from '@/validation/Login.validation';
+import { PasswordValidation } from '@/components/ui';
 
 const Access = () => {
   const { signUpData, setSignUpData } = useAuth();
@@ -28,6 +29,8 @@ const Access = () => {
   const { control, handleSubmit, reset } = useForm<SignUpAccessForm>({
     resolver: yupResolver(SignUpAccessSchema),
   });
+
+  const { password } = useWatch({ control });
 
   useFocusEffect(
     useCallback(() => {
@@ -80,6 +83,8 @@ const Access = () => {
           placeholder="Digite sua senha..."
           password
         />
+
+        <PasswordValidation password={password} />
 
         <Input
           name="passwordConfirm"
