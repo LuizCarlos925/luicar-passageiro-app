@@ -21,7 +21,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import { useRating } from '@/services/Settings/rating.service';
-import { handleError } from '@/utils/handleError';
 
 const Settings = () => {
   const { user, logout } = useAuth();
@@ -30,11 +29,6 @@ const Settings = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const { data: rating } = useRating(user?.passenger?.id, 'passenger');
-
-  const handleSupportPress = () => {
-    handleError('Em desenvolvimento');
-    setIsVisible(false);
-  };
 
   return (
     <GlobalContainer paddingHorizontal={20} showTabBar withoutPaddingTop>
@@ -153,7 +147,6 @@ const Settings = () => {
 
       <ModalSupport
         isVisible={isVisible}
-        onPress={handleSupportPress}
         onBackPress={() => setIsVisible(false)}
       />
     </GlobalContainer>

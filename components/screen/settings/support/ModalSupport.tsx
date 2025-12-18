@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, Linking, StyleSheet, View } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { Image } from 'expo-image';
@@ -9,16 +9,25 @@ import { Button } from '@/components/Button/Button';
 import { colors } from '@/global/theme';
 import { width } from '@/global/constants';
 import { Support } from '@/assets/images';
+import { handleError } from '@/utils/handleError';
 
 const { height: deviceHeight } = Dimensions.get('screen');
 
 export interface Props {
   isVisible: boolean;
-  onPress: () => void;
   onBackPress: () => void;
 }
 
-const ModalSupport = ({ isVisible, onPress, onBackPress }: Props) => {
+const ModalSupport = ({ isVisible, onBackPress }: Props) => {
+  const handleOpenEmail = () => {
+    try {
+      Linking.openURL('mailto:suporte@luicar.com.br');
+      onBackPress();
+    } catch (error) {
+      handleError('Não foi possível abrir o e-mail.');
+    }
+  };
+
   if (!isVisible) {
     return null;
   }
@@ -48,14 +57,14 @@ const ModalSupport = ({ isVisible, onPress, onBackPress }: Props) => {
 
         <Text size={16} color="neutral_60" style={styles.text}>
           Clique em continuar e seja redirecionado para a conversa com a nossa
-          equipe no WhatsApp.
+          equipe através do e-mail.
         </Text>
 
         <View style={styles.row}>
           <Button onPress={onBackPress} style={{ width: '48%' }} outline>
             Cancelar
           </Button>
-          <Button onPress={onPress} style={{ width: '48%' }}>
+          <Button onPress={handleOpenEmail} style={{ width: '48%' }}>
             Continuar
           </Button>
         </View>
