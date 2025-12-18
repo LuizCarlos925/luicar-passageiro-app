@@ -17,7 +17,8 @@ api.interceptors.request.use(
 
     const isLogin =
       (config.url?.includes('auth') ||
-        config.url?.includes('createPassenger')) &&
+        config.url?.includes('createPassenger') ||
+        config.url?.includes('forgotPassword')) &&
       !config.url?.includes('auth/change-password');
 
     if (isLogin) {
