@@ -21,11 +21,15 @@ const RAKINGS = {
 type RankingType = keyof typeof RAKINGS;
 
 type Props = {
-  ranking: RankingType;
+  ranking?: RankingType;
   isDarkMode?: boolean;
 };
 
 const Ranking = ({ ranking, isDarkMode }: Props) => {
+  if (!ranking) {
+    return null;
+  }
+
   return (
     <View style={isDarkMode ? styles.tagDark : styles.tag}>
       {RAKINGS?.[ranking]?.icon && (

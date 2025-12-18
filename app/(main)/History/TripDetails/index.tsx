@@ -55,7 +55,7 @@ const TripDetails = () => {
             driver={trip?.driver}
             tripsQuantity={Number(trip?.driverTripCount || 0)}
           />
-          <Ranking ranking={trip?.driver?.gamification || 'prata'} />
+          <Ranking ranking={trip?.driver?.gamification} />
         </>
       )}
 
