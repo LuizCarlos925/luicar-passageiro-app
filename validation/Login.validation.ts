@@ -44,8 +44,16 @@ export const RecoverPasswordSchema = Yup.object({
 export type SignUpProfileForm = Yup.InferType<typeof SignUpProfileSchema>;
 
 export const SignUpProfileSchema = Yup.object({
-  name: Yup.string().required('Nome obrigatório'),
-  social_name: Yup.string(),
+  name: Yup.string()
+    .required('Nome obrigatório')
+    .matches(
+      /^[a-záàâãéèêíïóôõöúçñ\s]+$/i,
+      'Nome deve conter apenas letras e espaços',
+    ),
+  social_name: Yup.string().matches(
+    /^[a-záàâãéèêíïóôõöúçñ\s]*$/i,
+    'Nome social deve conter apenas letras e espaços',
+  ),
   cpf: Yup.string()
     .required('CPF obrigatório')
     .min(14, 'CPF deve conter 11')
