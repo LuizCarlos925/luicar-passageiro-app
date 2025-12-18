@@ -46,6 +46,7 @@ export interface Passenger {
   image: Image;
   cards: ICard[];
   bank_account: IBankAccount;
+  termAcceptedAt: string;
 }
 
 export interface Image {

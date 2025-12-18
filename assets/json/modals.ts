@@ -45,6 +45,13 @@ export const modalsOptions = {
     textButton1: 'Cancelar',
     textButton2: 'Alterar senha',
   },
+  changePasswordSuccess: {
+    type: 'Success',
+    title: 'Senha alterada!',
+    description: 'Você será redirecionado para a tela de login.',
+    textButton1: 'Continuar',
+    textButton2: undefined,
+  },
   updateSuccess: {
     type: 'Success',
     title: 'Sucesso!',

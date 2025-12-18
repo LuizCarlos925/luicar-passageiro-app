@@ -43,10 +43,8 @@ const ChangePassword = () => {
         passwordConfirmation: form.passwordConfirm,
       });
 
-      logout();
-
       setTimeout(() => {
-        setModal({ name: 'updateSuccess' });
+        setModal({ name: 'changePasswordSuccess', onPress: logout });
       }, 500);
     } catch (err) {
       handleError(err);
