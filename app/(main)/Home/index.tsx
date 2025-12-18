@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Image } from 'expo-image';
 import * as Location from 'expo-location';
 
@@ -14,18 +14,24 @@ import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { getImageUrl } from '@/services/api';
+import { api, getImageUrl } from '@/services/api';
 import { useBalance } from '@/services/Home/balance.service';
 import { useLocations } from '@/services/Home/address.service';
 import { useCompanies } from '@/services/Home/companies.service';
 import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';
+import { useAuth } from '@/hooks/useAuth';
+import { handleError } from '@/utils/handleError';
+import ModalTerms from '@/components/screen/home/ModalTerms';
 
 const Home = () => {
   const [status, requestPermission] = Location.useForegroundPermissions();
 
+  const { user, refetchUser } = useAuth();
+
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleTerms, setIsVisibleTerms] = useState(false);
 
   const { data: locations } = useLocations('destino');
   const { data: ads } = useAdvertising();
@@ -37,6 +43,26 @@ const Home = () => {
       setIsVisible(true);
     }
   }, [status]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.passenger?.acceptedTerm === false) {
+        setIsVisibleTerms(true);
+      }
+    }, [user]),
+  );
+
+  const handleAccept = async () => {
+    try {
+      await api.put('/acceptTerm?type=passageiro', {
+        userId: user?.id,
+      });
+      refetchUser();
+      setIsVisibleTerms(false);
+    } catch (err: any) {
+      handleError(err);
+    }
+  };
 
   return (
     <GlobalContainer
@@ -123,6 +149,7 @@ const Home = () => {
         }}
         onBackPress={() => setIsVisible(false)}
       />
+      <ModalTerms isVisible={isVisibleTerms} onBackPress={handleAccept} />
     </GlobalContainer>
   );
 };
