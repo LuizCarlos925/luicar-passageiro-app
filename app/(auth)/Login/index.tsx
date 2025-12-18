@@ -30,7 +30,7 @@ const Login = () => {
     defaultValues: __DEV__
       ? {
           identifier: 'renango@gmail.com',
-          password: 'Aa12345.',
+          password: 'Aa123456.',
           rememberMe: true,
         }
       : {

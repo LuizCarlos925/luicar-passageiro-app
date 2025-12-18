@@ -158,7 +158,7 @@ export interface Driver {
   image?: Image;
   reviews?: Reviews;
   tripCount?: string;
-  gamification?: 'prata' | 'ouro' | 'diamante';
+  gamification?: 'prata' | 'ouro' | 'diamante' | 'padrao';
 }
 
 export interface Image {

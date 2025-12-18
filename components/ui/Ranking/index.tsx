@@ -18,7 +18,7 @@ const RAKINGS = {
   },
 } as const;
 
-type RankingType = keyof typeof RAKINGS;
+type RankingType = keyof typeof RAKINGS | 'padrao';
 
 type Props = {
   ranking?: RankingType;
@@ -26,7 +26,7 @@ type Props = {
 };
 
 const Ranking = ({ ranking, isDarkMode }: Props) => {
-  if (!ranking) {
+  if (!ranking || ranking === 'padrao') {
     return null;
   }
 
