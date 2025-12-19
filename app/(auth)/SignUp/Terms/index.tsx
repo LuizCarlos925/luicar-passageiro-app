@@ -69,14 +69,14 @@ const Terms = () => {
       gap={16}
       containerStyle={{ backgroundColor: colors.primary_10 }}
       contentWrapperStyle={{ flex: 1 }}
-      scrollable={false}
+      scrollable
     >
       <BackButton />
 
       <Step currentStep={3} />
 
       <Text size={32} fontWeight={700} style={styles.text}>
-        Termos de Uso e Política de Privacidade
+        Termos de Uso
       </Text>
 
       <ScrollContainer>
@@ -85,7 +85,19 @@ const Terms = () => {
         ) : (
           <Text size={16} color={colors.secondary_60}>
             {terms?.description}
-            {'\n\n'}
+          </Text>
+        )}
+      </ScrollContainer>
+
+      <Text size={32} fontWeight={700} style={styles.text}>
+        Política de Privacidade
+      </Text>
+
+      <ScrollContainer>
+        {isFetching ? (
+          <ActivityIndicator size={40} color={colors.primary_100} />
+        ) : (
+          <Text size={16} color={colors.secondary_60}>
             {politics?.description}
           </Text>
         )}

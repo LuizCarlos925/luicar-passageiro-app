@@ -25,7 +25,7 @@ const Terms = () => {
       paddingBottom={20}
       gap={16}
       contentWrapperStyle={{ flex: 1 }}
-      scrollable={false}
+      scrollable
     >
       <BackButton style={styles.backBtn} />
 
@@ -46,7 +46,19 @@ const Terms = () => {
         ) : (
           <Text size={16} color={colors.secondary_60}>
             {terms?.description}
-            {'\n\n'}
+          </Text>
+        )}
+      </ScrollContainer>
+
+      <Text size={24} fontWeight={700} color={colors.secondary_100}>
+        Política de Privacidade
+      </Text>
+
+      <ScrollContainer>
+        {isFetching ? (
+          <ActivityIndicator size={40} color={colors.primary_100} />
+        ) : (
+          <Text size={16} color={colors.secondary_60}>
             {politics?.description}
           </Text>
         )}
