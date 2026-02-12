@@ -2,8 +2,10 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-export const baseURL = 'https://luicar.mestresdaweb.org/api/';
-const imageUrl = 'https://luicar.mestresdaweb.org';
+// export const baseURL = 'https://luicar.mestresdaweb.org/api/';
+// const imageUrl = 'https://luicar.mestresdaweb.org';
+export const baseURL = 'https://api.luicar.com.br/api/';
+const imageUrl = 'https://api.luicar.com.br';
 
 export const api = axios.create({
   baseURL,
