@@ -64,7 +64,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
       const status = currentRide?.status;
 
       if (status === 'procurandoMotorista') {
-        return router.navigate('/(main)/Home/Ride/LookingForDriver');
+        return router.push('/(main)/Home/Ride/LookingForDriver');
       }
 
       if (status === 'cancelada') {
@@ -76,11 +76,11 @@ const RideProvider = ({ children }: PropsWithChildren) => {
           status === 'indoAoPontoDeEncontro') &&
         shouldNavigate
       ) {
-        return router.navigate('/(main)/Home/Ride/Waiting');
+        return router.push('/(main)/Home/Ride/Waiting');
       }
 
       if (status === 'andamento') {
-        return router.navigate('/(main)/Home/Ride/InProgress');
+        return router.push('/(main)/Home/Ride/InProgress');
       }
 
       if (status === 'feita' && !currentRide?.hasReviewed) {

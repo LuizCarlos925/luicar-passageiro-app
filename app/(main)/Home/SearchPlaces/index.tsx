@@ -119,6 +119,7 @@ const SearchPlaces = () => {
         });
 
         if (!trip?.data?.[0]?.id) {
+          setIsLoading(false);
           return;
         }
       } else {

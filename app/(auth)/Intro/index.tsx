@@ -30,7 +30,7 @@ const Intro = () => {
         router.push('/(auth)/Welcome');
       }
     }
-  }, [hasFinishedAnimation]);
+  }, [hasFinishedAnimation, isAuthenticated, router]);
 
   return (
     <LottieView
