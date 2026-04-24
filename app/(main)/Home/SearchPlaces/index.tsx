@@ -83,6 +83,11 @@ const SearchPlaces = () => {
     user?.passenger?.cards?.find(item => item?.isMain) ||
     user?.passenger?.cards?.[0];
 
+  const disableButton =
+    !method ||
+    (method === 'pix' && !pixCode) ||
+    (method === 'creditCard' && !card);
+
   useEffect(() => {
     if (params.destination) {
       setDestinationAddress(params.destination);
@@ -119,8 +124,9 @@ const SearchPlaces = () => {
         });
 
         if (!trip?.data?.[0]?.id) {
-          setIsLoading(false);
-          return;
+          throw new Error(
+            'Realize o pagamento via Pix para continuar com a corrida',
+          );
         }
       } else {
         const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
@@ -298,10 +304,11 @@ const SearchPlaces = () => {
         </View>
 
         <Button
+          key={`confirm-${method}`}
           onPress={handleSubmit(onSubmit)}
           isLoading={isLoading}
-          style={{ ...styles.button, opacity: method ? 1 : 0.7 }}
-          disabled={!method}
+          style={{ ...styles.button, opacity: !disableButton ? 1 : 0.7 }}
+          disabled={disableButton}
         >
           Solicitar motorista
         </Button>
