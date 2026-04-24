@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import * as Constants from 'expo-constants';
+import { channel, updateId } from 'expo-updates';
 
 import * as Icon from '@/assets/icons';
 import { SETTINGS_MENUS } from '@/assets/json/settingsMenu';
 
 import Text from '@/components/Text/Text';
 import { ModalSupport } from '@/components/screen';
+import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
 import { AvatarImage } from '@/components/AvatarImage/AvatarImage';
@@ -27,6 +29,7 @@ const Settings = () => {
   const { setModal } = useModal();
 
   const [isVisible, setIsVisible] = useState(false);
+  const [showUpdateId, setShowUpdateId] = useState(false);
 
   const { data: rating } = useRating(user?.passenger?.id, 'passenger');
 
@@ -144,6 +147,15 @@ const Settings = () => {
           />
         </Pressable>
       </View>
+
+      <Button
+        onPress={() => setShowUpdateId(prev => !prev)}
+        fontSize={10}
+        fontColor={theme.colors.neutro_100}
+        backgroundColor="transparent"
+      >
+        {showUpdateId && `${channel}: ${updateId}`}
+      </Button>
 
       <ModalSupport
         isVisible={isVisible}
