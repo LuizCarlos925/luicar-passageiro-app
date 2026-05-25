@@ -1,3 +1,5 @@
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 import React, {
   createContext,
   ReactNode,
@@ -80,10 +82,37 @@ const AuthProvider = ({ children }: ChildrenProps) => {
 
   const login = async (formLogin: LoginForm) => {
     setIsLoading(true);
+
     try {
+      let deviceToken = '';
+
+      try {
+        if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } =
+        await Notifications.requestPermissionsAsync();
+
+      finalStatus = status;
+    }
+
+    if (finalStatus === 'granted') {
+      const tokenData = await Notifications.getExpoPushTokenAsync();
+      deviceToken = tokenData.data;
+    }
+        }
+      } catch (e) {
+        console.log('Erro push token', e);
+      }
+
       const { data } = await api.post<ILoginResponse>('/auth/local', {
         ...formLogin,
         role: 'Authenticated',
+        deviceToken,
       });
 
       if (data?.message === 'Sua conta está bloqueada') {

@@ -82,10 +82,14 @@ const RideProvider = ({ children }: PropsWithChildren) => {
       if (status === 'andamento') {
         return router.push('/(main)/Home/Ride/InProgress');
       }
+if (status === 'feita') {
+  if (!currentRide?.hasReviewed) {
+    return router.push('/(main)/Home/Ride/Finished');
+  }
 
-      if (status === 'feita' && !currentRide?.hasReviewed) {
-        return router.push('/(main)/Home/Ride/Finished');
-      }
+  handleResetRide();
+  return router.dismissTo('/(main)/Home');
+}
     } catch (err) {
       handleError(err);
     }

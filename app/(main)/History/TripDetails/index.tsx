@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 
@@ -15,6 +15,7 @@ import { GlobalContainer } from '@/components/Container/Container';
 import { colors } from '@/global/theme';
 
 import { useHistoryDetails } from '@/services/History/history.service';
+import { baseURL } from '@/services/api';
 
 import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { format, parseISO } from 'date-fns';
@@ -27,6 +28,16 @@ const TripDetails = () => {
   const router = useRouter();
 
   const { data: trip } = useHistoryDetails(id);
+
+  const receiptUrl = trip?.id ? `${baseURL}trips/${trip.id}/receipt` : '';
+
+  const openReceipt = () => {
+    if (!receiptUrl) {
+      return;
+    }
+
+    Linking.openURL(receiptUrl);
+  };
 
   const renderDate = () => {
     if (trip?.tripStartedAt) {
@@ -90,6 +101,12 @@ const TripDetails = () => {
           </Text>
         </View>
       </View>
+
+      <Pressable onPress={openReceipt} style={styles.buttonReceipt}>
+        <Text size={14} fontWeight={600} color={colors.primary_100}>
+          Ver Recibo
+        </Text>
+      </Pressable>
 
       <View style={styles.line} />
 
@@ -194,6 +211,16 @@ const styles = StyleSheet.create({
   image: {
     width: 60,
     height: 40,
+  },
+  buttonReceipt: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
+    borderWidth: 1,
+    borderColor: colors.primary_100,
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
   },
   buttonReport: {
     flexDirection: 'row',

@@ -15,7 +15,6 @@ import { ThemeProvider } from 'styled-components';
 
 import { StatusBar } from 'expo-status-bar';
 import { Slot } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
 
 import { useFonts } from 'expo-font';
 
@@ -63,7 +62,6 @@ LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
 ]);
 
-SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   useUpdate();

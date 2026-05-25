@@ -1,0 +1,79 @@
+{
+  "expo": {
+    "name": "LuiCar",
+    "slug": "luicar-passageiro-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/expo/icon.png",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.mestresdaweb.luicarpassageiro",
+      "infoPlist": {
+        "NSCameraUsageDescription": "O aplicativo precisa acessar a câmera para permitir que você tire fotos para seu perfil, assim como postagens.",
+        "NSPhotoLibraryUsageDescription": "O aplicativo precisa acessar sua galeria para permitir o upload de fotos para seu perfil, assim como postagens.",
+        "NSMicrophoneUsageDescription": "O aplicativo precisa acessar o microfone para permitir a gravação de áudio.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/expo/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.mestresdaweb.luicarpassageiro"
+    },
+    "web": {
+      "favicon": "./assets/expo/favicon.png"
+    },
+    "owner": "luizcarlos925",
+    "scheme": "myapp",
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permita que o LuiCar use sua localização para que possamos mostrar a localização atual no mapa e encontrar motoristas próximos para realizar corridas.",
+          "locationAlwaysPermission": "Permita que o LuiCar use sua localização para que possamos mostrar a localização atual no mapa e encontrar motoristas próximos para realizar corridas.",
+          "locationWhenInUsePermission": "Permita que o LuiCar use sua localização para que possamos mostrar a localização atual no mapa e encontrar motoristas próximos para realizar corridas."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFFFFF",
+          "image": null,
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "343df5b9-c0cc-4e8c-9719-09d88694f276"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4a274f74-ad07-4254-ab0e-babd60e7815f"
+    }
+  }
+}
