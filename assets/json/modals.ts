@@ -92,7 +92,7 @@ export const modalsOptions = {
     type: 'Success',
     title: 'Sucesso!',
     description:
-      'Pagamento efetuado com sucesso! Aguarde, estamos procurando um motorista!',
+      'Corrida solicitada com sucesso! Aguarde, estamos procurando um motorista disponível!',
     textButton1: 'Continuar',
     textButton2: undefined,
   },

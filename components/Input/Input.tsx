@@ -136,7 +136,7 @@ const Input = <TFieldValues extends FieldValues>({
               }
               field.onChange(text);
             }}
-            value={field.value}
+            value={String(field.value ?? '')}
             refInput={field.ref}
             type={type}
             secureTextEntry={passwordHidden}

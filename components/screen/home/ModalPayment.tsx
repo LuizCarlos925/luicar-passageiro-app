@@ -37,7 +37,7 @@ const ModalPayment = ({ isVisible, onPress, onBackPress }: Props) => {
         style={styles.container}
       >
         <Text size={20} fontWeight={600} style={styles.text}>
-          Pagamento efetuado com sucesso!
+          Corrida solicitada com sucesso!
         </Text>
 
         <Image source={CoinsImg} style={styles.image} />

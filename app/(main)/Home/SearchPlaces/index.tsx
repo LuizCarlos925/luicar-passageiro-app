@@ -83,10 +83,11 @@ const SearchPlaces = () => {
     user?.passenger?.cards?.find(item => item?.isMain) ||
     user?.passenger?.cards?.[0];
 
-  const disableButton =
-    !method ||
-    (method === 'pix' && !pixCode) ||
-    (method === 'creditCard' && !card);
+   const disableButton =
+  !originAddress ||
+  !destinationAddress ||
+  isLoading;
+   
 
   useEffect(() => {
     if (params.destination) {
@@ -144,17 +145,16 @@ const SearchPlaces = () => {
           onlyWoman: isWoman,
         });
 
-        await api.post<IPayment>('/confirmTrip', {
-          paymentMethod: 1,
-          portion: '1',
-          card: { id: card?.id },
-        });
+// await api.post<IPayment>('/confirmTrip', {
+//   paymentMethod: 1,
+//   portion: '1',
+//   card: { id: card?.id },
+// });        
+
       }
 
-      setModal({
-        name: 'paymentSuccess',
-        onPress: handleFindRide,
-      });
+     handleFindRide();      
+
     } catch (err) {
       handleError(err);
     }

@@ -1,24 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { Image } from 'expo-image';
 import * as Location from 'expo-location';
 
 import Text from '@/components/Text/Text';
 import { Header } from '@/components/screen';
 import { Place } from '@/components/Place/Place';
 import { ModalLocation } from '@/components/screen';
-import Carousel from '@/components/Carousel/Carousel';
 import { IconComponent } from '@/components/Icon/Icon';
 import { GlobalContainer } from '@/components/Container/Container';
 
 import { colors } from '@/global/theme';
 
-import { api, getImageUrl } from '@/services/api';
+import { api } from '@/services/api';
 import { useBalance } from '@/services/Home/balance.service';
 import { useLocations } from '@/services/Home/address.service';
-import { useCompanies } from '@/services/Home/companies.service';
-import { useAdvertising } from '@/services/Home/advertising.service';
 
 import { formatCurrency } from '@/utils/format';
 import { useAuth } from '@/hooks/useAuth';
@@ -34,9 +30,7 @@ const Home = () => {
   const [isVisibleTerms, setIsVisibleTerms] = useState(false);
 
   const { data: locations } = useLocations('destino');
-  const { data: ads } = useAdvertising();
   const { data: balance } = useBalance();
-  const { data: companies } = useCompanies();
 
   useEffect(() => {
     if (status && !status?.granted) {
@@ -104,41 +98,6 @@ const Home = () => {
             />
           ))}
         </View>
-
-        {ads && ads?.length > 0 && (
-          <Carousel
-            images={
-              ads?.map(item => ({
-                id: item?.id,
-                image:
-                  item?.banner?.url ||
-                  item?.portfolio_product?.photos?.[0]?.url ||
-                  '',
-                link: item?.link || undefined,
-              })) || []
-            }
-          />
-        )}
-
-        <Text size={16} fontWeight={700} color={colors.secondary_100}>
-          Empresas parceiras
-        </Text>
-
-        <View style={styles.companiesWrapper}>
-          {companies?.map(company => (
-            <Company
-              key={company?.id}
-              logo={company?.photo?.url}
-              name={company?.tradeName}
-              onPress={() =>
-                router.push({
-                  pathname: '/(main)/Home/Company',
-                  params: { id: company?.id },
-                })
-              }
-            />
-          ))}
-        </View>
       </View>
 
       <ModalLocation
@@ -151,23 +110,6 @@ const Home = () => {
       />
       <ModalTerms isVisible={isVisibleTerms} onBackPress={handleAccept} />
     </GlobalContainer>
-  );
-};
-
-type CompanyProps = {
-  name: string;
-  logo: string;
-  onPress: () => void;
-};
-
-const Company = ({ logo, name, onPress }: CompanyProps) => {
-  return (
-    <Pressable onPress={onPress} style={styles.companyBtn}>
-      <Image style={styles.image} source={{ uri: getImageUrl(logo) }} />
-      <Text size={12} fontWeight={600}>
-        {name}
-      </Text>
-    </Pressable>
   );
 };
 
@@ -192,27 +134,6 @@ const styles = StyleSheet.create({
   destinationsWrapper: {
     width: '100%',
     gap: 4,
-  },
-  companiesWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '100%',
-    gap: '2%',
-  },
-  companyBtn: {
-    width: '32%',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.gray_e2,
-  },
-  image: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
   },
 });
 
