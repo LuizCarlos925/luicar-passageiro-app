@@ -410,6 +410,11 @@ const styles = StyleSheet.create({
     padding: 10,
     gap: 20,
   },
+  paymentActions: {
+    width: '100%',
+    gap: 12,
+    marginTop: 12,
+  },
   row2: {
     flexDirection: 'row',
     width: '100%',
