@@ -181,16 +181,19 @@ const SearchPlaces = () => {
         categoryId: 1,
         onlyWoman: isWoman,
       });
+     
+      handleFindRide();
+ 
 
-      const { data: paymentResponse } = await api.post<IPayment>(
-        '/confirmTrip',
-        {
-          paymentMethod: 2,
-          portion: '1',
-        },
-      );
-
-      setPixCode(paymentResponse?.paymentCode);
+//      const { data: paymentResponse } = await api.post<IPayment>(
+//        '/confirmTrip',
+//        {
+//          paymentMethod: 2,
+//          portion: '1',
+//        },
+//      );
+//
+//      setPixCode(paymentResponse?.paymentCode);
     } catch (err) {
       handleError(err);
     }
