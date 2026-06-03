@@ -17,7 +17,6 @@ import { WaitingLottie } from '@/assets/animations';
 
 import Text from '@/components/Text/Text';
 import { CancelRideBS, ModalWaitingCancel } from '@/components/screen';
-import ModalPayment from '@/components/screen/home/ModalPayment';
 import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
@@ -27,6 +26,7 @@ import { colors } from '@/global/theme';
 import { height, width } from '@/global/constants';
 
 import { useModal } from '@/hooks/useModal';
+import { useAuth } from '@/hooks/useAuth';
 
 import { api } from '@/services/api';
 
@@ -44,6 +44,7 @@ const MESSAGES = [
 
 const LookingForDriver = () => {
   const { setModal } = useModal();
+  const { user } = useAuth();
 
   const { ride, handleFindRide } = useRide();
 
@@ -52,11 +53,11 @@ const LookingForDriver = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
+  const confirmingPaymentRef = useRef(false);
   const fadeAnim = useSharedValue(1);
   const messageCounter = useSharedValue(0);
 
   const [isVisible, setIsVisible] = React.useState(false);
-  const [isPaymentVisible, setIsPaymentVisible] = React.useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -111,10 +112,41 @@ const LookingForDriver = () => {
   }, [setModal]);
 
   useEffect(() => {
-    if (String(ride?.status) === 'aguardandoPagamento') {
-      setIsPaymentVisible(true);
-    }
-  }, [ride?.status]);
+    const confirmPayment = async () => {
+      if (String(ride?.status) !== 'aguardandoPagamento') {
+        return;
+      }
+
+      if (confirmingPaymentRef.current) {
+        return;
+      }
+
+      confirmingPaymentRef.current = true;
+
+      try {
+        const card =
+          user?.passenger?.cards?.find(item => item?.isMain) ||
+          user?.passenger?.cards?.[0];
+
+        if (!card?.id) {
+          throw new Error('Nenhum cartão cadastrado para realizar o pagamento.');
+        }
+
+        await api.post('/confirmTrip', {
+          paymentMethod: 1,
+          portion: '1',
+          card: { id: card.id },
+        });
+
+        await handleFindRide(false);
+      } catch (err) {
+        confirmingPaymentRef.current = false;
+        handleError(err);
+      }
+    };
+
+    confirmPayment();
+  }, [ride?.status, user?.passenger?.cards]);
 
   useEffect(() => {
     fadeAnim.value = withRepeat(
@@ -330,12 +362,6 @@ const LookingForDriver = () => {
         }}
         onBackPress={() => setIsVisible(false)}
       />
-      <ModalPayment
-        isVisible={isPaymentVisible}
-        onPress={() => setIsPaymentVisible(false)}
-        onBackPress={() => setIsPaymentVisible(false)}
-      />
-
       <BottomSheet
         ref={bsCancelRef}
         index={-1}
