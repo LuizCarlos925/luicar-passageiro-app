@@ -63,7 +63,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
 
       const status = currentRide?.status;
 
-      if (status === 'procurandoMotorista') {
+      if (status === 'procurandoMotorista' || String(status) === 'aguardandoPagamento') {
         return router.push('/(main)/Home/Ride/LookingForDriver');
       }
 
