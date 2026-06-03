@@ -17,6 +17,7 @@ import { WaitingLottie } from '@/assets/animations';
 
 import Text from '@/components/Text/Text';
 import { CancelRideBS, ModalWaitingCancel } from '@/components/screen';
+import ModalPayment from '@/components/screen/home/ModalPayment';
 import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
@@ -55,6 +56,7 @@ const LookingForDriver = () => {
   const messageCounter = useSharedValue(0);
 
   const [isVisible, setIsVisible] = React.useState(false);
+  const [isPaymentVisible, setIsPaymentVisible] = React.useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -107,6 +109,12 @@ const LookingForDriver = () => {
 
     return () => backHandler.remove();
   }, [setModal]);
+
+  useEffect(() => {
+    if (String(ride?.status) === 'aguardandoPagamento') {
+      setIsPaymentVisible(true);
+    }
+  }, [ride?.status]);
 
   useEffect(() => {
     fadeAnim.value = withRepeat(
@@ -162,7 +170,7 @@ const LookingForDriver = () => {
           <LottieView
             autoPlay
             ref={animation}
-            source={WaitingLottie as { uri: string }}
+            source={WaitingLottie}
             style={{
               width: width + left + right,
               height: height + top + bottom,
@@ -322,6 +330,12 @@ const LookingForDriver = () => {
         }}
         onBackPress={() => setIsVisible(false)}
       />
+      <ModalPayment
+        isVisible={isPaymentVisible}
+        onPress={() => setIsPaymentVisible(false)}
+        onBackPress={() => setIsPaymentVisible(false)}
+      />
+
       <BottomSheet
         ref={bsCancelRef}
         index={-1}

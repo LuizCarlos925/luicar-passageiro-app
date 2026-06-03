@@ -118,8 +118,9 @@ const SearchPlaces = () => {
         const { data: trip } = await api.get('/trips', {
           params: {
             'filters[status][$in][0]': 'procurandoMotorista',
-            'filters[status][$in][1]': 'motoristaDeslocandoInicio',
-            'filters[status][$in][2]': 'indoAoPontoDeEncontro',
+            'filters[status][$in][1]': 'aguardandoPagamento',
+            'filters[status][$in][2]': 'motoristaDeslocandoInicio',
+            'filters[status][$in][3]': 'indoAoPontoDeEncontro',
             'sort[createdAt]': 'desc',
           },
         });
