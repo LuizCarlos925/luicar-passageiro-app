@@ -57,6 +57,8 @@ const LookingForDriver = () => {
   const [isVisible, setIsVisible] = React.useState(false);
   const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
 
+  const isAwaitingPayment = String(ride?.status) === 'aguardandoPagamento';
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: fadeAnim.value,
@@ -191,7 +193,7 @@ const LookingForDriver = () => {
         ref={bottomSheetRef}
         index={0}
         enablePanDownToClose={false}
-        snapPoints={[120, 600]}
+        snapPoints={isAwaitingPayment ? [360, 600] : [120, 600]}
         handleComponent={() => <View style={styles.lineHandler} />}
         backgroundStyle={{ backgroundColor: colors.secondary_100 }}
       >
@@ -210,9 +212,9 @@ const LookingForDriver = () => {
           <View style={styles.row}>
             <ActivityIndicator size={22} color={colors.primary_100} />
             <Text color={colors.primary_60}>
-              {String(ride?.status) === 'aguardandoPagamento'
-                ? 'Motorista aceitou. Escolha o pagamento.'
-                : 'Aguardando um motorista'}
+            {isAwaitingPayment
+            ? 'Motorista aceitou. Escolha o pagamento.'
+            : 'Aguardando um motorista'}              
             </Text>
           </View>
 
@@ -236,8 +238,36 @@ const LookingForDriver = () => {
                 </Text>
               </View>
             </View>
+{isAwaitingPayment && (
+  <View style={styles.paymentActions}>
+    <Text size={16} fontWeight={600} color={colors.neutro_00}>
+      Escolha a forma de pagamento
+    </Text>
 
-            <Divider />
+    <Button onPress={() => handleConfirmPayment(1)}>
+      Pagar com cartão
+    </Button>
+
+    <Button onPress={() => handleConfirmPayment(2)}>
+      Pagar com PIX
+    </Button>
+
+    <Button
+      onPress={() => {
+        bottomSheetRef.current?.collapse();
+        setIsVisible(true);
+      }}
+    >
+      Cancelar corrida
+    </Button>
+  </View>
+)}
+            
+
+
+
+
+<Divider />
 
             <View>
               <View style={styles.row2}>
@@ -319,31 +349,19 @@ const LookingForDriver = () => {
             </View>
           </View>
 
-          {String(ride?.status) === 'aguardandoPagamento' && (
-            <View style={styles.paymentActions}>
-              <Text size={16} fontWeight={600} color={colors.neutro_00}>
-                Escolha a forma de pagamento
-              </Text>
+{!isAwaitingPayment && (
+  <Button
+    onPress={() => {
+      bottomSheetRef.current?.collapse();
+      setIsVisible(true);
+    }}
+    style={{ marginTop: 'auto' }}
+  >
+    Cancelar corrida
+  </Button>
+)}           
 
-              <Button onPress={() => handleConfirmPayment(1)}>
-                Pagar com cartão
-              </Button>
 
-              <Button onPress={() => handleConfirmPayment(2)}>
-                Pagar com PIX
-              </Button>
-            </View>
-          )}
-
-          <Button
-            onPress={() => {
-              bottomSheetRef.current?.collapse();
-              setIsVisible(true);
-            }}
-            style={{ marginTop: 'auto' }}
-          >
-            Cancelar corrida
-          </Button>
         </BottomSheetScrollView>
       </BottomSheet>
 
