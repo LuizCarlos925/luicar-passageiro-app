@@ -26,7 +26,6 @@ import { colors } from '@/global/theme';
 import { height, width } from '@/global/constants';
 
 import { useModal } from '@/hooks/useModal';
-import { useAuth } from '@/hooks/useAuth';
 
 import { api } from '@/services/api';
 
@@ -44,7 +43,6 @@ const MESSAGES = [
 
 const LookingForDriver = () => {
   const { setModal } = useModal();
-  const { user } = useAuth();
 
   const { ride, handleFindRide } = useRide();
 
@@ -53,7 +51,6 @@ const LookingForDriver = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bsCancelRef = useRef<BottomSheet>(null);
   const animation = useRef<LottieView>(null);
-  const confirmingPaymentRef = useRef(false);
   const fadeAnim = useSharedValue(1);
   const messageCounter = useSharedValue(0);
 
@@ -85,6 +82,19 @@ const LookingForDriver = () => {
     }, []),
   );
 
+  const handleConfirmPayment = async (paymentMethod: 1 | 2) => {
+    try {
+      await api.post('/confirmTrip', {
+        paymentMethod,
+        portion: '1',
+      });
+
+      await handleFindRide(false);
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
   const handleCancelRide = async (reason: string) => {
     try {
       await api.put('/cancelTrip', {
@@ -110,43 +120,6 @@ const LookingForDriver = () => {
 
     return () => backHandler.remove();
   }, [setModal]);
-
-  useEffect(() => {
-    const confirmPayment = async () => {
-      if (String(ride?.status) !== 'aguardandoPagamento') {
-        return;
-      }
-
-      if (confirmingPaymentRef.current) {
-        return;
-      }
-
-      confirmingPaymentRef.current = true;
-
-      try {
-        const card =
-          user?.passenger?.cards?.find(item => item?.isMain) ||
-          user?.passenger?.cards?.[0];
-
-        if (!card?.id) {
-          throw new Error('Nenhum cartão cadastrado para realizar o pagamento.');
-        }
-
-        await api.post('/confirmTrip', {
-          paymentMethod: 1,
-          portion: '1',
-          card: { id: card.id },
-        });
-
-        await handleFindRide(false);
-      } catch (err) {
-        confirmingPaymentRef.current = false;
-        handleError(err);
-      }
-    };
-
-    confirmPayment();
-  }, [ride?.status, user?.passenger?.cards]);
 
   useEffect(() => {
     fadeAnim.value = withRepeat(
@@ -236,7 +209,11 @@ const LookingForDriver = () => {
 
           <View style={styles.row}>
             <ActivityIndicator size={22} color={colors.primary_100} />
-            <Text color={colors.primary_60}>Aguardando um motorista</Text>
+            <Text color={colors.primary_60}>
+              {String(ride?.status) === 'aguardandoPagamento'
+                ? 'Motorista aceitou. Escolha o pagamento.'
+                : 'Aguardando um motorista'}
+            </Text>
           </View>
 
           <View style={styles.rideInfoWrapper}>
@@ -341,6 +318,22 @@ const LookingForDriver = () => {
               </Text>
             </View>
           </View>
+
+          {String(ride?.status) === 'aguardandoPagamento' && (
+            <View style={styles.paymentActions}>
+              <Text size={16} fontWeight={600} color={colors.neutro_00}>
+                Escolha a forma de pagamento
+              </Text>
+
+              <Button onPress={() => handleConfirmPayment(1)}>
+                Pagar com cartão
+              </Button>
+
+              <Button onPress={() => handleConfirmPayment(2)}>
+                Pagar com PIX
+              </Button>
+            </View>
+          )}
 
           <Button
             onPress={() => {
