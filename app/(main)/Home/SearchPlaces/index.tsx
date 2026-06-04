@@ -48,7 +48,7 @@ const SearchPlaces = () => {
 
   const { setModal } = useModal();
 
-  const { handleFindRide } = useRide();
+  const { ride, handleFindRide } = useRide();
 
   const { control, handleSubmit, setValue } = useForm<RideForm>({
     resolver: yupResolver(RideSchema as any),
@@ -71,6 +71,7 @@ const SearchPlaces = () => {
   const [pixCode, setPixCode] = useState('');
   const [method, setMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [originAddress, setOriginAddress] = useState<string>('');
   const [destinationAddress, setDestinationAddress] = useState<string>('');
 
@@ -83,10 +84,13 @@ const SearchPlaces = () => {
     user?.passenger?.cards?.find(item => item?.isMain) ||
     user?.passenger?.cards?.[0];
 
-   const disableButton =
-  !originAddress ||
-  !destinationAddress ||
-  isLoading;
+  const isAwaitingPayment = String(ride?.status) === 'aguardandoPagamento';
+
+  const disableButton =
+    !originAddress ||
+    !destinationAddress ||
+    isLoading ||
+    isAwaitingPayment;
    
 
   useEffect(() => {
@@ -199,6 +203,40 @@ const SearchPlaces = () => {
     }
   };
 
+  const handleConfirmPayment = async (paymentMethod: 1 | 2) => {
+    setIsPaymentLoading(true);
+    try {
+      const { data: paymentResponse } = await api.post<IPayment>('/confirmTrip', {
+        paymentMethod,
+        portion: '1',
+        ...(paymentMethod === 1 && card?.id ? { card: { id: card.id } } : {}),
+      });
+
+      if (paymentMethod === 2 && paymentResponse?.paymentCode) {
+        setPixCode(paymentResponse.paymentCode);
+      }
+
+      await handleFindRide(false);
+    } catch (err) {
+      handleError(err);
+    }
+    setIsPaymentLoading(false);
+  };
+
+  const handleCancelAwaitingPaymentRide = async () => {
+    try {
+      await api.put('/cancelTrip', {
+        id: ride?.id,
+        reason: 'Cancelado pelo passageiro antes do pagamento',
+      });
+
+      await handleFindRide(false);
+      router.back();
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
   return (
     <GlobalContainer alignItems="flex-start" gap={15} withoutPaddingTop>
       <View style={styles.header}>
@@ -237,6 +275,37 @@ const SearchPlaces = () => {
             setDestinationAddress(address?.description || '')
           }
         />
+
+        {isAwaitingPayment && (
+          <View style={styles.awaitingPaymentWrapper}>
+            <Text size={16} fontWeight={600} color={colors.neutro_00}>
+              Escolher a forma de pagamento
+            </Text>
+
+            <Button
+              onPress={() => handleConfirmPayment(1)}
+              isLoading={isPaymentLoading}
+              disabled={isPaymentLoading}
+            >
+              Cartão de Crédito
+            </Button>
+
+            <Button
+              onPress={() => handleConfirmPayment(2)}
+              isLoading={isPaymentLoading}
+              disabled={isPaymentLoading}
+            >
+              PIX
+            </Button>
+
+            <Button
+              onPress={handleCancelAwaitingPaymentRide}
+              disabled={isPaymentLoading}
+            >
+              Cancelar corrida
+            </Button>
+          </View>
+        )}
       </View>
 
       <View style={styles.content}>
@@ -280,10 +349,7 @@ const SearchPlaces = () => {
           <ButtonPaymentMethod
             type="pix"
             isSelected={method === 'pix'}
-            onPress={() => {
-              generatePix();
-              setMethod('pix');
-            }}
+            onPress={() => setMethod('pix')}
           />
         </View>
 
@@ -357,6 +423,11 @@ const styles = StyleSheet.create({
   paymentWrapper: {
     width: '100%',
     marginBottom: 20,
+  },
+  awaitingPaymentWrapper: {
+    width: '100%',
+    gap: 10,
+    marginTop: 4,
   },
   button: {
     marginTop: 'auto',
