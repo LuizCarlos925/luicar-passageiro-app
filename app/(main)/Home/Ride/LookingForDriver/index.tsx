@@ -135,6 +135,12 @@ const LookingForDriver = () => {
     );
   }, []);
 
+  useEffect(() => {
+    if (isAwaitingPayment) {
+      bottomSheetRef.current?.expand();
+    }
+  }, [isAwaitingPayment]);
+
   return (
     <>
       <GlobalContainer paddingHorizontal={20} gap={30}>
@@ -193,7 +199,7 @@ const LookingForDriver = () => {
         ref={bottomSheetRef}
         index={0}
         enablePanDownToClose={false}
-        snapPoints={isAwaitingPayment ? [360, 600] : [120, 600]}
+        snapPoints={isAwaitingPayment ? [520, 680] : [120, 600]}
         handleComponent={() => <View style={styles.lineHandler} />}
         backgroundStyle={{ backgroundColor: colors.secondary_100 }}
       >
