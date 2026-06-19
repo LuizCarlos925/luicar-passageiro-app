@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import Constants from 'expo-constants';
 import React, {
   createContext,
   ReactNode,
@@ -101,7 +102,9 @@ const AuthProvider = ({ children }: ChildrenProps) => {
     }
 
     if (finalStatus === 'granted') {
-      const tokenData = await Notifications.getExpoPushTokenAsync();
+      const tokenData = await Notifications.getExpoPushTokenAsync({
+            projectId: Constants?.expoConfig?.extra?.eas?.projectId,
+          });
       deviceToken = tokenData.data;
     }
         }

@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
 import { Slot } from 'expo-router';
 
 import { useFonts } from 'expo-font';
@@ -46,6 +47,14 @@ const toastConfig = {
 };
 
 setDefaultOptions({ locale: ptBR });
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export const queryClient = new QueryClient({
   defaultOptions: {

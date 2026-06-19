@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "presetup": "yarn install",
     "setup": "tsx ./scripts/setup.ts",
-    "setup:dev": "tsx ./scripts/setup.ts --dev"
+    "setup:dev": "tsx ./scripts/setup.ts --dev",
+    "postinstall": "npx patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -53,7 +54,7 @@
     "react-native-keyboard-controller": "1.18.5",
     "react-native-maps": "1.20.1",
     "react-native-masked-text": "^1.13.0",
-    "react-native-modal": "^13.0.1",
+    "react-native-modal": "13.0.1",
     "react-native-otp-entry": "^1.8.2",
     "react-native-qrcode-svg": "^6.3.12",
     "react-native-reanimated": "~4.1.1",
