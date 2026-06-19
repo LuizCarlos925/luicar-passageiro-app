@@ -38,6 +38,7 @@ const Text = ({
         color,
         fontFamily: fontWeights[fontWeight],
         fontSize: size,
+        lineHeight: size * 1.3,
         marginTop,
         textAlign,
         ...style,
