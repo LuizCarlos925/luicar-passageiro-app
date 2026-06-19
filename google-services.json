@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "721971159966",
+    "project_id": "luicar-b6e93",
+    "storage_bucket": "luicar-b6e93.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721971159966:android:1e833b4190f96ee02fac8f",
+        "android_client_info": {
+          "package_name": "com.mestresdaweb.luicarmotorista"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmtN7TKYHdSnUkqZPStJszQcHVewHO8AQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721971159966:android:31539a5fb71c49cf2fac8f",
+        "android_client_info": {
+          "package_name": "com.mestresdaweb.luicarpassageiro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmtN7TKYHdSnUkqZPStJszQcHVewHO8AQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
