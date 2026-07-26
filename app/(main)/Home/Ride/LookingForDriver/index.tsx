@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
@@ -16,7 +16,7 @@ import { format } from 'date-fns';
 import { WaitingLottie } from '@/assets/animations';
 
 import Text from '@/components/Text/Text';
-import { CancelRideBS, ModalWaitingCancel } from '@/components/screen';
+import { CancelRideBS, ModalWaitingCancel, MethodPix } from '@/components/screen';
 import { Button } from '@/components/Button/Button';
 import { Divider } from '@/components/Divider/Divider';
 import { IconComponent } from '@/components/Icon/Icon';
@@ -33,6 +33,8 @@ import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
 
 import { useRide } from '@/context/useRide';
+import { useAuth } from '@/hooks/useAuth';
+import { DriverCard } from '@/components/DriverCard/DriverCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const MESSAGES = [
@@ -45,6 +47,11 @@ const LookingForDriver = () => {
   const { setModal } = useModal();
 
   const { ride, handleFindRide } = useRide();
+  const { user } = useAuth();
+  const [pixCode, setPixCode] = useState('');
+  const card =
+    user?.passenger?.cards?.find(item => item?.isMain) ||
+    user?.passenger?.cards?.[0];
 
   const { top, bottom, left, right } = useSafeAreaInsets();
 
@@ -86,10 +93,15 @@ const LookingForDriver = () => {
 
   const handleConfirmPayment = async (paymentMethod: 1 | 2) => {
     try {
-      await api.post('/confirmTrip', {
+      const { data: paymentResponse } = await api.post('/confirmTrip', {
         paymentMethod,
         portion: '1',
+        ...(paymentMethod === 1 && card?.id ? { card: { id: card.id } } : {}),
       });
+
+      if (paymentMethod === 2 && paymentResponse?.paymentCode) {
+        setPixCode(paymentResponse.paymentCode);
+      }
 
       await handleFindRide(false);
     } catch (err) {
@@ -223,6 +235,9 @@ const LookingForDriver = () => {
             : 'Aguardando um motorista'}              
             </Text>
           </View>
+          {isAwaitingPayment && (
+            <DriverCard vehicle={ride?.vehicle} driver={ride?.driver} />
+          )}
 
           <View style={styles.rideInfoWrapper}>
             <View style={styles.row}>
@@ -257,6 +272,7 @@ const LookingForDriver = () => {
     <Button onPress={() => handleConfirmPayment(2)}>
       Pagar com PIX
     </Button>
+    {pixCode ? <MethodPix pixCode={pixCode} /> : null}
 
     <Button
       onPress={() => {
