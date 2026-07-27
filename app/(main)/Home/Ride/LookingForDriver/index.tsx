@@ -101,9 +101,10 @@ const LookingForDriver = () => {
 
       if (paymentMethod === 2 && paymentResponse?.paymentCode) {
         setPixCode(paymentResponse.paymentCode);
+        await handleFindRide(false);
+      } else {
+        await handleFindRide(true);
       }
-
-      await handleFindRide(false);
     } catch (err) {
       handleError(err);
     }
