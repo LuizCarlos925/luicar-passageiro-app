@@ -121,23 +121,6 @@ const SearchPlaces = () => {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      if (method === 'pix') {
-        const { data: trip } = await api.get('/trips', {
-          params: {
-            'filters[status][$in][0]': 'procurandoMotorista',
-            'filters[status][$in][1]': 'aguardandoPagamento',
-            'filters[status][$in][2]': 'motoristaDeslocandoInicio',
-            'filters[status][$in][3]': 'indoAoPontoDeEncontro',
-            'sort[createdAt]': 'desc',
-          },
-        });
-
-        if (!trip?.data?.[0]?.id) {
-          throw new Error(
-            'Realize o pagamento via Pix para continuar com a corrida',
-          );
-        }
-      } else {
         const { data } = await api.get<IGeolocation>('/getGeocodeAddress', {
           params: {
             addressOrigin: origin,
@@ -161,15 +144,7 @@ const SearchPlaces = () => {
           destLng: data?.destination?.longitude,
         });
 
-// await api.post<IPayment>('/confirmTrip', {
-//   paymentMethod: 1,
-//   portion: '1',
-//   card: { id: card?.id },
-// });        
-
-      }
-
-     handleFindRide();      
+      handleFindRide();      
 
     } catch (err) {
       logRideAttemptEvent({
@@ -354,49 +329,6 @@ const SearchPlaces = () => {
         ))}
 
         <View style={styles.divider} />
-
-        <View style={styles.textWrapper}>
-          <Text size={16} fontWeight={600} color={colors.secondary_80}>
-            Formas de pagamento
-          </Text>
-          <Text size={12} color={colors.secondary_60}>
-            Selecione a melhor forma de pagamento para você
-          </Text>
-        </View>
-
-        <View style={styles.row}>
-          <ButtonPaymentMethod
-            type="creditCard"
-            isSelected={method === 'creditCard'}
-            onPress={() => setMethod('creditCard')}
-          />
-          <ButtonPaymentMethod
-            type="pix"
-            isSelected={method === 'pix'}
-            onPress={() => setMethod('pix')}
-          />
-        </View>
-
-        <View style={styles.paymentWrapper}>
-          {method === 'creditCard' && (
-            <MethodCreditCard
-              card={card}
-              onPress={() => {
-                router.push({
-                  pathname: '/(main)/Settings/CreditCard',
-                  params: {
-                    select: 'true',
-                    origin: originAddress,
-                    destination: destinationAddress,
-                    isWoman: String(isWoman),
-                  },
-                });
-              }}
-            />
-          )}
-          {method === 'pix' && pixCode && <MethodPix pixCode={pixCode} />}
-        </View>
-
         <Button
           key={`confirm-${method}`}
           onPress={handleSubmit(onSubmit)}
