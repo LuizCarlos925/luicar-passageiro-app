@@ -14,6 +14,7 @@ import { router } from 'expo-router';
 
 import { api } from '@/services/api';
 import { handleError } from '@/utils/handleError';
+import { setRideAttemptPassengerId } from '@/services/rideAttemptEvents.service';
 
 import { IUser } from '@/interfaces/user';
 import { ILoginResponse } from '@/interfaces/login';
@@ -75,6 +76,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
         },
       });
 
+      setRideAttemptPassengerId(data?.passenger?.id ?? null);
       return setUser(data);
     } catch (err) {
       handleError(err);
@@ -152,6 +154,7 @@ const AuthProvider = ({ children }: ChildrenProps) => {
   const logout = async () => {
     try {
       setUser({} as IUser);
+      setRideAttemptPassengerId(null);
       await deleteItemAsync('accessToken');
       await deleteItemAsync('refreshToken');
       router.dismissTo('/(auth)/Welcome');

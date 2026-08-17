@@ -33,6 +33,7 @@ import { formatCurrency, formatPaymentMethod } from '@/utils/format';
 import { handleError } from '@/utils/handleError';
 
 import { useRide } from '@/context/useRide';
+import { logRideAttemptEvent, clearRideAttempt } from '@/services/rideAttemptEvents.service';
 import { useAuth } from '@/hooks/useAuth';
 import { DriverCard } from '@/components/DriverCard/DriverCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -116,6 +117,12 @@ const LookingForDriver = () => {
         id: ride?.id,
         reason,
       });
+
+      logRideAttemptEvent({
+        eventType: 'passenger_cancelled',
+        failReason: reason,
+      });
+      clearRideAttempt();
 
       bsCancelRef.current?.close();
       handleFindRide();

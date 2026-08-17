@@ -31,6 +31,7 @@ import { ITripSelect } from '@/interfaces/tripSelect';
 import { IGeolocation } from '@/interfaces/geolocation';
 
 import { api } from '@/services/api';
+import { logRideAttemptEvent } from '@/services/rideAttemptEvents.service';
 import { useCategoriesPrices } from '@/services/Home/vehicles.service';
 
 import { handleError } from '@/utils/handleError';
@@ -94,9 +95,11 @@ const SearchPlaces = () => {
    
 
   useEffect(() => {
+    logRideAttemptEvent({ eventType: 'screen_opened' });
     if (params.destination) {
       setDestinationAddress(params.destination);
       setValue('destination', params.destination);
+      logRideAttemptEvent({ eventType: 'destination_set' });
     }
     if (params.origin) {
       setOriginAddress(params.origin);
@@ -150,6 +153,14 @@ const SearchPlaces = () => {
           onlyWoman: isWoman,
         });
 
+        logRideAttemptEvent({
+          eventType: 'ride_requested',
+          originLat: data?.origin?.latitude,
+          originLng: data?.origin?.longitude,
+          destLat: data?.destination?.latitude,
+          destLng: data?.destination?.longitude,
+        });
+
 // await api.post<IPayment>('/confirmTrip', {
 //   paymentMethod: 1,
 //   portion: '1',
@@ -161,6 +172,10 @@ const SearchPlaces = () => {
      handleFindRide();      
 
     } catch (err) {
+      logRideAttemptEvent({
+        eventType: 'app_error',
+        failReason: 'onSubmit_error',
+      });
       handleError(err);
     }
     setIsLoading(false);
@@ -185,7 +200,16 @@ const SearchPlaces = () => {
         categoryId: 1,
         onlyWoman: isWoman,
       });
-     
+
+      logRideAttemptEvent({
+        eventType: 'ride_requested',
+        originLat: data?.origin?.latitude,
+        originLng: data?.origin?.longitude,
+        destLat: data?.destination?.latitude,
+        destLng: data?.destination?.longitude,
+        metadata: { paymentMethod: 'pix' },
+      });
+
       handleFindRide();
  
 
