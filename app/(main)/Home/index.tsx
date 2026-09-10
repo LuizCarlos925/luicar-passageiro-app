@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import * as Location from 'expo-location';
+import MapView, {
+  Marker,
+  PROVIDER_DEFAULT,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 
 import Text from '@/components/Text/Text';
 import { Header } from '@/components/screen';
@@ -15,6 +20,7 @@ import { colors } from '@/global/theme';
 import { api } from '@/services/api';
 import { useBalance } from '@/services/Home/balance.service';
 import { useLocations } from '@/services/Home/address.service';
+import { useNearbyDrivers } from '@/services/Home/nearbyDrivers.service';
 
 import { formatCurrency } from '@/utils/format';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,15 +34,63 @@ const Home = () => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleTerms, setIsVisibleTerms] = useState(false);
+  const [region, setRegion] = useState({
+    latitude: -23.55052,
+    longitude: -46.633308,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
+  });
 
   const { data: locations } = useLocations('destino');
   const { data: balance } = useBalance();
+  const { data: nearbyDrivers } = useNearbyDrivers(region);
 
   useEffect(() => {
     if (status && !status?.granted) {
       setIsVisible(true);
     }
   }, [status]);
+
+  useEffect(() => {
+    if (!status?.granted) {
+      return;
+    }
+
+    let subscription: Location.LocationSubscription | null = null;
+
+    const startWatching = async () => {
+      try {
+        const current = await Location.getCurrentPositionAsync({});
+        setRegion(prev => ({
+          ...prev,
+          latitude: current.coords.latitude,
+          longitude: current.coords.longitude,
+        }));
+        subscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 4000,
+            distanceInterval: 10,
+          },
+          location => {
+            setRegion(prev => ({
+              ...prev,
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }));
+          },
+        );
+      } catch (err: any) {
+        handleError(err);
+      }
+    };
+
+    startWatching();
+
+    return () => {
+      subscription?.remove();
+    };
+  }, [status?.granted]);
 
   useFocusEffect(
     useCallback(() => {
@@ -65,6 +119,42 @@ const Home = () => {
       showTabBar
     >
       <View style={styles.content}>
+        <View style={styles.mapWrapper}>
+          <MapView
+            style={StyleSheet.absoluteFill}
+            provider={
+              Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
+            }
+            region={region}
+            showsUserLocation
+            showsMyLocationButton={false}
+            rotateEnabled={false}
+            toolbarEnabled={false}
+          >
+            {nearbyDrivers?.drivers?.map(driver => (
+              <Marker
+                key={driver.id}
+                coordinate={{
+                  latitude: driver.lat,
+                  longitude: driver.lng,
+                }}
+              >
+                <IconComponent name="CarIcon" size={28} />
+              </Marker>
+            ))}
+          </MapView>
+
+          {!!nearbyDrivers?.count && (
+            <View style={styles.driversCountBadge}>
+              <Text size={14} fontWeight={600} color={colors.neutro_00}>
+                {nearbyDrivers.count === 1
+                  ? '1 motorista por perto'
+                  : `${nearbyDrivers.count} motoristas por perto`}
+              </Text>
+            </View>
+          )}
+        </View>
+
         {!!balance?.balance && (
           <View style={styles.cashBackWrapper}>
             <IconComponent name="CashBackIcon" size={36} />
@@ -114,6 +204,21 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
+  mapWrapper: {
+    width: '100%',
+    height: 220,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  driversCountBadge: {
+    position: 'absolute',
+    bottom: 12,
+    alignSelf: 'center',
+    backgroundColor: colors.secondary_100,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
   cashBackWrapper: {
     flexDirection: 'row',
     width: '100%',
