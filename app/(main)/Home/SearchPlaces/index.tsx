@@ -146,10 +146,12 @@ const SearchPlaces = () => {
 
       handleFindRide();      
 
-    } catch (err) {
+    } catch (err: any) {
+      const errMsg = String(err?.response?.data?.error?.message || err?.message || '');
+      const outOfArea = errMsg.includes('não atendemos');
       logRideAttemptEvent({
-        eventType: 'app_error',
-        failReason: 'onSubmit_error',
+        eventType: (outOfArea ? 'out_of_area' : 'app_error') as any,
+        failReason: errMsg ? errMsg.slice(0, 200) : 'onSubmit_error',
       });
       handleError(err);
     }
