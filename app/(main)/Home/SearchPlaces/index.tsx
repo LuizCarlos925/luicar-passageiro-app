@@ -76,10 +76,22 @@ const SearchPlaces = () => {
   const [originAddress, setOriginAddress] = useState<string>('');
   const [destinationAddress, setDestinationAddress] = useState<string>('');
 
-  const { data: categories } = useCategoriesPrices(
+  const { data: categories, error: pricesError } = useCategoriesPrices(
     originAddress,
     destinationAddress,
   );
+
+  const pricesErrorMsg = String((pricesError as any)?.response?.data?.error?.message || '');
+  const isOutOfArea = pricesErrorMsg.includes('não atendemos');
+
+  useEffect(() => {
+    if (isOutOfArea) {
+      logRideAttemptEvent({
+        eventType: 'out_of_area' as any,
+        failReason: pricesErrorMsg.slice(0, 200),
+      });
+    }
+  }, [isOutOfArea, originAddress, destinationAddress]);
 
   const card =
     user?.passenger?.cards?.find(item => item?.isMain) ||
@@ -87,7 +99,7 @@ const SearchPlaces = () => {
 
   const isAwaitingPayment = String(ride?.status) === 'aguardandoPagamento';
 
-  const disableButton =
+  const disableButton = isOutOfArea ||
     !originAddress ||
     !destinationAddress ||
     isLoading ||
@@ -329,6 +341,14 @@ const SearchPlaces = () => {
             ))}
           </View>
         ))}
+
+        {isOutOfArea && (
+          <Text size={16} fontWeight={500} color={colors.secondary_80}>
+            Ainda não atendemos essa região. No momento, as corridas precisam
+            sair de Santo André, São Bernardo do Campo, São Caetano do Sul ou
+            Mauá.
+          </Text>
+        )}
 
         <View style={styles.divider} />
         <Button

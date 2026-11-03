@@ -23,5 +23,7 @@ export const useCategoriesPrices = (origin?: string, destination?: string) => {
     queryKey: ['categories-prices', origin, destination],
     queryFn: getCategoriesPrices,
     enabled: !!origin && !!destination,
+    retry: (count: number, err: any) =>
+      !String(err?.response?.data?.error?.message || '').includes('não atendemos') && count < 3,
   });
 };
