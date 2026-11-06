@@ -1,6 +1,6 @@
 import React from 'react';
 import { router } from 'expo-router';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
 
 import { Step } from '@/components/Step';
 import Text from '@/components/Text/Text';
@@ -24,6 +24,8 @@ const Terms = () => {
 
   const { setModal } = useModal();
 
+  const [condominiumCode, setCondominiumCode] = React.useState('');
+
   const { data: termsData, isFetching } = useTerms();
 
   const terms = termsData?.find(term => term.name === 'Termos de Uso');
@@ -45,6 +47,7 @@ const Terms = () => {
         state: signUpData.state,
         email: signUpData.email,
         password: signUpData.password,
+        condominiumCode: condominiumCode.trim() || undefined,
       });
 
       await api.put('/acceptTerm?type=passageiro', {
@@ -103,7 +106,23 @@ const Terms = () => {
         )}
       </ScrollContainer>
 
-      <Button onPress={onSubmit} style={{ marginTop: 'auto' }}>
+      <View style={styles.condoWrapper}>
+        <Text size={14} fontWeight={700} color={colors.secondary_60}>
+          Código do condomínio (opcional)
+        </Text>
+        <TextInput
+          value={condominiumCode}
+          onChangeText={t => setCondominiumCode(t.toUpperCase())}
+          placeholder="Ex: VILLAVERDE"
+          placeholderTextColor="#9AA0A6"
+          autoCapitalize="characters"
+          autoCorrect={false}
+          maxLength={30}
+          style={styles.condoInput}
+        />
+      </View>
+
+      <Button onPress={onSubmit} style={{ marginTop: 12 }}>
         Aceitar e concluir cadastro
       </Button>
       <Button onPress={router.back} style={{ marginBottom: 20 }} outline>
@@ -117,6 +136,21 @@ const styles = StyleSheet.create({
   text: {
     width: '100%',
     textAlign: 'center',
+  },
+  condoWrapper: {
+    width: '100%',
+    marginTop: 'auto',
+    gap: 6,
+  },
+  condoInput: {
+    borderWidth: 1,
+    borderColor: colors.secondary_60,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+    color: '#000000',
+    backgroundColor: '#FFFFFF',
   },
 });
 
