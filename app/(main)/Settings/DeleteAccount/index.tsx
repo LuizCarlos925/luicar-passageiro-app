@@ -33,7 +33,7 @@ const DeleteAccount = () => {
     try {
       setIsVisible(false);
 
-      await api.delete(`/deleteUser/${form.password}`);
+      await api.post('/deleteUser', { password: form.password });
 
       setModal({
         name: 'deleteAccountSuccess',
