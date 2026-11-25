@@ -101,7 +101,7 @@ const RideProvider = ({ children }: PropsWithChildren) => {
       }
 
       if (status === 'cancelada') {
-        await logOncePerRideStatus(rideId, status, 'passenger_cancelled');
+        if (!(currentRide as any)?.cancellationReason) await logOncePerRideStatus(rideId, status, 'passenger_cancelled');
         clearRideAttempt();
         return router.dismissTo('/(main)/Home');
       }
